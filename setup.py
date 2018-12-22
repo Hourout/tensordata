@@ -6,7 +6,7 @@ def readme():
         return f.read()
 
 setup(name='tensordata',
-      version='0.0.0',
+      version='0.0.1',
       install_requires=['pandas', 'numpy', 'imageio', 'tensorflow>=1.12.0'],
       description='CV, NLP, DM datasets Toolkit for Machine Learning.',
       long_description=readme(),
@@ -14,7 +14,7 @@ setup(name='tensordata',
       url='https://github.com/Hourout/tensordata',
       author='JinQing Lee',
       author_email='hourout@163.com',
-      keywords=['computer-vision', 'NLP', 'DM', 'Machine Learning', 'datasets'],
+      keywords=['computer-vision', 'natural-language-processing', 'data-mining', 'Machine Learning', 'datasets'],
       license='Apache License Version 2.0',
       classifiers=[
           'Intended Audience :: Developers',
