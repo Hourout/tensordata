@@ -5,8 +5,8 @@ import tarfile
 import rarfile
 import tensorflow as tf
 
-def zip_files(files, zip_name):
-    """Compression files.
+def files_zip(files, zip_name):
+    """Compression files to .zip.
     
     Args:
         files: str or list
@@ -30,8 +30,33 @@ def zip_files(files, zip_name):
         raise ValueError('`files` should be type of str or list.')
     return zip_name
 
-def zip_folder(folder, zip_name):
-    """Compress all files in the folder.
+def files_tar(files, tar_name):
+    """Compression files to .tar.
+    
+    Args:
+        files: str or list
+               if str, files should be file path;
+               if list, files should be file path list.
+        tar_name: str, compression files name.
+    Return:
+        tar_name: str, compression files name.
+    """
+    assert isinstance(tar_name, str), '`tar_name` should be str.'
+    if isinstance(files, str):
+        assert not tf.gfile.IsDirectory(files), '`files` should be file path.'
+        with tarfile.TarFile(tar_name, 'w') as t:
+            t.add(files)
+    elif isinstance(files, list):
+        with tarfile.TarFile(tar_name, 'w') as t:
+            for file in files:
+                assert not tf.gfile.IsDirectory(file), 'Elements in the list should be file path.'
+                t.add(file)
+    else:
+        raise ValueError('`files` should be type of str or list.')
+    return tar_name
+
+def folder_zip(folder, zip_name):
+    """Compress all files in the folder to .zip.
     
     Args:
         folder: str, folder should be folder path.
@@ -47,6 +72,24 @@ def zip_folder(folder, zip_name):
             for filename in filenames:
                 z.write(os.path.join(dirpath, filename), fpath+filename)
     return zip_name
+
+def folder_tar(folder, tar_name):
+    """Compress all files in the folder to .tar.
+    
+    Args:
+        folder: str, folder should be folder path.
+        zip_name: str, compression files name.
+    Return:
+        zip_name: str, compression files name.
+    """
+    assert tf.gfile.IsDirectory(folder), '`folder` should be folder path.'
+    with tarfile.open(tar_name, 'w') as tar:
+        for dirpath, dirnames, filenames in tf.gfile.Walk(tar_name):
+            fpath = dirpath.replace(startdir, '')
+            fpath = fpath and fpath + os.sep or ''
+            for filename in filenames:
+                tar.add(os.path.join(dirpath, filename), fpath+filename)
+    return tar_name
 
 def un_gz(gz_file, ugz_name=None):
     """Uncompression .gz file.
