@@ -35,7 +35,7 @@ def chinese_ctrip_hotel_reviews(root):
     url_json = 'https://raw.githubusercontent.com/Hourout/datasets/master/nlp/ctrip_hotel_reviews/chinese_ctrip_hotel_reviews.json'
     url_txt = 'https://raw.githubusercontent.com/SophonPlus/ChineseNlpCorpus/master/datasets/ChnSentiCorp_htl_all/ChnSentiCorp_htl_all.csv'
     s = requests.get(url_json)
-    with open(os.path.join(task_path, 'ctrip_hotel_reviews.json'), 'w') as outfile:
+    with open(os.path.join(task_path, 'chinese_ctrip_hotel_reviews.json'), 'w') as outfile:
         json.dump(s.json(), outfile, ensure_ascii=False)
         outfile.write('\n')
     s = requests.get(url_txt).content
