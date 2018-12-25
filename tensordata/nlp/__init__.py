@@ -1,1 +1,2 @@
 from tensordata.nlp._ctrip_hotel_reviews import ctrip_hotel_reviews
+from tensordata.nlp._ctrip_hotel_reviews import chinese_takeaway_reviews
