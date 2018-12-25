@@ -5,7 +5,7 @@ import requests
 import pandas as pd
 import tensorflow as tf
 
-def ctrip_hotel_reviews(root):
+def chinese_ctrip_hotel_reviews(root):
     """Ctrip hotel reviews datasets.
     
     datasets url:`https://github.com/SophonPlus/ChineseNlpCorpus/blob/
@@ -17,22 +17,22 @@ def ctrip_hotel_reviews(root):
     
     Data storage directory:
     root = `/user/.../mydata`
-    mnist data: 
-    `root/ctrip_hotel_reviews/ctrip_hotel_reviews.txt`
+    chinese_ctrip_hotel_reviews data: 
+    `root/ctrip_hotel_reviews/chinese_ctrip_hotel_reviews.txt`
     Args:
         root: str, Store the absolute path of the data directory.
-              example:if you want data path is `/user/.../mydata/ctrip_hotel_reviews`,
+              example:if you want data path is `/user/.../mydata/chinese_ctrip_hotel_reviews`,
               root should be `/user/.../mydata`.
     Returns:
-        Store the absolute path of the data directory, is `root/ctrip_hotel_reviews`.
+        Store the absolute path of the data directory, is `root/chinese_ctrip_hotel_reviews`.
     """
     start = time.time()
     assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'ctrip_hotel_reviews')
+    task_path = os.path.join(root, 'chinese_ctrip_hotel_reviews')
     if tf.gfile.Exists(task_path):
         tf.gfile.DeleteRecursively(task_path)
     tf.gfile.MakeDirs(task_path)
-    url_json = 'https://raw.githubusercontent.com/Hourout/datasets/master/nlp/ctrip_hotel_reviews/ctrip_hotel_reviews.json'
+    url_json = 'https://raw.githubusercontent.com/Hourout/datasets/master/nlp/ctrip_hotel_reviews/chinese_ctrip_hotel_reviews.json'
     url_txt = 'https://raw.githubusercontent.com/SophonPlus/ChineseNlpCorpus/master/datasets/ChnSentiCorp_htl_all/ChnSentiCorp_htl_all.csv'
     s = requests.get(url_json)
     with open(os.path.join(task_path, 'ctrip_hotel_reviews.json'), 'w') as outfile:
@@ -40,6 +40,6 @@ def ctrip_hotel_reviews(root):
         outfile.write('\n')
     s = requests.get(url_txt).content
     data = pd.read_csv(io.StringIO(s.decode('utf-8')))
-    data.to_csv(os.path.join(task_path, 'ctrip_hotel_reviews.txt'), index=False)
-    print('ctrip_hotel_reviews dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
+    data.to_csv(os.path.join(task_path, 'chinese_ctrip_hotel_reviews.txt'), index=False)
+    print('chinese_ctrip_hotel_reviews dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
