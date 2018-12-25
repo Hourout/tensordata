@@ -1,3 +1,4 @@
 from tensordata.nlp._chinese_reviews_ctrip_hotel import chinese_reviews_ctrip_hotel
 from tensordata.nlp._chinese_reviews_takeaway import chinese_reviews_takeaway
 from tensordata.nlp._chinese_reviews_online_shopping_10_cats import chinese_reviews_online_shopping_10_cats
+from tensordata.nlp._chinese_reviews_sina_weibo import chinese_reviews_sina_weibo
