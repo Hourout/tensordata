@@ -5,7 +5,7 @@ import requests
 import pandas as pd
 import tensorflow as tf
 
-def chinese_ctrip_hotel_reviews(root):
+def chinese_reviews_ctrip_hotel(root):
     """Ctrip hotel reviews datasets.
     
     datasets url:`https://github.com/SophonPlus/ChineseNlpCorpus/blob/
@@ -17,30 +17,30 @@ def chinese_ctrip_hotel_reviews(root):
     
     Data storage directory:
     root = `/user/.../mydata`
-    chinese_ctrip_hotel_reviews data: 
-    `root/ctrip_hotel_reviews/chinese_ctrip_hotel_reviews.txt`
-    `root/ctrip_hotel_reviews/chinese_ctrip_hotel_reviews.json`
+    chinese_reviews_ctrip_hotel data: 
+    `root/chinese_reviews_ctrip_hotel/chinese_reviews_ctrip_hotel.txt`
+    `root/chinese_reviews_ctrip_hotel/chinese_reviews_ctrip_hotel.json`
     Args:
         root: str, Store the absolute path of the data directory.
-              example:if you want data path is `/user/.../mydata/chinese_ctrip_hotel_reviews`,
+              example:if you want data path is `/user/.../mydata/chinese_reviews_ctrip_hotel`,
               root should be `/user/.../mydata`.
     Returns:
-        Store the absolute path of the data directory, is `root/chinese_ctrip_hotel_reviews`.
+        Store the absolute path of the data directory, is `root/chinese_reviews_ctrip_hotel`.
     """
     start = time.time()
     assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'chinese_ctrip_hotel_reviews')
+    task_path = os.path.join(root, 'chinese_reviews_ctrip_hotel')
     if tf.gfile.Exists(task_path):
         tf.gfile.DeleteRecursively(task_path)
     tf.gfile.MakeDirs(task_path)
-    url_json = 'https://raw.githubusercontent.com/Hourout/datasets/master/nlp/ctrip_hotel_reviews/chinese_ctrip_hotel_reviews.json'
+    url_json = 'https://raw.githubusercontent.com/Hourout/datasets/master/nlp/chinese_reviews_ctrip_hotel/chinese_reviews_ctrip_hotel.json'
     url_txt = 'https://raw.githubusercontent.com/SophonPlus/ChineseNlpCorpus/master/datasets/ChnSentiCorp_htl_all/ChnSentiCorp_htl_all.csv'
     s = requests.get(url_json)
-    with open(os.path.join(task_path, 'chinese_ctrip_hotel_reviews.json'), 'w') as outfile:
+    with open(os.path.join(task_path, 'chinese_reviews_ctrip_hotel.json'), 'w') as outfile:
         json.dump(s.json(), outfile, ensure_ascii=False)
         outfile.write('\n')
     s = requests.get(url_txt).content
     data = pd.read_csv(io.StringIO(s.decode('utf-8')))
-    data.to_csv(os.path.join(task_path, 'chinese_ctrip_hotel_reviews.txt'), index=False)
-    print('chinese_ctrip_hotel_reviews dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
+    data.to_csv(os.path.join(task_path, 'chinese_reviews_ctrip_hotel.txt'), index=False)
+    print('chinese_reviews_ctrip_hotel dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
