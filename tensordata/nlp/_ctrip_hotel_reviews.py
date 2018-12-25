@@ -1,5 +1,6 @@
 import os
 import time
+import json
 import requests
 import pandas as pd
 import tensorflow as tf
@@ -40,5 +41,5 @@ def ctrip_hotel_reviews(root):
     s = requests.get(url_txt).content
     data = pd.read_csv(io.StringIO(s.decode('utf-8')))
     data.to_csv(os.path.join(task_path, 'ctrip_hotel_reviews.txt'), index=False)
-    print('ctrip hotel reviews dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
+    print('ctrip_hotel_reviews dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
