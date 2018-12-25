@@ -19,6 +19,7 @@ def chinese_ctrip_hotel_reviews(root):
     root = `/user/.../mydata`
     chinese_ctrip_hotel_reviews data: 
     `root/ctrip_hotel_reviews/chinese_ctrip_hotel_reviews.txt`
+    `root/ctrip_hotel_reviews/chinese_ctrip_hotel_reviews.json`
     Args:
         root: str, Store the absolute path of the data directory.
               example:if you want data path is `/user/.../mydata/chinese_ctrip_hotel_reviews`,
