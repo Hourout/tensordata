@@ -17,7 +17,7 @@ def boston_housing(root):
     
     Data storage directory:
     root = `/user/.../mydata`
-    mnist data: 
+    boston_housing data: 
     `root/boston_housing/boston_housing.txt`
     `root/boston_housing/boston_housing.json`
     Args:
