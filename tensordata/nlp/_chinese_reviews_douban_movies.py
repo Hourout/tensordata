@@ -11,11 +11,10 @@ def _request_txt(url):
     return t
 
 def chinese_reviews_douban_movies(root):
-    """Chinese Sina weibo 4 emotion reviews datasets.
+    """Chinese douban movies reviews datasets.
         
-    Chinese Sina weibo reviews datasets contains 360,000+ samples, 
-    contains 4 emotions, including about 200,000 joys, 
-    anger, disgust, and low, more than 50,000.
+    Chinese douban movies reviews datasets Includes 28 movies, 
+    over 700,000 users, over 2 million ratings.
     
     Data storage directory:
     root = `/user/.../mydata`
