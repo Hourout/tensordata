@@ -8,7 +8,7 @@ def get_arxiv(root, ids, new_name=None):
     Data storage directory:
     root = `/user/.../mydata`
     `ids`.pdf data: 
-    `root/arxiv/`ids`.pdf`
+    `root/arxiv/`ids`.pdf` or `root/arxiv/`new_name`.pdf`
     Args:
         root: str, Store the absolute path of the data directory.
               example:if you want data path is `/user/.../mydata/arxiv`,
