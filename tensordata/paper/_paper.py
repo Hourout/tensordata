@@ -6,6 +6,9 @@ import concurrent
 import pandas as pd
 import tensorflow as tf
 
+
+__all__ = ['get_arxiv', 'get_cvpr2018']
+
 def _download(path):
     tf.keras.utils.get_file(os.path.join(path.split('|')[0], path.split('|')[1].split('/')[-1]), path.split('|')[1])
 
