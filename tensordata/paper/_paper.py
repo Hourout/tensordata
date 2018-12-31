@@ -7,12 +7,14 @@ import pandas as pd
 import tensorflow as tf
 
 
-__all__ = ['get_arxiv', 'get_cvpr2018', 'get_cvpr2017']
+__all__ = ['arxiv', 'CVPR2018', 'CVPR2017', 'CVPR2016', 'CVPR2015', 'CVPR2014', 'CVPR2013',
+           'ICCV2013', 'ICCV2015', 'ICCV2017'
+          ]
 
 def _download(path):
     tf.keras.utils.get_file(os.path.join(path.split('|')[0], path.split('|')[1].split('/')[-1]), path.split('|')[1])
 
-def get_arxiv(root, ids, new_name=None):
+def arxiv(root, ids, new_name=None):
     """Download paper from https://arxiv.org, the file format is pdf.
     
     Data storage directory:
@@ -57,24 +59,24 @@ def _get_paper(name, root, url):
         excutor.map(_download, data)
     return task_path
 
-def get_cvpr2018(root):
-    """cvpr2018 datasets from http://openaccess.thecvf.com/CVPR2018.py.
+def CVPR2018(root):
+    """CVPR2018 datasets from http://openaccess.thecvf.com/CVPR2018.py.
         
-    cvpr2018 datasets includes 979 papers.
+    CVPR2018 datasets includes 979 papers.
     
     Data storage directory:
     root = `/user/.../mydata`
-    cvpr2018 data: 
-    `root/cvpr2018/...`
+    CVPR2018 data: 
+    `root/CVPR2018/...`
     Args:
         root: str, Store the absolute path of the data directory.
-              example:if you want data path is `/user/.../mydata/cvpr2018`,
+              example:if you want data path is `/user/.../mydata/CVPR2018`,
               root should be `/user/.../mydata`.
     Returns:
-        Store the absolute path of the data directory, is `root/cvpr2018`.
+        Store the absolute path of the data directory, is `root/CVPR2018`.
     """
     start = time.time()
-    _get_paper('cvpr2018', root,
+    _get_paper('CVPR2018', root,
                url='https://raw.githubusercontent.com/Hourout/datasets/master/paper/cvpr/cvpr2018.txt')
 #     assert tf.gfile.IsDirectory(root), '`root` should be directory.'
 #     task_path = os.path.join(root, 'cvpr2018')
@@ -85,27 +87,27 @@ def get_cvpr2018(root):
 #     data = pd.read_csv(io.StringIO(requests.get(url).content.decode('utf-8')), header=None)[0].tolist()
 #     with concurrent.futures.ProcessPoolExecutor() as excutor:
 #         excutor.map(_download, [task_path+'|'+i for i in data])
-    print('cvpr2018 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
+    print('CVPR2018 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
-def get_cvpr2017(root):
-    """cvpr2017 datasets from http://openaccess.thecvf.com/CVPR2017.py.
+def CVPR2017(root):
+    """CVPR2017 datasets from http://openaccess.thecvf.com/CVPR2017.py.
         
-    cvpr2017 datasets includes 783 papers.
+    CVPR2017 datasets includes 783 papers.
     
     Data storage directory:
     root = `/user/.../mydata`
-    cvpr2017 data: 
-    `root/cvpr2017/...`
+    CVPR2017 data: 
+    `root/CVPR2017/...`
     Args:
         root: str, Store the absolute path of the data directory.
-              example:if you want data path is `/user/.../mydata/cvpr2017`,
+              example:if you want data path is `/user/.../mydata/CVPR2017`,
               root should be `/user/.../mydata`.
     Returns:
-        Store the absolute path of the data directory, is `root/cvpr2017`.
+        Store the absolute path of the data directory, is `root/CVPR2017`.
     """
     start = time.time()
-    _get_paper('cvpr2017', root,
+    _get_paper('CVPR2017', root,
                url='https://raw.githubusercontent.com/Hourout/datasets/master/paper/cvpr/cvpr2017.txt')
 #     assert tf.gfile.IsDirectory(root), '`root` should be directory.'
 #     task_path = os.path.join(root, 'cvpr2017')
@@ -116,27 +118,27 @@ def get_cvpr2017(root):
 #     data = pd.read_csv(io.StringIO(requests.get(url).content.decode('utf-8')), header=None)[0].tolist()
 #     with concurrent.futures.ProcessPoolExecutor() as excutor:
 #         excutor.map(_download, [task_path+'|'+i for i in data])
-    print('cvpr2017 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
+    print('CVPR2017 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
-def get_cvpr2016(root):
-    """cvpr2016 datasets from http://openaccess.thecvf.com/CVPR2016.py.
+def CVPR2016(root):
+    """CVPR2016 datasets from http://openaccess.thecvf.com/CVPR2016.py.
         
-    cvpr2016 datasets includes 643 papers.
+    CVPR2016 datasets includes 643 papers.
     
     Data storage directory:
     root = `/user/.../mydata`
-    cvpr2016 data: 
-    `root/cvpr2016/...`
+    CVPR2016 data: 
+    `root/CVPR2016/...`
     Args:
         root: str, Store the absolute path of the data directory.
-              example:if you want data path is `/user/.../mydata/cvpr2016`,
+              example:if you want data path is `/user/.../mydata/CVPR2016`,
               root should be `/user/.../mydata`.
     Returns:
-        Store the absolute path of the data directory, is `root/cvpr2016`.
+        Store the absolute path of the data directory, is `root/CVPR2016`.
     """
     start = time.time()
-    _get_paper('cvpr2016', root,
+    _get_paper('CVPR2016', root,
                url='https://raw.githubusercontent.com/Hourout/datasets/master/paper/cvpr/cvpr2016.txt')
 #     assert tf.gfile.IsDirectory(root), '`root` should be directory.'
 #     task_path = os.path.join(root, 'cvpr2017')
@@ -147,5 +149,137 @@ def get_cvpr2016(root):
 #     data = pd.read_csv(io.StringIO(requests.get(url).content.decode('utf-8')), header=None)[0].tolist()
 #     with concurrent.futures.ProcessPoolExecutor() as excutor:
 #         excutor.map(_download, [task_path+'|'+i for i in data])
-    print('cvpr2016 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
+    print('CVPR2016 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
+    return task_path
+
+def CVPR2015(root):
+    """CVPR2015 datasets from http://openaccess.thecvf.com/CVPR2015.py.
+        
+    CVPR2015 datasets includes 602 papers.
+    
+    Data storage directory:
+    root = `/user/.../mydata`
+    CVPR2015 data: 
+    `root/CVPR2015/...`
+    Args:
+        root: str, Store the absolute path of the data directory.
+              example:if you want data path is `/user/.../mydata/CVPR2015`,
+              root should be `/user/.../mydata`.
+    Returns:
+        Store the absolute path of the data directory, is `root/CVPR2015`.
+    """
+    start = time.time()
+    _get_paper('CVPR2015', root,
+               url='https://raw.githubusercontent.com/Hourout/datasets/master/paper/cvpr/cvpr2015.txt')
+    print('CVPR2015 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
+    return task_path
+
+def CVPR2014(root):
+    """CVPR2014 datasets from http://openaccess.thecvf.com/CVPR2014.py.
+        
+    CVPR2014 datasets includes 540 papers.
+    
+    Data storage directory:
+    root = `/user/.../mydata`
+    CVPR2014 data: 
+    `root/CVPR2014/...`
+    Args:
+        root: str, Store the absolute path of the data directory.
+              example:if you want data path is `/user/.../mydata/CVPR2014`,
+              root should be `/user/.../mydata`.
+    Returns:
+        Store the absolute path of the data directory, is `root/CVPR2014`.
+    """
+    start = time.time()
+    _get_paper('CVPR2014', root,
+               url='https://raw.githubusercontent.com/Hourout/datasets/master/paper/cvpr/cvpr2014.txt')
+    print('CVPR2014 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
+    return task_path
+
+def CVPR2013(root):
+    """CVPR2013 datasets from http://openaccess.thecvf.com/CVPR2013.py.
+        
+    CVPR2013 datasets includes 471 papers.
+    
+    Data storage directory:
+    root = `/user/.../mydata`
+    CVPR2013 data: 
+    `root/CVPR2013/...`
+    Args:
+        root: str, Store the absolute path of the data directory.
+              example:if you want data path is `/user/.../mydata/CVPR2013`,
+              root should be `/user/.../mydata`.
+    Returns:
+        Store the absolute path of the data directory, is `root/CVPR2013`.
+    """
+    start = time.time()
+    _get_paper('CVPR2013', root,
+               url='https://raw.githubusercontent.com/Hourout/datasets/master/paper/cvpr/cvpr2013.txt')
+    print('CVPR2013 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
+    return task_path
+
+def ICCV2017(root):
+    """ICCV2017 datasets from http://openaccess.thecvf.com/ICCV2017.py.
+        
+    ICCV2017 datasets includes 621 papers.
+    
+    Data storage directory:
+    root = `/user/.../mydata`
+    ICCV2017 data: 
+    `root/ICCV2017/...`
+    Args:
+        root: str, Store the absolute path of the data directory.
+              example:if you want data path is `/user/.../mydata/ICCV2017`,
+              root should be `/user/.../mydata`.
+    Returns:
+        Store the absolute path of the data directory, is `root/ICCV2017`.
+    """
+    start = time.time()
+    _get_paper('ICCV2017', root,
+               url='https://raw.githubusercontent.com/Hourout/datasets/master/paper/ICCV/iccv2017.txt')
+    print('ICCV2017 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
+    return task_path
+
+def ICCV2015(root):
+    """ICCV2015 datasets from http://openaccess.thecvf.com/ICCV2015.py.
+        
+    ICCV2015 datasets includes 526 papers.
+    
+    Data storage directory:
+    root = `/user/.../mydata`
+    ICCV2015 data: 
+    `root/ICCV2015/...`
+    Args:
+        root: str, Store the absolute path of the data directory.
+              example:if you want data path is `/user/.../mydata/ICCV2015`,
+              root should be `/user/.../mydata`.
+    Returns:
+        Store the absolute path of the data directory, is `root/ICCV2015`.
+    """
+    start = time.time()
+    _get_paper('ICCV2015', root,
+               url='https://raw.githubusercontent.com/Hourout/datasets/master/paper/ICCV/iccv2015.txt')
+    print('ICCV2015 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
+    return task_path
+
+def ICCV2013(root):
+    """ICCV2013 datasets from http://openaccess.thecvf.com/ICCV2013.py.
+        
+    ICCV2013 datasets includes 455 papers.
+    
+    Data storage directory:
+    root = `/user/.../mydata`
+    ICCV2013 data: 
+    `root/ICCV2013/...`
+    Args:
+        root: str, Store the absolute path of the data directory.
+              example:if you want data path is `/user/.../mydata/ICCV2013`,
+              root should be `/user/.../mydata`.
+    Returns:
+        Store the absolute path of the data directory, is `root/ICCV2013`.
+    """
+    start = time.time()
+    _get_paper('ICCV2013', root,
+               url='https://raw.githubusercontent.com/Hourout/datasets/master/paper/ICCV/iccv2013.txt')
+    print('ICCV2013 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
