@@ -11,6 +11,8 @@ def cifar10(root):
     """CIFAR10 image classification dataset from https://www.cs.toronto.edu/~kriz/cifar.html
     
     Each sample is an image (in 3D NDArray) with shape (32, 32, 3).
+    
+    Attention: if exist dirs `root/cifar10`, api will delete it and create it.
     Data storage directory:
     root = `/user/.../mydata`
     cifar10 data: 
@@ -65,6 +67,8 @@ def cifar100(root, fine_label=True):
     """CIFAR100 image classification dataset from https://www.cs.toronto.edu/~kriz/cifar.html
     
     Each sample is an image (in 3D NDArray) with shape (32, 32, 3).
+    
+    Attention: if exist dirs `root/cifar100`, api will delete it and create it.
     Data storage directory:
     root = `/user/.../mydata`
     cifar100 data: 
