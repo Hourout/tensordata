@@ -4,6 +4,8 @@ import imageio
 import numpy as np
 import tensorflow as tf
 
+__all__ = ['mnist_kuzushiji10', 'mnist_kuzushiji49']
+
 def mnist_kuzushiji10(root):
     """Kuzushiji-MNIST from https://github.com/rois-codh/kmnist.
     
@@ -15,9 +17,10 @@ def mnist_kuzushiji10(root):
     
     Each sample is an gray image (in 3D NDArray) with shape (28, 28, 1).
     
+    Attention: if exist dirs `root/mnist_kuzushiji10`, api will delete it and create it.
     Data storage directory:
     root = `/user/.../mydata`
-    mnist data: 
+    mnist_kuzushiji10 data: 
     `root/mnist_kuzushiji10/train/0/xx.png`
     `root/mnist_kuzushiji10/train/2/xx.png`
     `root/mnist_kuzushiji10/train/6/xx.png`
@@ -69,9 +72,10 @@ def mnist_kuzushiji49(root):
     
     Each sample is an gray image (in 3D NDArray) with shape (28, 28, 1).
     
+    Attention: if exist dirs `root/mnist_kuzushiji49`, api will delete it and create it.
     Data storage directory:
     root = `/user/.../mydata`
-    mnist data: 
+    mnist_kuzushiji49 data: 
     `root/mnist_kuzushiji49/train/0/xx.png`
     `root/mnist_kuzushiji49/train/2/xx.png`
     `root/mnist_kuzushiji49/train/6/xx.png`
