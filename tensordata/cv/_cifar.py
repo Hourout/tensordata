@@ -5,12 +5,15 @@ import imageio
 import numpy as np
 import tensorflow as tf
 
+__all__ = ['cifar10', 'cifar100']
+
 def cifar10(root):
     """CIFAR10 image classification dataset from https://www.cs.toronto.edu/~kriz/cifar.html
+    
     Each sample is an image (in 3D NDArray) with shape (32, 32, 3).
     Data storage directory:
     root = `/user/.../mydata`
-    mnist data: 
+    cifar10 data: 
     `root/cifar10/train/0/xx.png`
     `root/cifar10/train/2/xx.png`
     `root/cifar10/train/6/xx.png`
@@ -60,10 +63,11 @@ def cifar10(root):
 
 def cifar100(root, fine_label=True):
     """CIFAR100 image classification dataset from https://www.cs.toronto.edu/~kriz/cifar.html
+    
     Each sample is an image (in 3D NDArray) with shape (32, 32, 3).
     Data storage directory:
     root = `/user/.../mydata`
-    mnist data: 
+    cifar100 data: 
     `root/cifar100/train/0/xx.png`
     `root/cifar100/train/2/xx.png`
     `root/cifar100/train/6/xx.png`
