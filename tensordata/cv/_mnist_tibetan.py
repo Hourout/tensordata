@@ -7,6 +7,8 @@ import numpy as np
 import pandas as pd
 import tensorflow as tf
 
+__all__ = ['mnist_tibetan']
+
 def mnist_tibetan(root):
     """Tibetan-MNIST from https://github.com/bat67/TibetanMNIST.
     
@@ -18,9 +20,10 @@ def mnist_tibetan(root):
     
     Each sample is an gray image (in 3D NDArray) with shape (28, 28, 1).
     
+    Attention: if exist dirs `root/mnist_tibetan`, api will delete it and create it.
     Data storage directory:
     root = `/user/.../mydata`
-    mnist data: 
+    mnist_tibetan data: 
     `root/mnist_tibetan/train/0/xx.png`
     `root/mnist_tibetan/train/2/xx.png`
     `root/mnist_tibetan/train/6/xx.png`
