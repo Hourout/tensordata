@@ -93,7 +93,7 @@ def coil100(root):
         tf.gfile.Copy(i, j)
     tf.gfile.Remove(os.path.join(task_path, 'coil100.zip'))
     tf.gfile.DeleteRecursively(os.path.join(task_path, 'coil100'))
-    if tf.gfile.Exists(os.path.join(task_path, 'train', 'vertGroupppm2png.pl'):
+    if tf.gfile.Exists(os.path.join(task_path, 'train', 'vertGroupppm2png.pl')):
         tf.gfile.DeleteRecursively(os.path.join(task_path, 'train', 'vertGroupppm2png.pl'))
     print('coil100 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
