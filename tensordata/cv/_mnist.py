@@ -5,9 +5,14 @@ import imageio
 import numpy as np
 import tensorflow as tf
 
+__all__ = ['mnist', 'mnist_fashion']
+
 def mnist(root):
     """MNIST handwritten digits dataset from http://yann.lecun.com/exdb/mnist
+    
     Each sample is an gray image (in 3D NDArray) with shape (28, 28, 1).
+    
+    Attention: if exist dirs `root/mnist`, api will delete it and create it.
     Data storage directory:
     root = `/user/.../mydata`
     mnist data: 
@@ -68,9 +73,10 @@ def mnist_fashion(root):
     from https://github.com/zalandoresearch/fashion-mnist.
     Each sample is an gray image (in 3D NDArray) with shape (28, 28, 1).
     
+    Attention: if exist dirs `root/mnist_fashion`, api will delete it and create it.
     Data storage directory:
     root = `/user/.../mydata`
-    mnist data: 
+    mnist_fashion data: 
     `root/mnist_fashion/train/0/xx.png`
     `root/mnist_fashion/train/2/xx.png`
     `root/mnist_fashion/train/6/xx.png`
