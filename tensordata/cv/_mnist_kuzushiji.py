@@ -3,8 +3,9 @@ import time
 import imageio
 import numpy as np
 import tensorflow as tf
+from tensordata.utils.compress import un_tar
 
-__all__ = ['mnist_kuzushiji10', 'mnist_kuzushiji49']
+__all__ = ['mnist_kuzushiji10', 'mnist_kuzushiji49', 'mnist_kuzushiji_kanji']
 
 def mnist_kuzushiji10(root):
     """Kuzushiji-MNIST from https://github.com/rois-codh/kmnist.
@@ -116,4 +117,38 @@ def mnist_kuzushiji49(root):
     for url in url_list:
         tf.gfile.Remove(os.path.join(task_path, url.split('/')[-1]))
     print('mnist_kuzushiji49 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
+    return task_path
+
+def mnist_kuzushiji_kanji(root):
+    """Kuzushiji-Kanji dataset from https://github.com/rois-codh/kmnist.
+    
+    Kuzushiji-Kanji is a large and highly imbalanced 64x64 dataset 
+    of 3832 Kanji characters, containing 140,426 images 
+    of both common and rare characters.
+    
+    Attention: if exist dirs `root/mnist_kuzushiji_kanji`, api will delete it and create it.
+    Data storage directory:
+    root = `/user/.../mydata`
+    mnist_kuzushiji_kanji data: 
+    `root/mnist_kuzushiji_kanji/train/U+55C7/xx.png`
+    `root/mnist_kuzushiji_kanji/train/U+7F8E/xx.png`
+    `root/mnist_kuzushiji_kanji/train/U+9593/xx.png`
+    Args:
+        root: str, Store the absolute path of the data directory.
+              example:if you want data path is `/user/.../mydata/mnist_kuzushiji_kanji`,
+              root should be `/user/.../mydata`.
+    Returns:
+        Store the absolute path of the data directory, is `root/mnist_kuzushiji_kanji.
+    """
+    start = time.time()
+    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
+    task_path = os.path.join(root, 'mnist_kuzushiji_kanji')
+    if tf.gfile.Exists(task_path):
+        tf.gfile.DeleteRecursively(task_path)
+    url = "http://codh.rois.ac.jp/kmnist/dataset/kkanji/kkanji.tar"
+    tf.keras.utils.get_file(os.path.join(root, url.split('/')[-1]), url)
+    un_tar(os.path.join(root, url.split('/')[-1]), task_path)
+    tf.gfile.Rename(os.path.join(task_path, 'kkanji2'), os.path.join(task_path, 'train'))
+    tf.gfile.Remove(os.path.join(root, 'kkanji.tar'))
+    print('mnist_kuzushiji_kanji dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
