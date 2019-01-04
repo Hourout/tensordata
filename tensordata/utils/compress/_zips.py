@@ -1,9 +1,14 @@
 import os
+import bz2
 import gzip
 import zipfile
 import tarfile
 import rarfile
 import tensorflow as tf
+
+__all__ = ['files_zip', 'files_tar', 'files_bz2', 
+           'folder_zip', 'folder_tar',
+           'un_gz', 'un_tar', 'un_zip', 'un_rar', 'un_bz2']
 
 def files_zip(files, zip_name):
     """Compression files to .zip.
@@ -54,6 +59,33 @@ def files_tar(files, tar_name):
     else:
         raise ValueError('`files` should be type of str or list.')
     return tar_name
+
+def files_bz2(files, bz2_name):
+    """Compression files to .bz2.
+    
+    Args:
+        files: str or list
+               if str, files should be file path;
+               if list, files should be file path list.
+        zip_name: str, compression files name.
+    Return:
+        zip_name: str, compression files name.
+    """
+    assert isinstance(bz2_name, str), '`bz2_name` should be str.'
+    if isinstance(files, str):
+        assert not tf.gfile.IsDirectory(files), '`files` should be file path.'
+        with bz2.BZ2File(bz2_name, 'w') as b:
+            with tf.gfile.GFile(files, 'rb') as f:
+                b.write(f.read())
+    elif isinstance(files, list):
+        with bz2.BZ2File(bz2_name, 'w') as b:
+            for file in files:
+                assert not tf.gfile.IsDirectory(file), 'Elements in the list should be file path.'
+                with tf.gfile.GFile(file, 'rb') as f:
+                    b.write(f.read())
+    else:
+        raise ValueError('`files` should be type of str or list.')
+    return bz2_name
 
 def folder_zip(folder, zip_name):
     """Compress all files in the folder to .zip.
@@ -161,3 +193,20 @@ def un_rar(rar_file, urar_folder=None):
         for name in names:
             r.extract(name, urar_folder)
     return urar_folder
+
+def un_bz2(bz2_file, ubz2_folder=None):
+    """Uncompression .bz2 file
+    
+    Args:
+        rar_files: str, rar_file should be file path;
+        urar_folder: str, uncompression files name.
+    Return:
+        urar_folder: str, uncompression files name.
+    """
+    assert bz2_file[-4:]==".bz2", '`bz2_file` should be `xxx.bz2`'
+    if ubz2_folder is None:
+        ubz2_folder = bz2_file[:-4]
+    with bz2.BZ2File(bz2_file, 'r') as b:
+        with tf.gfile.GFile(ubz2_folder, 'w') as f:
+            f.write(b.readline())
+    return ubz2_folder
