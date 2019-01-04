@@ -4,7 +4,7 @@ import tensorflow as tf
 from tensordata.utils.compress import un_bz2
 
 __all__ = ['shijing', 'youmengying', 'huajianji', 'poetry_SouthernTang', 'lunyu',
-           'poetry_tang', 'poetry_song'
+           'poet_tang', 'poet_song', 'ci_song'
           ]
 
 def shijing(root):
@@ -176,8 +176,8 @@ def lunyu(root):
     print('lunyu dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
-def poetry_tang(root):
-    """Tang_poetry dataset from Chinese classical literature.
+def poet_tang(root):
+    """Tang_poet dataset from Chinese classical literature.
     
     "Full Tang Poetry" is the 44th year of Qing Emperor Kangxi (1705), 
     Peng Dingqiu, Shen Sanzeng, Yang Zhongna, Wang Shizhen, Wang Wei, 
@@ -187,30 +187,30 @@ def poetry_tang(root):
     
     Data storage directory:
     root = `/user/.../mydata`
-    poetry_tang data: 
-    `root/poetry_tang/poetry_tang.json`
+    poet_tang data: 
+    `root/poet_tang/poet_tang.json`
     Args:
         root: str, Store the absolute path of the data directory.
-              example:if you want data path is `/user/.../mydata/poetry_tang`,
+              example:if you want data path is `/user/.../mydata/poet_tang`,
               root should be `/user/.../mydata`.
     Returns:
-        Store the absolute path of the data directory, is `root/poetry_tang`.
+        Store the absolute path of the data directory, is `root/poet_tang`.
     """
     start = time.time()
     assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'poetry_tang')
+    task_path = os.path.join(root, 'poet_tang')
     if tf.gfile.Exists(task_path):
         tf.gfile.DeleteRecursively(task_path)
     tf.gfile.MakeDirs(task_path)
     url = 'https://raw.githubusercontent.com/Hourout/datasets/master/nlp/wenxue/poetry_tang.json.bz2'
-    tf.keras.utils.get_file(os.path.join(task_path, url.split('/')[-1]), url)
-    un_bz2(os.path.join(task_path, url.split('/')[-1]))
-    tf.gfile.Remove(os.path.join(task_path, url.split('/')[-1]))
-    print('poetry_tang dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
+    tf.keras.utils.get_file(os.path.join(task_path, 'poet_tang.json.bz2'), url)
+    un_bz2(os.path.join(task_path, 'poet_tang.json.bz2'))
+    tf.gfile.Remove(os.path.join(task_path, 'poet_tang.json.bz2'))
+    print('poet_tang dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
-def poetry_song(root):
-    """Song_poetry dataset from Chinese classical literature.
+def poet_song(root):
+    """Song_poet dataset from Chinese classical literature.
     
     "Full Song Poetry" After the high prosperity of Tang poetry, 
     Song poetry has new development and creation in ideological 
@@ -223,23 +223,57 @@ def poetry_song(root):
     Data storage directory:
     root = `/user/.../mydata`
     poetry_song data: 
-    `root/poetry_tang/poetry_song.json`
+    `root/poet_song/poet_song.json`
     Args:
         root: str, Store the absolute path of the data directory.
-              example:if you want data path is `/user/.../mydata/poetry_song`,
+              example:if you want data path is `/user/.../mydata/poet_song`,
               root should be `/user/.../mydata`.
     Returns:
-        Store the absolute path of the data directory, is `root/poetry_song`.
+        Store the absolute path of the data directory, is `root/poet_song`.
     """
     start = time.time()
     assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'poetry_song')
+    task_path = os.path.join(root, 'poet_song')
     if tf.gfile.Exists(task_path):
         tf.gfile.DeleteRecursively(task_path)
     tf.gfile.MakeDirs(task_path)
     url = 'https://raw.githubusercontent.com/Hourout/datasets/master/nlp/wenxue/poetry_song.json.bz2'
+    tf.keras.utils.get_file(os.path.join(task_path, 'poet_song.json.bz2'), url)
+    un_bz2(os.path.join(task_path, 'poet_song.json.bz2'))
+    tf.gfile.Remove(os.path.join(task_path, 'poet_song.json.bz2'))
+    print('poet_song dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
+    return task_path
+
+def ci_song(root):
+    """Song_ci dataset from Chinese classical literature.
+    
+    "The Song of the Whole Song" is one of the most important 
+    achievements of ancient books in China in the past 100 years. 
+    Song poetry and Tang poetry are the artistic peaks of 
+    Chinese classical poetry. The "Full Tang Poetry" edited in 
+    the Qing Dynasty is a household name, and now it is newly 
+    compiled "Full Song Ci", which is called the double shackles 
+    of Chinese literature. The book has a total of five volumes, 
+    a collection of words from the Song Dynasty for three hundred years.
+    
+    Data storage directory:
+    root = `/user/.../mydata`
+    ci_song data: 
+    `root/ci_song/ci_song.json`
+    Args:
+        root: str, Store the absolute path of the data directory.
+              example:if you want data path is `/user/.../mydata/ci_song`,
+              root should be `/user/.../mydata`.
+    Returns:
+        Store the absolute path of the data directory, is `root/ci_song`.
+    """
+    start = time.time()
+    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
+    task_path = os.path.join(root, 'ci_song')
+    if tf.gfile.Exists(task_path):
+        tf.gfile.DeleteRecursively(task_path)
+    tf.gfile.MakeDirs(task_path)
+    url = 'https://raw.githubusercontent.com/Hourout/datasets/master/nlp/wenxue/ci_song.json'
     tf.keras.utils.get_file(os.path.join(task_path, url.split('/')[-1]), url)
-    un_bz2(os.path.join(task_path, url.split('/')[-1]))
-    tf.gfile.Remove(os.path.join(task_path, url.split('/')[-1]))
-    print('poetry_song dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
+    print('ci_song dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
