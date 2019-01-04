@@ -1,4 +1,7 @@
+import os
+import time
 import tensorflow as tf
+from tensordata.utils.compress import un_bz2
 
 __all__ = ['shijing', 'youmengying', 'huajianji', 'poetry_nantang_erzhu', 'lunyu']
 
