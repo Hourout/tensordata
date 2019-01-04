@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-__all__ = ['shijing', 'youmengying', 'huajianji', 'nantang_erzhu_poetry']
+__all__ = ['shijing', 'youmengying', 'huajianji', 'poetry_nantang_erzhu', 'lunyu']
 
 def shijing(root):
     """Shijing dataset from Chinese classical literature.
@@ -100,8 +100,8 @@ def huajianji(root):
     print('huajianji dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
-def nantang_erzhu_poetry(root):
-    """Nantang_erzhu_poetry dataset from Chinese classical literature.
+def poetry_SouthernTang(root):
+    """poetry_SouthernTang dataset from Chinese classical literature.
     
     "The Southern Tang Dynasty's two main words", 
     is the Southern Tang Dynasty master Li Jing, the latter master Li Yu. 
@@ -111,22 +111,62 @@ def nantang_erzhu_poetry(root):
     
     Data storage directory:
     root = `/user/.../mydata`
-    nantang_erzhu_poetry data: 
-    `root/nantang_erzhu_poetry/nantang_erzhu_poetry.json`
+    poetry_SouthernTang data: 
+    `root/poetry_SouthernTang/poetry_SouthernTang.json`
     Args:
         root: str, Store the absolute path of the data directory.
-              example:if you want data path is `/user/.../mydata/nantang_erzhu_poetry`,
+              example:if you want data path is `/user/.../mydata/poetry_SouthernTang`,
               root should be `/user/.../mydata`.
     Returns:
-        Store the absolute path of the data directory, is `root/nantang_erzhu_poetry`.
+        Store the absolute path of the data directory, is `root/poetry_SouthernTang`.
     """
     start = time.time()
     assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'nantang_erzhu_poetry')
+    task_path = os.path.join(root, 'poetry_SouthernTang')
     if tf.gfile.Exists(task_path):
         tf.gfile.DeleteRecursively(task_path)
     tf.gfile.MakeDirs(task_path)
     url = "https://raw.githubusercontent.com/Hourout/datasets/master/nlp/wenxue/nantang_erzhu_poetry.json"
+    tf.keras.utils.get_file(os.path.join(task_path, 'poetry_SouthernTang.json'), url)
+    print('poetry_SouthernTang dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
+    return task_path
+
+def lunyu(root):
+    """Lunyu dataset from Chinese classical literature.
+    
+    The Chinese Confucian classics, "The Analects of Confucius" is 
+    a collection of quotations of Confucius and his disciples. 
+    It was written by Confucius disciples and re-transmission disciples, 
+    and was written in the early period of the Warring States Period. 
+    The book consists of 20 chapters and 492 chapters. 
+    It is mainly composed of quotations and supplemented by narratives. 
+    It mainly records the words and deeds of Confucius and his disciples, 
+    and more concentratedly reflects Confucius' political opinions, 
+    ethical thoughts, moral concepts and educational principles. 
+    This book is one of the classic works of Confucianism. 
+    It is also called "Four Books" with "University", 
+    "The Doctrine of the Mean" and "Mencius",
+    plus "The Book of Songs", "Shangshu", "Book of Rites", 
+    "Zhou Yi", "Spring and Autumn", collectively called "four books". Five Classics."
+    
+    Data storage directory:
+    root = `/user/.../mydata`
+    lunyu data: 
+    `root/lunyu/lunyu.json`
+    Args:
+        root: str, Store the absolute path of the data directory.
+              example:if you want data path is `/user/.../mydata/lunyu`,
+              root should be `/user/.../mydata`.
+    Returns:
+        Store the absolute path of the data directory, is `root/lunyu`.
+    """
+    start = time.time()
+    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
+    task_path = os.path.join(root, 'lunyu')
+    if tf.gfile.Exists(task_path):
+        tf.gfile.DeleteRecursively(task_path)
+    tf.gfile.MakeDirs(task_path)
+    url = 'https://raw.githubusercontent.com/Hourout/datasets/master/nlp/wenxue/lunyu.json'
     tf.keras.utils.get_file(os.path.join(task_path, url.split('/')[-1]), url)
-    print('nantang_erzhu_poetry dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
+    print('lunyu dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
