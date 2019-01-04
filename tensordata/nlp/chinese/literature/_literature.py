@@ -4,7 +4,7 @@ import tensorflow as tf
 from tensordata.utils.compress import un_bz2
 
 __all__ = ['shijing', 'youmengying', 'huajianji', 'poetry_SouthernTang', 'lunyu',
-           'poetry_tang'
+           'poetry_tang', 'poetry_song'
           ]
 
 def shijing(root):
@@ -207,4 +207,39 @@ def poetry_tang(root):
     un_bz2(os.path.join(task_path, url.split('/')[-1]))
     tf.gfile.Remove(os.path.join(task_path, url.split('/')[-1]))
     print('poetry_tang dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
+    return task_path
+
+def poetry_song(root):
+    """Song_poetry dataset from Chinese classical literature.
+    
+    "Full Song Poetry" After the high prosperity of Tang poetry, 
+    Song poetry has new development and creation in ideological 
+    content and artistic expression. 
+    Many excellent writers have appeared, 
+    and many schools have been formed, 
+    which have produced poetry development in Yuan, 
+    Ming and Qing. A far-reaching impact.
+    
+    Data storage directory:
+    root = `/user/.../mydata`
+    poetry_song data: 
+    `root/poetry_tang/poetry_song.json`
+    Args:
+        root: str, Store the absolute path of the data directory.
+              example:if you want data path is `/user/.../mydata/poetry_song`,
+              root should be `/user/.../mydata`.
+    Returns:
+        Store the absolute path of the data directory, is `root/poetry_song`.
+    """
+    start = time.time()
+    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
+    task_path = os.path.join(root, 'poetry_song')
+    if tf.gfile.Exists(task_path):
+        tf.gfile.DeleteRecursively(task_path)
+    tf.gfile.MakeDirs(task_path)
+    url = 'https://raw.githubusercontent.com/Hourout/datasets/master/nlp/wenxue/poetry_song.json.bz2'
+    tf.keras.utils.get_file(os.path.join(task_path, url.split('/')[-1]), url)
+    un_bz2(os.path.join(task_path, url.split('/')[-1]))
+    tf.gfile.Remove(os.path.join(task_path, url.split('/')[-1]))
+    print('poetry_song dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
