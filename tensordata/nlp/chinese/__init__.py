@@ -1,1 +1,1 @@
-from tensordata.nlp import chinese
+from tensordata.nlp.chinese import literature
