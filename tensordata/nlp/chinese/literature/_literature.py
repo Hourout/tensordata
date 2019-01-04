@@ -3,7 +3,9 @@ import time
 import tensorflow as tf
 from tensordata.utils.compress import un_bz2
 
-__all__ = ['shijing', 'youmengying', 'huajianji', 'poetry_nantang_erzhu', 'lunyu']
+__all__ = ['shijing', 'youmengying', 'huajianji', 'poetry_SouthernTang', 'lunyu',
+           'poetry_tang'
+          ]
 
 def shijing(root):
     """Shijing dataset from Chinese classical literature.
@@ -172,4 +174,37 @@ def lunyu(root):
     url = 'https://raw.githubusercontent.com/Hourout/datasets/master/nlp/wenxue/lunyu.json'
     tf.keras.utils.get_file(os.path.join(task_path, url.split('/')[-1]), url)
     print('lunyu dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
+    return task_path
+
+def poetry_tang(root):
+    """Tang_poetry dataset from Chinese classical literature.
+    
+    "Full Tang Poetry" is the 44th year of Qing Emperor Kangxi (1705), 
+    Peng Dingqiu, Shen Sanzeng, Yang Zhongna, Wang Shizhen, Wang Wei, 
+    Yu Mei, Xu Shuben, Che Dingjin, Pan Conglu, and Cha Yu 
+    "There are more than 48,900 poems, more than 2,200 people,"
+    a total of 900 volumes, 12 volumes of catalogues.
+    
+    Data storage directory:
+    root = `/user/.../mydata`
+    poetry_tang data: 
+    `root/poetry_tang/poetry_tang.json`
+    Args:
+        root: str, Store the absolute path of the data directory.
+              example:if you want data path is `/user/.../mydata/poetry_tang`,
+              root should be `/user/.../mydata`.
+    Returns:
+        Store the absolute path of the data directory, is `root/poetry_tang`.
+    """
+    start = time.time()
+    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
+    task_path = os.path.join(root, 'poetry_tang')
+    if tf.gfile.Exists(task_path):
+        tf.gfile.DeleteRecursively(task_path)
+    tf.gfile.MakeDirs(task_path)
+    url = 'https://raw.githubusercontent.com/Hourout/datasets/master/nlp/wenxue/poetry_tang.json.bz2'
+    tf.keras.utils.get_file(os.path.join(task_path, url.split('/')[-1]), url)
+    un_bz2(os.path.join(task_path, url.split('/')[-1]))
+    tf.gfile.Remove(os.path.join(task_path, url.split('/')[-1]))
+    print('poetry_tang dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
