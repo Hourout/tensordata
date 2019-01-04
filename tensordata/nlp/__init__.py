@@ -10,3 +10,4 @@ from tensordata.nlp._chinese_stop_word import chinese_stop_word
 from tensordata.nlp._chinese_stop_word import chinese_stop_word_baidu
 from tensordata.nlp._chinese_stop_word import chinese_stop_word_SCU
 from tensordata.nlp._chinese_stop_word import chinese_stop_word_HIT
+from tensordata.nlp import chinese
