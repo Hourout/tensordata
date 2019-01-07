@@ -1,13 +1,1 @@
-from tensordata.nlp._chinese_reviews_ctrip_hotel import chinese_reviews_ctrip_hotel
-from tensordata.nlp._chinese_reviews_takeaway import chinese_reviews_takeaway
-from tensordata.nlp._chinese_reviews_online_shopping_10_cats import chinese_reviews_online_shopping_10_cats
-from tensordata.nlp._chinese_reviews_sina_weibo import chinese_reviews_sina_weibo
-from tensordata.nlp._chinese_reviews_sina_weibo_emotion4 import chinese_reviews_sina_weibo_emotion4
-from tensordata.nlp._chinese_reviews_douban_movies import chinese_reviews_douban_movies
-
-#stop word
-from tensordata.nlp._chinese_stop_word import chinese_stop_word
-from tensordata.nlp._chinese_stop_word import chinese_stop_word_baidu
-from tensordata.nlp._chinese_stop_word import chinese_stop_word_SCU
-from tensordata.nlp._chinese_stop_word import chinese_stop_word_HIT
 from tensordata.nlp import chinese
