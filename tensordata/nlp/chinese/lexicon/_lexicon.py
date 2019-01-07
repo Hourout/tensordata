@@ -5,7 +5,7 @@ import requests
 import pandas as pd
 import tensorflow as tf
 
-__all__ = ['it',
+__all__ = ['it', 'animal', 'medical', 'famous_person', 'placename',
 ]
 
 def it(root):
@@ -126,4 +126,34 @@ def famous_person(root):
     data = pd.read_csv(io.StringIO(requests.get(url).content.decode('utf-8')), header=None, sep='\t')[0]
     data.to_csv(os.path.join(task_path, 'chinese_lexicon_famous_person.txt'), index=False, header=None)
     print('chinese_lexicon_famous_person dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
+    return task_path
+
+def placename(root):
+    """Chinese lexicon placename datasets.
+    
+    datasets url:`https://github.com/fighting41love/funNLP`
+    
+    chinese_lexicon_placename dataset contains 44800+ samples.
+    
+    Data storage directory:
+    root = `/user/.../mydata`
+    chinese_lexicon_placename data: 
+    `root/chinese_lexicon_placename/chinese_lexicon_placename.txt`
+    Args:
+        root: str, Store the absolute path of the data directory.
+              example:if you want data path is `/user/.../mydata/chinese_lexicon_placename`,
+              root should be `/user/.../mydata`.
+    Returns:
+        Store the absolute path of the data directory, is `root/chinese_lexicon_placename`.
+    """
+    start = time.time()
+    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
+    task_path = os.path.join(root, 'chinese_lexicon_placename')
+    if tf.gfile.Exists(task_path):
+        tf.gfile.DeleteRecursively(task_path)
+    tf.gfile.MakeDirs(task_path)
+    url = "https://raw.githubusercontent.com/Hourout/datasets/master/nlp/chinese_lexicon/chinese_lexicon_placename.txt"
+    data = pd.read_csv(io.StringIO(requests.get(url).content.decode('utf-8')), header=None)
+    data.to_csv(os.path.join(task_path, 'chinese_lexicon_placename.txt'), index=False, header=None)
+    print('chinese_lexicon_placename dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
