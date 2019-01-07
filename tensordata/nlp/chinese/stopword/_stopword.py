@@ -4,7 +4,9 @@ import requests
 import pandas as pd
 import tensorflow as tf
 
-def chinese_stop_word(root):
+__all__ = ['standard', 'baidu', 'SCU', 'HIT']
+
+def standard(root):
     """Chinese stop word datasets.
         
     Chinese stop word datasets Includes 746 stop word.
@@ -32,7 +34,7 @@ def chinese_stop_word(root):
     print('chinese_stop_word dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
-def chinese_stop_word_baidu(root):
+def baidu(root):
     """Chinese stop word of baidu datasets.
         
     Chinese stop word of baidu datasets Includes 1395 stop word.
@@ -60,7 +62,7 @@ def chinese_stop_word_baidu(root):
     print('chinese_stop_word_baidu dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
-def chinese_stop_word_SCU(root):
+def SCU(root):
     """Chinese stop word of Sichuan University datasets.
         
     Chinese stop word of Sichuan University datasets Includes 976 stop word.
@@ -88,7 +90,7 @@ def chinese_stop_word_SCU(root):
     print('chinese_stop_word_SCU dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
-def chinese_stop_word_HIT(root):
+def HIT(root):
     """Chinese stop word of Harbin Institute of Technology datasets.
         
     Chinese stop word of Harbin Institute of Technology datasets Includes 767 stop word.
