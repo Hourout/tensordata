@@ -21,7 +21,7 @@ def json(url, root_file):
         json.dump(s.json(), f, ensure_ascii=False)
     return root_file
 
-def request_txt(url, root_file, sep=','):
+def txt(url, root_file, sep=','):
     """Request url that file is txt file.
     
     Args:
