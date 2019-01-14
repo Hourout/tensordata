@@ -21,7 +21,7 @@ def json(url, root_file):
         json.dump(s.json(), f, ensure_ascii=False)
     return root_file
 
-def txt(url, root_file, sep=','):
+def txt(url, root_file, sep=',', names=None):
     """Request url that file is txt file.
     
     Args:
@@ -32,6 +32,6 @@ def txt(url, root_file, sep=','):
         root_file: str, downloaded and saved file name.
     """
     s = requests.get(url).content
-    data = pd.read_csv(io.StringIO(s.decode('utf-8')), header=None, low_memory=False)
-    data.to_csv(root_file, index=False, sep=sep, header=None)
+    data = pd.read_csv(io.StringIO(s.decode('utf-8')), names=names, dtype='str')
+    data.to_csv(root_file, index=False, sep=sep)
     return root_file
