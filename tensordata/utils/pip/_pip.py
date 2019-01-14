@@ -4,9 +4,9 @@ import subprocess
 import tensorflow as tf
 
 
-__all__ = ['library_list', 'library_update', 'library_get']
+__all__ = ['pip_list', 'pip_update', 'pip_get']
 
-def library_list(name=None, py=3):
+def pip_list(name=None, py=3):
     assert name is None or isinstance(name, str) or isinstance(name, list), "`name` should be None or str or list."
     assert py in [2, 3], "`py` should be in one of [2, 3]."
     
@@ -23,9 +23,9 @@ def library_list(name=None, py=3):
             raise ValueError("{} is not in local libraries".format(name))
     return s
 
-def library_update(name=None, version=None, py=3):
+def pip_update(name=None, version=None, py=3):
     assert py in [2, 3], "`py` should be in one of [2, 3]."
-    old_lib = library_list(name=name)
+    old_lib = pip_list(name=name)
     if version is not None:
         if isinstance(version, str):
             version = [version]
@@ -45,11 +45,11 @@ def library_update(name=None, version=None, py=3):
                 subprocess.call("pip3 install --user --upgrade " + dist, shell=True)
             else:
                 subprocess.call("pip2 install --user --upgrade " + dist, shell=True)
-    new_lib = library_list(name=name)
+    new_lib = pip_list(name=name)
     lib = {i:{'old_version': old_lib[i], "new_version":new_lib[i]} for i in old_lib}
     return lib
 
-def library_get(root, lib=None, name=None, version=None):
+def pip_get(root, lib=None, name=None, version=None):
     if lib is None and name is None:
         raise ValueError("`lib` and `name` at least one is not None.")
     assert lib is None or isinstance(lib, str), "`lib` should be None or str."
