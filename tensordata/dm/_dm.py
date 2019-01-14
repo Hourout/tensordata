@@ -4,6 +4,9 @@ import json
 import requests
 import pandas as pd
 import tensorflow as tf
+from tensordata.utils._utils import assert_dirs
+import tensordata.request as rq
+
 
 __all__ = ['boston_housing', 'adult']
 
@@ -29,20 +32,11 @@ def boston_housing(root):
         Store the absolute path of the data directory, is `root/boston_housing`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'boston_housing')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
+    task_path = assert_dirs(root, 'boston_housing')
     url_json = 'https://raw.githubusercontent.com/Hourout/datasets/master/dm/boston_house/boston_housing.json'
     url_txt = 'https://raw.githubusercontent.com/Hourout/datasets/master/dm/boston_house/boston_housing.txt'
-    s = requests.get(url_json)
-    with open(os.path.join(task_path, 'boston_housing.json'), 'w') as outfile:
-        json.dump(s.json(), outfile, ensure_ascii=False)
-        outfile.write('\n')
-    s = requests.get(url_txt).content
-    data = pd.read_csv(io.StringIO(s.decode('utf-8')), dtype='float32')
-    data.to_csv(os.path.join(task_path, 'boston_housing.txt'), index=False)
+    rq.json(url_json, os.path.join(task_path, 'boston_housing.json'))
+    rq.txt(url_txt, os.path.join(task_path, 'boston_housing.txt'))
     print('boston_housing dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -70,19 +64,10 @@ def adult(root):
         Store the absolute path of the data directory, is `root/adult`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'adult')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
+    task_path = assert_dirs(root, 'adult')
     url_json = 'https://raw.githubusercontent.com/Hourout/datasets/master/dm/adult/adult.json'
     url_txt = 'https://raw.githubusercontent.com/Hourout/datasets/master/dm/adult/adult.txt'
-    s = requests.get(url_json)
-    with open(os.path.join(task_path, 'adult.json'), 'w') as outfile:
-        json.dump(s.json(), outfile, ensure_ascii=False)
-        outfile.write('\n')
-    s = requests.get(url_txt).content
-    data = pd.read_csv(io.StringIO(s.decode('utf-8')))
-    data.to_csv(os.path.join(task_path, 'adult.txt'), index=False)
+    rq.json(url_json, os.path.join(task_path, 'adult.json'))
+    rq.txt(url_txt, os.path.join(task_path, 'adult.txt'))
     print('adult dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
