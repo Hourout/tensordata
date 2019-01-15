@@ -1,19 +1,28 @@
-import io
-import requests
 import subprocess
-import tensorflow as tf
 
 
-__all__ = ['pip_list', 'pip_update', 'pip_get']
+__all__ = ['freeze', 'upgrade', 'upgradeable', 'install', 'mirror', 'file']
 
-def pip_list(name=None, py=3):
-    assert name is None or isinstance(name, str) or isinstance(name, list), "`name` should be None or str or list."
-    assert py in [2, 3], "`py` should be in one of [2, 3]."
+pypi = {'pip':'https://pypi.org/simple'
+        'tsinghua': 'https://pypi.tuna.tsinghua.edu.cn/simple',
+        'aliyun': 'https://mirrors.aliyun.com/pypi/simple',
+        'ustc':'https://mirrors.ustc.edu.cn/pypi/web/simple'}
+
+def freeze(name=None, py=3):
+    """List all python libraries.
     
-    cmd = "pip3 list" if py==3 else "pip2 list"
+    Args:
+        name: str or list. libraries name.
+        py: python environment.one of [2, 3].
+    Return:
+        a dict of python libraries version.
+    """
+    assert name is None or isinstance(name, (str, list)), "`name` should be None or str or list."
+    assert py in [2, 3], "`py` should be in one of [2, 3]."
+    cmd = "pip3 freeze" if py==3 else "pip2 freeze"
     s = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True).communicate()[0]
-    s = [i.strip().split(' ') for i in s.decode('utf-8').split('\r\n')[2:-1]]
-    s = {i[0]: i[-1] for i in s}
+    s = [i.split('==') for i in s.decode('utf-8').split('\r\n')[:-1]]
+    s = {i[0]: i[1] for i in s}
     if name is not None:
         try:
             if isinstance(name, str):
@@ -23,52 +32,111 @@ def pip_list(name=None, py=3):
             raise ValueError("{} is not in local libraries".format(name))
     return s
 
-def pip_update(name=None, version=None, py=3):
+def upgrade(name=None, version=None, py=3, mirror='pip'):
+    """Upgrade python libraries.
+    
+    Args:
+        name: str or list. libraries name.
+        version: str or list. libraries version name.
+        py: python environment.one of [2, 3].
+        mirror: pip install libraries mirror,
+                default official https://pypi.org/simple.
+    Return:
+        a dict of python libraries version.
+    """
     assert py in [2, 3], "`py` should be in one of [2, 3]."
-    old_lib = pip_list(name=name)
+    assert version is None or isinstance(version, (str, list)), "`version` should be None or str or list."
+    old_lib = freeze(name=name, py=py)
     if version is not None:
         if isinstance(version, str):
             version = [version]
-        elif isinstance(version, list):
-            pass
-        else:
-            raise ValueError("`version` should be None or str or list.")
-        assert len(old_lib)==len(version)
+        assert len(old_lib)==len(version), "`name` and `version` should be same number."
         for (dist, ver) in zip(name, version):
-            if py==3:
-                subprocess.call("pip3 install --user --upgrade " + dist + "==" + ver, shell=True)
+            if mirror in pypi:
+                cmd = "pip" + str(py) +" install -i "+ pypi[mirror] + " --user --upgrade " + dist + "==" + ver
             else:
-                subprocess.call("pip2 install --user --upgrade " + dist + "==" + ver, shell=True)
+                cmd = "pip" + str(py) +" install -i "+ mirror + " --user --upgrade " + dist + "==" + ver
+            subprocess.call(cmd, shell=True)
     else:
         for dist in old_lib:
-            if py==3:
-                subprocess.call("pip3 install --user --upgrade " + dist, shell=True)
+            if mirror in pypi:
+                cmd = "pip" + str(py) +" install -i "+ pypi[mirror] + " --user --upgrade " + dist
             else:
-                subprocess.call("pip2 install --user --upgrade " + dist, shell=True)
-    new_lib = pip_list(name=name)
+                cmd = "pip" + str(py) +" install -i "+ mirror + " --user --upgrade " + dist
+            subprocess.call(cmd, shell=True)
+    new_lib = freeze(name=name, py=py)
     lib = {i:{'old_version': old_lib[i], "new_version":new_lib[i]} for i in old_lib}
     return lib
 
-def pip_get(root, lib=None, name=None, version=None):
-    if lib is None and name is None:
-        raise ValueError("`lib` and `name` at least one is not None.")
-    assert lib is None or isinstance(lib, str), "`lib` should be None or str."
-    assert name is None or isinstance(name, str), "`name` should be None or str."
+def upgradeable(py=3):
+    """Veiw upgradeable python libraries.
+    
+    Args:
+        py: python environment.one of [2, 3].
+    Return:
+        a dict of python libraries version.
+    """
+    assert py in [2, 3], "`py` should be in one of [2, 3]."
+    cmd = "pip" + str(py) +" list -o"
+    a = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True).communicate()[0]
+    s = [i.strip().split(' ') for i in a.decode('utf-8').split('\r\n')[2:-1]]
+    s = [list(filter(lambda x:len(x)>0, i)) for i in s]
+    s = {i[0]:{'version':i[1], 'latest':i[2], 'type':i[-1]} for i in s}
+    return s
+
+def install(name, version=None, py=3, mirror='pip'):
+    """Install python libraries.
+    
+    Args:
+        name: str or list. libraries name.
+        version: str or list. libraries version name.
+        py: python environment.one of [2, 3].
+        mirror: pip install libraries mirror,
+                default official https://pypi.org/simple.
+    Return:
+        a dict of python libraries version.
+    """
+    assert isinstance(name, str), "`name` should be str."
     assert version is None or isinstance(version, str), "`version` should be None or str."
-    qinghua = "https://pypi.tuna.tsinghua.edu.cn"
-    if lib is not None:
-        s = requests.get(qinghua+'/simple/'+lib.split('-')[0]).content
-        s = list(io.StringIO(s.decode('utf-8')))
-        s = [(qinghua+'/'+i[i.find('packages'):]).split('"')[0] for i in s if lib in i]
+    cmd = "pip" + str(py) +" install " + (name if vesion is None else name + "==" + version)
+    if mirror in pypi:
+        cmd = cmd + " -i "+ pypi[mirror]
     else:
-        s = requests.get(qinghua+'/simple/'+name).content
-        s = list(io.StringIO(s.decode('utf-8')))
-        if version is None:
-            s = [(qinghua+'/'+i[i.find('packages'):]).split('"')[0] for i in s if name in i]
-        else:
-            s = [(qinghua+'/'+i[i.find('packages'):]).split('"')[0] for i in s if name in i and version in i]
-    for i in s:
-        local_file = i.split('/')[-1]
-        local_file = root+'/'+local_file[:local_file.find('#')]
-        tf.keras.utils.get_file(local_file, i)
+        cmd = cmd + " -i "+ mirror
+    subprocess.call(cmd, shell=True)
+    return freeze(name=name, py=py)
+
+def mirror(mirror='pip', py=3):
+    """Set up pip mirrors on your machine.
+    
+    Args:
+        py: python environment.one of [2, 3].
+        mirror: pip install libraries mirror,
+                default official https://pypi.org/simple.
+    Return:
+        pip cmd.
+    """
+    if mirror in pypi:
+        upgrade(name='pip', py=py, mirror='pip')
+        cmd = "pip" + str(py) +" config set global.index-url " + pypi[mirror]
+    else:
+        upgrade(name='pip', py=py, mirror='pip')
+        cmd = "pip" + str(py) +" config set global.index-url " + mirror
+    subprocess.call(cmd, shell=True)
+    return cmd
+
+def file(root, name, py=3, mirror='pip'):
+    """Download python libraries to the specified folder.
+    Args:
+        root: str, dirs.
+        name: str or list. libraries name.
+        py: python environment.one of [2, 3].
+        mirror: pip install libraries mirror,
+                default official https://pypi.org/simple.
+    Return:
+        root: dirs.
+    """
+    assert isinstance(name, str), "`name` should be str."
+    cmd = "pip" + str(py) +" download " + name + " -d " + root + " -i "+ (pypi[mirror] if mirror in pypi else mirror)
+    subprocess.call(cmd, shell=True)
     return root
