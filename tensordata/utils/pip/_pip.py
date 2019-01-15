@@ -1,7 +1,8 @@
 import subprocess
 
 
-__all__ = ['freeze', 'upgrade', 'upgradeable', 'install', 'mirror', 'file']
+__all__ = ['freeze', 'upgrade', 'upgradeable', 'install', 'mirror', 'file',
+           'show', 'search']
 
 pypi = {'pip':"https://pypi.org/simple",
         'tsinghua': "https://pypi.tuna.tsinghua.edu.cn/simple",
@@ -137,3 +138,42 @@ def file(root, name, py=3, mirror='pip'):
     cmd = "pip" + str(py) +" download " + name + " -d " + root + " -i "+ (pypi[mirror] if mirror in pypi else mirror)
     subprocess.call(cmd, shell=True)
     return root
+
+def show(name, py=3):
+    """Show python libraries.
+    
+    Args:
+        name: str or list. libraries name.
+        py: python environment.one of [2, 3].
+    Return:
+        a dict of python libraries version information.
+    """
+    assert isinstance(name, (str, list)), "`name` should be str or list."
+    assert py in [2, 3], "`py` should be in one of [2, 3]."
+    if isinstance(name, str):
+        name = [name]
+    t = {}
+    for lib in name:
+        cmd = "pip" + str(py) +" show " + lib
+        s = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True).communicate()[0]
+        s = [i.split(': ') for i in s.decode('utf-8').split('\r\n')[:-1]]
+        s = {i[0]: i[1] for i in s}
+        t[lib] = s
+    return t
+
+def search(name, py=3):
+    """Show python libraries.
+    
+    Args:
+        name: str. libraries name.
+        py: python environment.one of [2, 3].
+    Return:
+        a dict of python libraries version information.
+    """
+    assert isinstance(name, str), "`name` should be str."
+    assert py in [2, 3], "`py` should be in one of [2, 3]."
+    cmd = "pip" + str(py) +" search " + name
+    s = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True).communicate()[0]
+    s = [i.strip() for i in s.decode('utf-8').split('\r\n')[:-1]]
+    s = {i[:i.find(')')+1]: i[i.find(')')+1:].strip() for i in s}
+    return s
