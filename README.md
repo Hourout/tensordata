@@ -7,7 +7,7 @@ CV, NLP, DM datasets Toolkit for Machine Learning.
 [![PyPI](https://img.shields.io/pypi/v/tensordata.svg)](https://pypi.python.org/pypi/tensordata)
 ![PyPI format](https://img.shields.io/pypi/format/tensordata.svg)
 
-|[ Version ](https://github.com/Hourout/tensordata/blob/master/document/version.md)|
+| [中文介绍](https://github.com/Hourout/tensordata/blob/master/document/Chinese.md) |[ Version ](https://github.com/Hourout/tensordata/blob/master/document/version.md)|
 
 ## Installation
 To install [this verson from PyPI](https://pypi.org/project/tensordata/), type:
