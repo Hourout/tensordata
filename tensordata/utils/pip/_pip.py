@@ -1,8 +1,8 @@
 import subprocess
 
 
-__all__ = ['freeze', 'upgrade', 'upgradeable', 'install', 'mirror', 'file',
-           'show', 'search']
+__all__ = ['freeze', 'upgrade', 'upgradeable', 'install', 'uninstall', 
+           'mirror', 'file', 'show', 'search']
 
 pypi = {'pip':"https://pypi.org/simple",
         'tsinghua': "https://pypi.tuna.tsinghua.edu.cn/simple",
@@ -103,6 +103,21 @@ def install(name, version=None, py=3, mirror='pip'):
     cmd = cmd + " -i "+ (pypi[mirror] if mirror in pypi else mirror)
     subprocess.call(cmd, shell=True)
     return freeze(name=name, py=py)
+
+def uninstall(name, py=3):
+    """Uinstall python libraries.
+    
+    Args:
+        name: str. libraries name.
+        py: python environment.one of [2, 3].
+    Return:
+        uninstall log.
+    """
+    assert isinstance(name, str), "`name` should be str."
+    assert py in [2, 3], "`py` should be in one of [2, 3]."
+    cmd = "pip" + str(py) +" uninstall " + name + " -y"
+    s = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True).communicate()[0]
+    return s
 
 def mirror(mirror='pip', py=3):
     """Set up pip mirrors on your machine.
