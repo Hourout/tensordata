@@ -23,7 +23,7 @@ pip install git+git://github.com/Hourout/tensordata.git
 tensordata 目前还在快速开发中，未来将支持更多的功能，欢迎keras以及tensorflow社区的同学们一起加入开发。
 
 ## 更多阅读
-- https://mp.weixin.qq.com/s/UDFIoAmGnnksuBI4Dk8vkA
+- [全新开源，开放数据下载服务python库——tensordata](https://mp.weixin.qq.com/s/UDFIoAmGnnksuBI4Dk8vkA)
 
 ## 博客
 欢迎关注keras中文社区博客，扫码关注微信公众号
