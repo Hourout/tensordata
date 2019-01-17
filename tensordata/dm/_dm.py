@@ -5,10 +5,10 @@ import requests
 import pandas as pd
 import tensorflow as tf
 from tensordata.utils._utils import assert_dirs
-import tensordata.request as rq
+import tensordata.utils.request as rq
 
 
-__all__ = ['boston_housing', 'adult']
+__all__ = ['boston_housing', 'adult', 'wine']
 
 def boston_housing(root):
     """Housing Values in Suburbs of Boston
@@ -36,7 +36,7 @@ def boston_housing(root):
     url_json = 'https://raw.githubusercontent.com/Hourout/datasets/master/dm/boston_house/boston_housing.json'
     url_txt = 'https://raw.githubusercontent.com/Hourout/datasets/master/dm/boston_house/boston_housing.txt'
     rq.json(url_json, os.path.join(task_path, 'boston_housing.json'))
-    rq.txt(url_txt, os.path.join(task_path, 'boston_housing.txt'))
+    rq.table(url_txt, os.path.join(task_path, 'boston_housing.txt'))
     print('boston_housing dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -68,6 +68,45 @@ def adult(root):
     url_json = 'https://raw.githubusercontent.com/Hourout/datasets/master/dm/adult/adult.json'
     url_txt = 'https://raw.githubusercontent.com/Hourout/datasets/master/dm/adult/adult.txt'
     rq.json(url_json, os.path.join(task_path, 'adult.json'))
-    rq.txt(url_txt, os.path.join(task_path, 'adult.txt'))
+    rq.table(url_txt, os.path.join(task_path, 'adult.txt'))
     print('adult dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
+    return task_path
+
+def wine(root):
+    """Title of Database: Wine recognition data
+    Updated Sept 21, 1998 by C.Blake : Added attribute information
+    
+    These data are the results of a chemical analysis of
+    wines grown in the same region in Italy but derived from three
+    different cultivars.
+    The analysis determined the quantities of 13 constituents
+    found in each of the three types of wines. 
+    
+    Number of Instances
+    class 1 59
+    class 2 71
+    class 3 48
+    
+    Data storage directory:
+    root = `/user/.../mydata`
+    wine data: 
+    `root/wine/wine.txt`
+    `root/wine/wine.json`
+    Args:
+        root: str, Store the absolute path of the data directory.
+              example:if you want data path is `/user/.../mydata/wine`,
+              root should be `/user/.../mydata`.
+    Returns:
+        Store the absolute path of the data directory, is `root/wine`.
+    """
+    start = time.time()
+    task_path = assert_dirs(root, 'wine')
+    url_introduce = 'http://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.names'
+    url_txt = 'http://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data'
+    rq.file(url_introduce, os.path.join(task_path, 'introduce.txt'), verbose=0)
+    rq.table(url_txt, os.path.join(task_path, 'wine.txt'),
+             names=['label', 'Alcohol', 'Malic acid', 'Ash', 'Alcalinity of ash', 'Magnesium',
+                    'Total phenols', 'Flavanoids', 'Nonflavanoid phenols', 'Proanthocyanins',
+                    'Color intensity', 'Hue', 'OD280/OD315 of diluted wines', 'Proline'])
+    print('wine dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
