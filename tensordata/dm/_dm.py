@@ -8,7 +8,7 @@ from tensordata.utils._utils import assert_dirs
 import tensordata.utils.request as rq
 
 
-__all__ = ['boston_housing', 'adult', 'wine']
+__all__ = ['boston_housing', 'adult', 'wine', 'abalone']
 
 def boston_housing(root):
     """Housing Values in Suburbs of Boston
@@ -109,4 +109,36 @@ def wine(root):
                     'Total phenols', 'Flavanoids', 'Nonflavanoid phenols', 'Proanthocyanins',
                     'Color intensity', 'Hue', 'OD280/OD315 of diluted wines', 'Proline'])
     print('wine dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
+    return task_path
+
+def abalone(root):
+    """Predicting the age of abalone from physical measurements.
+    
+    The age of abalone is determined by cutting the shell through the cone, 
+    staining it, and counting the number of rings through a microscope -- a boring and
+    time-consuming task.  Other measurements, which are easier to obtain, are
+    used to predict the age.  Further information, such as weather patterns
+    and location (hence food availability) may be required to solve the problem.
+    
+    Data storage directory:
+    root = `/user/.../mydata`
+    abalone data: 
+    `root/abalone/abalone.txt`
+    `root/abalone/introduce.txt`
+    Args:
+        root: str, Store the absolute path of the data directory.
+              example:if you want data path is `/user/.../mydata/abalone`,
+              root should be `/user/.../mydata`.
+    Returns:
+        Store the absolute path of the data directory, is `root/abalone`.
+    """
+    start = time.time()
+    task_path = assert_dirs(root, 'abalone')
+    url_introduce = 'http://archive.ics.uci.edu/ml/machine-learning-databases/abalone/abalone.names'
+    url_txt = 'http://archive.ics.uci.edu/ml/machine-learning-databases/abalone/abalone.data'
+    rq.file(url_introduce, os.path.join(task_path, 'introduce.txt'), verbose=0)
+    rq.table(url_txt, os.path.join(task_path, 'abalone.txt'),
+             names=['Sex', 'Length', 'Diameter', 'Height' 'Whole_weight', 
+                    'Shucked_weight', 'Viscera_weight', 'Shell_weight', 'label'])
+    print('abalone dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
