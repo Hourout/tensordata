@@ -4,7 +4,7 @@ import requests
 import pandas as pd
 import tensorflow as tf
 
-__all__ ['json', 'table', 'file']
+__all__ ['json', 'table', 'files']
 
 def json(url, root_file):
     """Request url that file is json file.
@@ -36,7 +36,7 @@ def table(url, root_file, sep=',', names=None):
     data.to_csv(root_file, index=False, sep=sep)
     return root_file
 
-def file(url, root_file, verbose=1, chunk_size=1024):
+def files(url, root_file, verbose=1, chunk_size=1024):
     """Request url and download to root_file.
     
     Args:
