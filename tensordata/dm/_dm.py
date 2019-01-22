@@ -8,7 +8,7 @@ from tensordata.utils._utils import assert_dirs
 import tensordata.utils.request as rq
 
 
-__all__ = ['boston_housing', 'adult', 'wine', 'abalone']
+__all__ = ['boston_housing', 'adult', 'wine', 'abalone', 'arrhythmia']
 
 def boston_housing(root):
     """Housing Values in Suburbs of Boston
@@ -103,7 +103,7 @@ def wine(root):
     task_path = assert_dirs(root, 'wine')
     url_introduce = 'http://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.names'
     url_txt = 'http://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data'
-    rq.file(url_introduce, os.path.join(task_path, 'introduce.txt'), verbose=0)
+    rq.files(url_introduce, os.path.join(task_path, 'introduce.txt'), verbose=0)
     rq.table(url_txt, os.path.join(task_path, 'wine.txt'),
              names=['label', 'Alcohol', 'Malic acid', 'Ash', 'Alcalinity of ash', 'Magnesium',
                     'Total phenols', 'Flavanoids', 'Nonflavanoid phenols', 'Proanthocyanins',
@@ -136,9 +136,36 @@ def abalone(root):
     task_path = assert_dirs(root, 'abalone')
     url_introduce = 'http://archive.ics.uci.edu/ml/machine-learning-databases/abalone/abalone.names'
     url_txt = 'http://archive.ics.uci.edu/ml/machine-learning-databases/abalone/abalone.data'
-    rq.file(url_introduce, os.path.join(task_path, 'introduce.txt'), verbose=0)
+    rq.files(url_introduce, os.path.join(task_path, 'introduce.txt'), verbose=0)
     rq.table(url_txt, os.path.join(task_path, 'abalone.txt'),
              names=['Sex', 'Length', 'Diameter', 'Height' 'Whole_weight', 
                     'Shucked_weight', 'Viscera_weight', 'Shell_weight', 'label'])
     print('abalone dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
+    return task_path
+
+def arrhythmia(root):
+    """Aarrhythmia datasets from http://archive.ics.uci.edu/ml/datasets/Arrhythmia.
+    
+    This database contains 279 attributes, 206 of which are linear
+    valued and the rest are nominal. 
+    
+    Data storage directory:
+    root = `/user/.../mydata`
+    arrhythmia data: 
+    `root/abalone/arrhythmia.txt`
+    `root/abalone/introduce.txt`
+    Args:
+        root: str, Store the absolute path of the data directory.
+              example:if you want data path is `/user/.../mydata/arrhythmia`,
+              root should be `/user/.../mydata`.
+    Returns:
+        Store the absolute path of the data directory, is `root/arrhythmia`.
+    """
+    start = time.time()
+    task_path = assert_dirs(root, 'arrhythmia')
+    url_introduce = 'http://archive.ics.uci.edu/ml/machine-learning-databases/arrhythmia/arrhythmia.names'
+    url_txt = 'http://archive.ics.uci.edu/ml/machine-learning-databases/arrhythmia/arrhythmia.data'
+    rq.files(url_introduce, os.path.join(task_path, 'introduce.txt'), verbose=0)
+    rq.table(url_txt, os.path.join(task_path, 'arrhythmia.txt'))
+    print('arrhythmia dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
