@@ -1,5 +1,6 @@
 import os
 import time
+import pandas as pd
 from tensordata.utils._utils import assert_dirs
 import tensordata.utils.request as rq
 
