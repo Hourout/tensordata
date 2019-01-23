@@ -4,7 +4,7 @@ import requests
 import pandas as pd
 import tensorflow as tf
 
-__all__ ['json', 'table', 'files']
+__all__ = ['json', 'table', 'files']
 
 def json(url, root_file):
     """Request url that file is json file.
