@@ -3,7 +3,8 @@ import requests
 import pandas as pd
 
 __all__ = ['real_time', 'real_time_share', 'real_time_index', 
-           'info_city', 'info_weather']
+           'info_city', 'info_weather',
+           'feature_time', 'feature_time_index']
 def real_time_share(city):
     a = requests.get('https://www.tianqiapi.com/api/?version=v1&city='+city).json()
     for i in a['data']:
@@ -63,3 +64,25 @@ def info_weather():
             "晴转扬沙","扬沙转阴","浮尘转霾","晴转霾","霾转阴","霾转多云","霾转晴","小到中雪转多云",
             "大雪转多云","雨夹雪转小雨","大雨转阴","浮尘转多云","多云转霾","晴转雾","小雨转中雪",
             "阵雨转小雪","晴转雷阵雨","阴转雾"]
+
+def feature_time(city):
+    a = requests.get('https://www.tianqiapi.com/api/?version=v1&city='+city).json()
+    s = {}
+    name = ['日期', '温度', '最高温度', '最低温度', '天气', '风向', '风力', '星期']
+    name_en = ['date', 'tem', 'tem1', 'tem2', 'wea', 'win', 'win_speed', 'week']
+    for i, j in zip(name, name_en):
+        s[i] = [k[j] for k in a['data']]
+    s = pd.DataFrame(s).reindex(columns=name)
+    s['更新时间'] = a['update_time']
+    return s
+
+def feature_time_index(city):
+    a = requests.get('https://www.tianqiapi.com/api/?version=v1&city='+city).json()
+    s = {}
+    s['日期'] = [i['date'] for i in a['data']]
+    name = ['紫外线指数', '运动指数', '血糖指数', '穿衣指数', '洗车指数', '空气污染扩散指数']
+    for i, j in enumerate(name):
+        s[j] = [k['index'][i]['level'] for k in a['data']]
+    s = pd.DataFrame(s).drop(['运动指数'], axis=1)
+    s['更新时间'] = a['update_time']
+    return s
