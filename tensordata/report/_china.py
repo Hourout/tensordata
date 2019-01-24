@@ -32,7 +32,7 @@ def china_mobie(mobile):
     s = s['response']
     return s
 
-def logistics(com, card):
+def china_logistics(com, card):
     assert isinstance(com, str), "`com` should be str."
     assert isinstance(card, str), "`card` should be str."
     if com not in company:
