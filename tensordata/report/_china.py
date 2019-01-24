@@ -2,7 +2,7 @@
 import requests
 import pandas as pd
 
-__all__ = ['china_id_card', 'china_mobie', 'logistics']
+__all__ = ['china_id_card', 'china_mobie', 'china_logistics']
 
 company = {"申通":"shentong", "EMS":"ems", "顺丰":"shunfeng", "圆通":"yuantong",
            "中通":"zhongtong", "韵达":"yunda", "天天":"tiantian", "汇通":"huitongkuaidi",
