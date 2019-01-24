@@ -6,7 +6,7 @@ __all__ = ['real_time', 'real_time_share', 'real_time_index',
            'info_city', 'info_weather',
            'feature_time', 'feature_time_index']
 
-def get_tianqi_api(city)
+def _get_tianqi_api(city):
     assert isinstance(city, str), "`city` should be str."
     return requests.get('https://www.tianqiapi.com/api/?version=v1&city='+city).json()
 
