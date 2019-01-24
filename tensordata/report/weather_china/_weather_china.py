@@ -5,8 +5,13 @@ import pandas as pd
 __all__ = ['real_time', 'real_time_share', 'real_time_index', 
            'info_city', 'info_weather',
            'feature_time', 'feature_time_index']
+
+def get_tianqi_api(city)
+    assert isinstance(city, str), "`city` should be str."
+    return requests.get('https://www.tianqiapi.com/api/?version=v1&city='+city).json()
+
 def real_time_share(city):
-    a = requests.get('https://www.tianqiapi.com/api/?version=v1&city='+city).json()
+    a = _get_tianqi_api(city)
     for i in a['data']:
         if i['date']==str(pd.to_datetime(pd.datetime.now()))[:10]:
             break    
@@ -15,7 +20,7 @@ def real_time_share(city):
     return s
 
 def real_time(city):
-    a = requests.get('https://www.tianqiapi.com/api/?version=v1&city='+city).json()
+    a = _get_tianqi_api(city)
     for i in a['data']:
         if i['date']==str(pd.to_datetime(pd.datetime.now()))[:10]:
             break
@@ -30,7 +35,7 @@ def real_time(city):
     return s
 
 def real_time_index(city):
-    a = requests.get('https://www.tianqiapi.com/api/?version=v1&city='+city).json()
+    a = _get_tianqi_api(city)
     for i in a['data']:
         if i['date']==str(pd.to_datetime(pd.datetime.now()))[:10]:
             break
@@ -66,7 +71,7 @@ def info_weather():
             "阵雨转小雪","晴转雷阵雨","阴转雾"]
 
 def feature_time(city):
-    a = requests.get('https://www.tianqiapi.com/api/?version=v1&city='+city).json()
+    a = _get_tianqi_api(city)
     s = {}
     name = ['日期', '温度', '最高温度', '最低温度', '天气', '风向', '风力', '星期']
     name_en = ['date', 'tem', 'tem1', 'tem2', 'wea', 'win', 'win_speed', 'week']
@@ -77,7 +82,7 @@ def feature_time(city):
     return s
 
 def feature_time_index(city):
-    a = requests.get('https://www.tianqiapi.com/api/?version=v1&city='+city).json()
+    a = _get_tianqi_api(city)
     s = {}
     s['日期'] = [i['date'] for i in a['data']]
     name = ['紫外线指数', '运动指数', '血糖指数', '穿衣指数', '洗车指数', '空气污染扩散指数']
