@@ -17,3 +17,6 @@ def assert_dirs(root, root_dir=None, delete=True, make_root_dir=True):
         if not gfile.exists(root):
             gfile.makedirs(root)
         return root
+
+def path_join(path, *paths):
+    return eval(repr(os.path.join(path, *paths)).replace("\\", '/').replace("//", '/'))
