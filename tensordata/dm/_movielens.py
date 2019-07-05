@@ -1,9 +1,9 @@
-import os
 import time
 import requests
 import concurrent
 import pandas as pd
-import tensorflow as tf
+from tensordata.utils._utils import assert_dirs
+import tensordata.utils.request as rq
 
 def _request_txt(url):
     s = requests.get(url).content
@@ -51,11 +51,7 @@ def movielens(root):
         Store the absolute path of the data directory, is `root/movielens`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'movielens')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
+    task_path = assert_dirs(root, 'movielens')
     url_json = 'https://raw.githubusercontent.com/Hourout/datasets/master/dm/imdb/movielens.json'
     url_link_txt = 'https://raw.githubusercontent.com/Hourout/datasets/master/dm/imdb/links.txt'
     url_genome_tags_txt = 'https://raw.githubusercontent.com/Hourout/datasets/master/dm/imdb/genome_tags.txt'
@@ -63,26 +59,21 @@ def movielens(root):
     url_genome_scores_txt = 'https://raw.githubusercontent.com/Hourout/datasets/master/dm/imdb/genome_scores.txt'
     url_ratings_txt = 'https://raw.githubusercontent.com/Hourout/datasets/master/dm/imdb/ratings.txt'
     url_tags_txt = 'https://raw.githubusercontent.com/Hourout/datasets/master/dm/imdb/tags.txt'
-    with open(os.path.join(task_path, 'movielens.json'), 'w') as outfile:
-        json.dump(requests.get(url_json).json(), outfile, ensure_ascii=False)
-        outfile.write('\n')
-    data = pd.read_csv(io.StringIO(requests.get(url_link_txt).content.decode('utf-8')))
-    data.to_csv(os.path.join(task_path, 'links.txt'), index=False)
-    data = pd.read_csv(io.StringIO(requests.get(url_movies_txt).content.decode('utf-8')))
-    data.to_csv(os.path.join(task_path, 'movies.txt'), index=False)
-    data = pd.read_csv(io.StringIO(requests.get(url_genome_tags_txt).content.decode('utf-8')))
-    data.to_csv(os.path.join(task_path, 'genome_tags.txt'), index=False)
+    rq.json(url_json, task_path+'/movielens.json')
+    rq.table(url_link_txt, task_path+'/links.txt')
+    rq.table(url_movies_txt, task_path+'/movies.txt')
+    rq.table(url_genome_tags_txt, task_path+'/genome_tags.txt')
     l = [url_genome_scores_txt[:-4]+str(i)+url_genome_scores_txt[-4:] for i in range(16)]
     with concurrent.futures.ProcessPoolExecutor() as excutor:
         data = pd.concat(excutor.map(_request_txt, l))
-    data.to_csv(os.path.join(task_path, 'genome_scores.txt'), index=False)
+    data.to_csv(task_path+'/genome_scores.txt', index=False)
     l = [url_ratings_txt[:-4]+str(i)+url_ratings_txt[-4:] for i in range(21)]
     with concurrent.futures.ProcessPoolExecutor() as excutor:
         data = pd.concat(excutor.map(_request_txt, l))
-    data.to_csv(os.path.join(task_path, 'ratings.txt'), index=False)
+    data.to_csv(task_path+'/ratings.txt', index=False)
     l = [url_tags_txt[:-4]+str(i)+url_tags_txt[-4:] for i in range(2)]
     with concurrent.futures.ProcessPoolExecutor() as excutor:
         data = pd.concat(excutor.map(_request_txt, l))
-    data.to_csv(os.path.join(task_path, 'tags.txt'), index=False)
+    data.to_csv(task_path+'/tags.txt', index=False)
     print('movielens dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
