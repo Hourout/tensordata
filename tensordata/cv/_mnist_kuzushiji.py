@@ -4,7 +4,7 @@ import imageio
 import numpy as np
 from tensorflow.io import gfile
 from tensordata.utils.compress import un_tar
-from tensordata.utils._utils import assert_dirs
+from tensordata.utils._utils import assert_dirs, path_join
 import tensordata.utils.request as rq
 
 __all__ = ['mnist_kuzushiji10', 'mnist_kuzushiji49', 'mnist_kuzushiji_kanji']
@@ -44,21 +44,21 @@ def mnist_kuzushiji10(root):
                 'http://codh.rois.ac.jp/kmnist/dataset/kmnist/kmnist-test-imgs.npz',
                 'http://codh.rois.ac.jp/kmnist/dataset/kmnist/kmnist-test-labels.npz']
     for url in url_list:
-        rq.files(url, task_path+'/'+url.split('/')[-1])
-    train = np.load(task_path+'/kmnist-train-imgs.npz')['arr_0']
-    train_label = np.load(task_path+'/kmnist-train-labels.npz')['arr_0']
-    test = np.load(task_path+'/kmnist-test-imgs.npz')['arr_0']
-    test_label = np.load(task_path+'/kmnist-test-labels.npz')['arr_0']
+        rq.files(url, path_join(task_path, url.split('/')[-1]))
+    train = np.load(path_join(task_path, 'kmnist-train-imgs.npz'))['arr_0']
+    train_label = np.load(path_join(task_path, 'kmnist-train-labels.npz'))['arr_0']
+    test = np.load(path_join(task_path, 'kmnist-test-imgs.npz'))['arr_0']
+    test_label = np.load(path_join(task_path, 'kmnist-test-labels.npz'))['arr_0']
     for i in set(train_label):
-        gfile.makedirs(task_path+'/train/'+str(i))
+        gfile.makedirs(path_join(task_path, 'train', str(i)))
     for i in set(test_label):
-        gfile.makedirs(task_path+'/test/'+str(i))
+        gfile.makedirs(path_join(task_path, 'test', str(i)))
     for idx in range(train.shape[0]):
-        imageio.imsave(task_path+'/train/'+str(train_label[idx])+'/'+str(idx)+'.png', train[idx])
+        imageio.imsave(path_join(task_path, 'train', str(train_label[idx]), str(idx)+'.png'), train[idx])
     for idx in range(test.shape[0]):
-        imageio.imsave(task_path+'/test/'+str(test_label[idx])+'/'+str(idx)+'.png', test[idx])
+        imageio.imsave(path_join(task_path, 'test', str(test_label[idx]), str(idx)+'.png'), test[idx])
     for url in url_list:
-        gfile.remove(task_path+'/'+url.split('/')[-1])
+        gfile.remove(path_join(task_path, url.split('/')[-1]))
     print('mnist_kuzushiji10 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -95,21 +95,21 @@ def mnist_kuzushiji49(root):
                 'http://codh.rois.ac.jp/kmnist/dataset/k49/k49-test-imgs.npz',
                 'http://codh.rois.ac.jp/kmnist/dataset/k49/k49-test-labels.npz']
     for url in url_list:
-        rq.files(url, task_path+'/'+url.split('/')[-1])
-    train = np.load(task_path+'/k49-train-imgs.npz')['arr_0']
-    train_label = np.load(task_path+'/k49-train-labels.npz')['arr_0']
-    test = np.load(task_path+'/k49-test-imgs.npz')['arr_0']
-    test_label = np.load(task_path+'/k49-test-labels.npz')['arr_0']
+        rq.files(url, path_join(task_path, url.split('/')[-1]))
+    train = np.load(path_join(task_path, 'k49-train-imgs.npz'))['arr_0']
+    train_label = np.load(path_join(task_path, 'k49-train-labels.npz'))['arr_0']
+    test = np.load(path_join(task_path, 'k49-test-imgs.npz'))['arr_0']
+    test_label = np.load(path_join(task_path, 'k49-test-labels.npz'))['arr_0']
     for i in set(train_label):
-        gfile.makedirs(task_path+'/train/'+str(i))
+        gfile.makedirs(path_join(task_path, 'train', str(i)))
     for i in set(test_label):
-        gfile.makedirs(task_path+'/test/'+str(i))
+        gfile.makedirs(path_join(task_path, 'test', str(i)))
     for idx in range(train.shape[0]):
-        imageio.imsave(task_path+'/train/'+str(train_label[idx])+'/'+str(idx)+'.png', train[idx])
+        imageio.imsave(path_join(task_path, 'train', str(train_label[idx]), str(idx)+'.png'), train[idx])
     for idx in range(test.shape[0]):
-        imageio.imsave(task_path+'/test/'+str(test_label[idx])+'/'+str(idx)+'.png', test[idx])
+        imageio.imsave(path_join(task_path, 'test', str(test_label[idx]), str(idx)+'.png'), test[idx])
     for url in url_list:
-        gfile.remove(task_path+'/'+url.split('/')[-1])
+        gfile.remove(path_join(task_path, url.split('/')[-1]))
     print('mnist_kuzushiji49 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -137,9 +137,9 @@ def mnist_kuzushiji_kanji(root):
     start = time.time()
     task_path = assert_dirs(root, 'mnist_kuzushiji_kanji', make_root_dir=False)
     url = "http://codh.rois.ac.jp/kmnist/dataset/kkanji/kkanji.tar"
-    rq.files(url, root+'/'+url.split('/')[-1])
-    un_tar(root+'/'+url.split('/')[-1], task_path)
-    gfile.rename(task_path+'/kkanji2', task_path+'/train')
-    gfile.remove(root+'/kkanji.tar')
+    rq.files(url, path_join(root, url.split('/')[-1]))
+    un_tar(path_join(root, url.split('/')[-1]), task_path)
+    gfile.rename(path_join(task_path, 'kkanji2'), path_join(task_path, 'train'))
+    gfile.remove(path_join(root, 'kkanji.tar'))
     print('mnist_kuzushiji_kanji dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
