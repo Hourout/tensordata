@@ -1,11 +1,11 @@
-import os
 import io
 import time
 import requests
 import imageio
-import numpy as np
 import pandas as pd
-import tensorflow as tf
+from tensorflow.io import gfile
+from tensordata.utils._utils import assert_dirs
+
 
 __all__ = ['mnist_tibetan']
 
@@ -39,13 +39,9 @@ def mnist_tibetan(root):
     """
     start = time.time()
     print('Downloading data from https://github.com/Hourout/datasets/tree/master/TibetanMNIST')
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'mnist_tibetan')
+    task_path = assert_dirs(root, 'mnist_tibetan')
     url_list = ['https://raw.githubusercontent.com/Hourout/datasets/master/TibetanMNIST/TibetanMNIST_28_28_01.csv',
                 'https://raw.githubusercontent.com/Hourout/datasets/master/TibetanMNIST/TibetanMNIST_28_28_02.csv']
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
     data = pd.DataFrame()
     for url in url_list:
         s = requests.get(url).content
@@ -53,8 +49,8 @@ def mnist_tibetan(root):
     train = data.loc[:, 1:].values.reshape(-1, 28, 28)
     train_label = data.loc[:, 0].values
     for i in set(train_label):
-        tf.gfile.MakeDirs(os.path.join(task_path, 'train', str(i)))
+        gfile.makedirs(task_path+'/train/', str(i))
     for idx in range(train.shape[0]):
-        imageio.imsave(os.path.join(task_path, 'train', str(train_label[idx]), str(idx)+'.png'), train[idx])
+        imageio.imsave(task_path+'/train/'+str(train_label[idx])+'/'+str(idx)+'.png', train[idx])
     print('mnist_tibetan dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
