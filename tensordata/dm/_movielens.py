@@ -2,7 +2,7 @@ import time
 import requests
 import concurrent
 import pandas as pd
-from tensordata.utils._utils import assert_dirs
+from tensordata.utils._utils import assert_dirs, path_join
 import tensordata.utils.request as rq
 
 def _request_txt(url):
@@ -59,21 +59,21 @@ def movielens(root):
     url_genome_scores_txt = 'https://raw.githubusercontent.com/Hourout/datasets/master/dm/imdb/genome_scores.txt'
     url_ratings_txt = 'https://raw.githubusercontent.com/Hourout/datasets/master/dm/imdb/ratings.txt'
     url_tags_txt = 'https://raw.githubusercontent.com/Hourout/datasets/master/dm/imdb/tags.txt'
-    rq.json(url_json, task_path+'/movielens.json')
-    rq.table(url_link_txt, task_path+'/links.txt')
-    rq.table(url_movies_txt, task_path+'/movies.txt')
-    rq.table(url_genome_tags_txt, task_path+'/genome_tags.txt')
+    rq.json(url_json, path_join(task_path, 'movielens.json'))
+    rq.table(url_link_txt, path_join(task_path, 'links.txt'))
+    rq.table(url_movies_txt, path_join(task_path, 'movies.txt'))
+    rq.table(url_genome_tags_txt, path_join(task_path, 'genome_tags.txt'))
     l = [url_genome_scores_txt[:-4]+str(i)+url_genome_scores_txt[-4:] for i in range(16)]
     with concurrent.futures.ProcessPoolExecutor() as excutor:
         data = pd.concat(excutor.map(_request_txt, l))
-    data.to_csv(task_path+'/genome_scores.txt', index=False)
+    data.to_csv(path_join(task_path, 'genome_scores.txt'), index=False)
     l = [url_ratings_txt[:-4]+str(i)+url_ratings_txt[-4:] for i in range(21)]
     with concurrent.futures.ProcessPoolExecutor() as excutor:
         data = pd.concat(excutor.map(_request_txt, l))
-    data.to_csv(task_path+'/ratings.txt', index=False)
+    data.to_csv(path_join(task_path, 'ratings.txt'), index=False)
     l = [url_tags_txt[:-4]+str(i)+url_tags_txt[-4:] for i in range(2)]
     with concurrent.futures.ProcessPoolExecutor() as excutor:
         data = pd.concat(excutor.map(_request_txt, l))
-    data.to_csv(task_path+'/tags.txt', index=False)
+    data.to_csv(path_join(task_path, 'tags.txt'), index=False)
     print('movielens dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
