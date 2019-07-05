@@ -1,9 +1,4 @@
-import os
 import time
-import json
-import requests
-import pandas as pd
-import tensorflow as tf
 from tensordata.utils._utils import assert_dirs
 import tensordata.utils.request as rq
 
@@ -35,8 +30,8 @@ def boston_housing(root):
     task_path = assert_dirs(root, 'boston_housing')
     url_json = 'https://raw.githubusercontent.com/Hourout/datasets/master/dm/boston_house/boston_housing.json'
     url_txt = 'https://raw.githubusercontent.com/Hourout/datasets/master/dm/boston_house/boston_housing.txt'
-    rq.json(url_json, os.path.join(task_path, 'boston_housing.json'))
-    rq.table(url_txt, os.path.join(task_path, 'boston_housing.txt'))
+    rq.json(url_json, task_path+'/boston_housing.json')
+    rq.table(url_txt, task_path+'/boston_housing.txt')
     print('boston_housing dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -67,8 +62,8 @@ def adult(root):
     task_path = assert_dirs(root, 'adult')
     url_json = 'https://raw.githubusercontent.com/Hourout/datasets/master/dm/adult/adult.json'
     url_txt = 'https://raw.githubusercontent.com/Hourout/datasets/master/dm/adult/adult.txt'
-    rq.json(url_json, os.path.join(task_path, 'adult.json'))
-    rq.table(url_txt, os.path.join(task_path, 'adult.txt'))
+    rq.json(url_json, task_path+'/adult.json')
+    rq.table(url_txt, task_path+'/adult.txt')
     print('adult dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -103,8 +98,8 @@ def wine(root):
     task_path = assert_dirs(root, 'wine')
     url_introduce = 'http://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.names'
     url_txt = 'http://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data'
-    rq.files(url_introduce, os.path.join(task_path, 'introduce.txt'), verbose=0)
-    rq.table(url_txt, os.path.join(task_path, 'wine.txt'),
+    rq.files(url_introduce, task_path+'/introduce.txt', verbose=0)
+    rq.table(url_txt, task_path+'/wine.txt',
              names=['label', 'Alcohol', 'Malic acid', 'Ash', 'Alcalinity of ash', 'Magnesium',
                     'Total phenols', 'Flavanoids', 'Nonflavanoid phenols', 'Proanthocyanins',
                     'Color intensity', 'Hue', 'OD280/OD315 of diluted wines', 'Proline'])
@@ -136,8 +131,8 @@ def abalone(root):
     task_path = assert_dirs(root, 'abalone')
     url_introduce = 'http://archive.ics.uci.edu/ml/machine-learning-databases/abalone/abalone.names'
     url_txt = 'http://archive.ics.uci.edu/ml/machine-learning-databases/abalone/abalone.data'
-    rq.files(url_introduce, os.path.join(task_path, 'introduce.txt'), verbose=0)
-    rq.table(url_txt, os.path.join(task_path, 'abalone.txt'),
+    rq.files(url_introduce, task_path+'/introduce.txt', verbose=0)
+    rq.table(url_txt, task_path+'/abalone.txt',
              names=['Sex', 'Length', 'Diameter', 'Height' 'Whole_weight', 
                     'Shucked_weight', 'Viscera_weight', 'Shell_weight', 'label'])
     print('abalone dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
@@ -165,7 +160,7 @@ def arrhythmia(root):
     task_path = assert_dirs(root, 'arrhythmia')
     url_introduce = 'http://archive.ics.uci.edu/ml/machine-learning-databases/arrhythmia/arrhythmia.names'
     url_txt = 'http://archive.ics.uci.edu/ml/machine-learning-databases/arrhythmia/arrhythmia.data'
-    rq.files(url_introduce, os.path.join(task_path, 'introduce.txt'), verbose=0)
-    rq.table(url_txt, os.path.join(task_path, 'arrhythmia.txt'))
+    rq.files(url_introduce, task_path+'/introduce.txt', verbose=0)
+    rq.table(url_txt, task_path+'/arrhythmia.txt')
     print('arrhythmia dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
