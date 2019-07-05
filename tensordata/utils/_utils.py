@@ -5,7 +5,7 @@ def assert_dirs(root, root_dir=None, delete=True, make_root_dir=True):
     assert gfile.isdir(root), '{} should be directory.'.format(root)
     if root_dir is not None:
         assert isinstance(root_dir, str), '{} should be str.'.format(root_dir)
-        task_path = root+'/'+root_dir
+        task_path = path_join(root, root_dir)
         if gfile.exists(task_path):
             if delete:
                 gfile.rmtree(task_path)
