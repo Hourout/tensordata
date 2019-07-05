@@ -2,8 +2,10 @@ import os
 import time
 import imageio
 import numpy as np
-import tensorflow as tf
+from tensorflow.io import gfile
 from tensordata.utils.compress import un_tar
+from tensordata.utils._utils import assert_dirs
+import tensordata.utils.request as rq
 
 __all__ = ['mnist_kuzushiji10', 'mnist_kuzushiji49', 'mnist_kuzushiji_kanji']
 
@@ -36,31 +38,27 @@ def mnist_kuzushiji10(root):
         Store the absolute path of the data directory, is `root/mnist_kuzushiji10`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'mnist_kuzushiji10')
+    task_path = assert_dirs(root, 'mnist_kuzushiji10')
     url_list = ['http://codh.rois.ac.jp/kmnist/dataset/kmnist/kmnist-train-imgs.npz',
                 'http://codh.rois.ac.jp/kmnist/dataset/kmnist/kmnist-train-labels.npz',
                 'http://codh.rois.ac.jp/kmnist/dataset/kmnist/kmnist-test-imgs.npz',
                 'http://codh.rois.ac.jp/kmnist/dataset/kmnist/kmnist-test-labels.npz']
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
     for url in url_list:
-        tf.keras.utils.get_file(os.path.join(task_path, url.split('/')[-1]), url)
-    train = np.load(os.path.join(task_path, 'kmnist-train-imgs.npz'))['arr_0']
-    train_label = np.load(os.path.join(task_path, 'kmnist-train-labels.npz'))['arr_0']
-    test = np.load(os.path.join(task_path, 'kmnist-test-imgs.npz'))['arr_0']
-    test_label = np.load(os.path.join(task_path, 'kmnist-test-labels.npz'))['arr_0']
+        rq.files(url, task_path+'/'+url.split('/')[-1])
+    train = np.load(task_path+'/kmnist-train-imgs.npz')['arr_0']
+    train_label = np.load(task_path+'/kmnist-train-labels.npz')['arr_0']
+    test = np.load(task_path+'/kmnist-test-imgs.npz')['arr_0']
+    test_label = np.load(task_path+'/kmnist-test-labels.npz')['arr_0']
     for i in set(train_label):
-        tf.gfile.MakeDirs(os.path.join(task_path, 'train', str(i)))
+        gfile.makedirs(task_path+'/train/'+str(i))
     for i in set(test_label):
-        tf.gfile.MakeDirs(os.path.join(task_path, 'test', str(i)))
+        gfile.makedirs(task_path+'/test/'+str(i))
     for idx in range(train.shape[0]):
-        imageio.imsave(os.path.join(task_path, 'train', str(train_label[idx]), str(idx)+'.png'), train[idx])
+        imageio.imsave(task_path+'/train/'+str(train_label[idx])+'/'+str(idx)+'.png', train[idx])
     for idx in range(test.shape[0]):
-        imageio.imsave(os.path.join(task_path, 'test', str(test_label[idx]), str(idx)+'.png'), test[idx])
+        imageio.imsave(task_path+'/test/'+str(test_label[idx])+'/'+str(idx)+'.png', test[idx])
     for url in url_list:
-        tf.gfile.Remove(os.path.join(task_path, url.split('/')[-1]))
+        gfile.remove(task_path+'/'+url.split('/')[-1])
     print('mnist_kuzushiji10 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -91,31 +89,27 @@ def mnist_kuzushiji49(root):
         Store the absolute path of the data directory, is `root/mnist_kuzushiji49`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'mnist_kuzushiji49')
+    task_path = assert_dirs(root, 'mnist_kuzushiji49')
     url_list = ['http://codh.rois.ac.jp/kmnist/dataset/k49/k49-train-imgs.npz',
                 'http://codh.rois.ac.jp/kmnist/dataset/k49/k49-train-labels.npz',
                 'http://codh.rois.ac.jp/kmnist/dataset/k49/k49-test-imgs.npz',
                 'http://codh.rois.ac.jp/kmnist/dataset/k49/k49-test-labels.npz']
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
     for url in url_list:
-        tf.keras.utils.get_file(os.path.join(task_path, url.split('/')[-1]), url)
-    train = np.load(os.path.join(task_path, 'k49-train-imgs.npz'))['arr_0']
-    train_label = np.load(os.path.join(task_path, 'k49-train-labels.npz'))['arr_0']
-    test = np.load(os.path.join(task_path, 'k49-test-imgs.npz'))['arr_0']
-    test_label = np.load(os.path.join(task_path, 'k49-test-labels.npz'))['arr_0']
+        rq.files(url, task_path+'/'+url.split('/')[-1])
+    train = np.load(task_path+'/k49-train-imgs.npz')['arr_0']
+    train_label = np.load(task_path+'/k49-train-labels.npz')['arr_0']
+    test = np.load(task_path+'/k49-test-imgs.npz')['arr_0']
+    test_label = np.load(task_path+'/k49-test-labels.npz')['arr_0']
     for i in set(train_label):
-        tf.gfile.MakeDirs(os.path.join(task_path, 'train', str(i)))
+        gfile.makedirs(task_path+'/train/'+str(i))
     for i in set(test_label):
-        tf.gfile.MakeDirs(os.path.join(task_path, 'test', str(i)))
+        gfile.makedirs(task_path+'/test/'+str(i))
     for idx in range(train.shape[0]):
-        imageio.imsave(os.path.join(task_path, 'train', str(train_label[idx]), str(idx)+'.png'), train[idx])
+        imageio.imsave(task_path+'/train/'+str(train_label[idx])+'/'+str(idx)+'.png', train[idx])
     for idx in range(test.shape[0]):
-        imageio.imsave(os.path.join(task_path, 'test', str(test_label[idx]), str(idx)+'.png'), test[idx])
+        imageio.imsave(task_path+'/test/'+str(test_label[idx])+'/'+str(idx)+'.png', test[idx])
     for url in url_list:
-        tf.gfile.Remove(os.path.join(task_path, url.split('/')[-1]))
+        gfile.remove(task_path+'/'+url.split('/')[-1])
     print('mnist_kuzushiji49 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -141,14 +135,11 @@ def mnist_kuzushiji_kanji(root):
         Store the absolute path of the data directory, is `root/mnist_kuzushiji_kanji.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'mnist_kuzushiji_kanji')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
+    task_path = assert_dirs(root, 'mnist_kuzushiji_kanji', make_root_dir=False)
     url = "http://codh.rois.ac.jp/kmnist/dataset/kkanji/kkanji.tar"
-    tf.keras.utils.get_file(os.path.join(root, url.split('/')[-1]), url)
-    un_tar(os.path.join(root, url.split('/')[-1]), task_path)
-    tf.gfile.Rename(os.path.join(task_path, 'kkanji2'), os.path.join(task_path, 'train'))
-    tf.gfile.Remove(os.path.join(root, 'kkanji.tar'))
+    rq.files(url, root+'/'+url.split('/')[-1])
+    un_tar(root+'/'+url.split('/')[-1], task_path)
+    gfile.rename(task_path+'/kkanji2', task_path+'/train')
+    gfile.remove(root+'/kkanji.tar')
     print('mnist_kuzushiji_kanji dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
