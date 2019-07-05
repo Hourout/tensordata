@@ -1,3 +1,4 @@
+import os
 from tensorflow.io import gfile
 
 def assert_dirs(root, root_dir=None, delete=True, make_root_dir=True):
