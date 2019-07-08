@@ -3,7 +3,9 @@ import os
 import time
 import requests
 import pandas as pd
-import tensorflow as tf
+from tensorflow.io import gfile
+from tensordata.utils._utils import assert_dirs, path_join
+import tensordata.utils.request as rq
 
 __all__ = ['it', 'animal', 'medical', 'famous_person', 'placename', 'antonym', 
            'synonym', 'privative', 'idiom', 'pornography', 'car',
@@ -28,14 +30,9 @@ def it(root):
         Store the absolute path of the data directory, is `root/chinese_lexicon_it`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'chinese_lexicon_it')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
+    task_path = assert_dirs(root, 'chinese_lexicon_it')
     url = "https://raw.githubusercontent.com/Hourout/datasets/master/nlp/chinese_lexicon/chinese_lexicon_it.txt"
-    data = pd.read_csv(io.StringIO(requests.get(url).content.decode('utf-8')), header=None)
-    data.to_csv(os.path.join(task_path, 'chinese_lexicon_it.txt'), index=False, header=None)
+    rq.table(url, path_join(task_path, 'chinese_lexicon_it.txt'))
     print('chinese_lexicon_it dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -58,14 +55,9 @@ def animal(root):
         Store the absolute path of the data directory, is `root/chinese_lexicon_animal`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'chinese_lexicon_animal')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
+    task_path = assert_dirs(root, 'chinese_lexicon_animal')
     url = "https://raw.githubusercontent.com/Hourout/datasets/master/nlp/chinese_lexicon/chinese_lexicon_animal.txt"
-    data = pd.read_csv(io.StringIO(requests.get(url).content.decode('utf-8')), header=None)
-    data.to_csv(os.path.join(task_path, 'chinese_lexicon_animal.txt'), index=False, header=None)
+    rq.table(url, path_join(task_path, 'chinese_lexicon_animal.txt'))
     print('chinese_lexicon_animal dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -88,14 +80,9 @@ def medical(root):
         Store the absolute path of the data directory, is `root/chinese_lexicon_medical`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'chinese_lexicon_medical')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
+    task_path = assert_dirs(root, 'chinese_lexicon_medical')
     url = "https://raw.githubusercontent.com/Hourout/datasets/master/nlp/chinese_lexicon/chinese_lexicon_medical.txt"
-    data = pd.read_csv(io.StringIO(requests.get(url).content.decode('utf-8')), header=None)
-    data.to_csv(os.path.join(task_path, 'chinese_lexicon_medical.txt'), index=False, header=None)
+    rq.table(url, path_join(task_path, 'chinese_lexicon_medical.txt'))
     print('chinese_lexicon_medical dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -118,14 +105,9 @@ def famous_person(root):
         Store the absolute path of the data directory, is `root/chinese_lexicon_famous_person`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'chinese_lexicon_famous_person')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
+    task_path = assert_dirs(root, 'chinese_lexicon_famous_person')
     url = "https://raw.githubusercontent.com/Hourout/datasets/master/nlp/chinese_lexicon/chinese_lexicon_famous_person.txt"
-    data = pd.read_csv(io.StringIO(requests.get(url).content.decode('utf-8')), header=None, sep='\t')[0]
-    data.to_csv(os.path.join(task_path, 'chinese_lexicon_famous_person.txt'), index=False, header=None)
+    rq.table(url, path_join(task_path, 'chinese_lexicon_famous_person.txt'))
     print('chinese_lexicon_famous_person dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -148,14 +130,9 @@ def placename(root):
         Store the absolute path of the data directory, is `root/chinese_lexicon_placename`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'chinese_lexicon_placename')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
+    task_path = assert_dirs(root, 'chinese_lexicon_placename')
     url = "https://raw.githubusercontent.com/Hourout/datasets/master/nlp/chinese_lexicon/chinese_lexicon_placename.txt"
-    data = pd.read_csv(io.StringIO(requests.get(url).content.decode('utf-8')), header=None)
-    data.to_csv(os.path.join(task_path, 'chinese_lexicon_placename.txt'), index=False, header=None)
+    rq.table(url, path_join(task_path, 'chinese_lexicon_placename.txt'))
     print('chinese_lexicon_placename dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -178,14 +155,9 @@ def antonym(root):
         Store the absolute path of the data directory, is `root/chinese_lexicon_antonym`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'chinese_lexicon_antonym')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
+    task_path = assert_dirs(root, 'chinese_lexicon_antonym')
     url = "https://raw.githubusercontent.com/Hourout/datasets/master/nlp/chinese_lexicon/chinese_lexicon_antonym.txt"
-    data = pd.read_csv(io.StringIO(requests.get(url).content.decode('utf-8')), header=None)
-    data.to_csv(os.path.join(task_path, 'chinese_lexicon_antonym.txt'), index=False, header=None)
+    rq.table(url, path_join(task_path, 'chinese_lexicon_antonym.txt'))
     print('chinese_lexicon_antonym dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -208,14 +180,9 @@ def synonym(root):
         Store the absolute path of the data directory, is `root/chinese_lexicon_synonym`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'chinese_lexicon_synonym')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
+    task_path = assert_dirs(root, 'chinese_lexicon_synonym')
     url = "https://raw.githubusercontent.com/Hourout/datasets/master/nlp/chinese_lexicon/chinese_lexicon_synonym.txt"
-    data = pd.read_csv(io.StringIO(requests.get(url).content.decode('utf-8')), header=None, sep='\n')
-    data.to_csv(os.path.join(task_path, 'chinese_lexicon_synonym.txt'), index=False, header=None)
+    rq.table(url, path_join(task_path, 'chinese_lexicon_synonym.txt'))
     print('chinese_lexicon_synonym dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -238,14 +205,9 @@ def privative(root):
         Store the absolute path of the data directory, is `root/chinese_lexicon_privative`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'chinese_lexicon_privative')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
+    task_path = assert_dirs(root, 'chinese_lexicon_privative')
     url = "https://raw.githubusercontent.com/Hourout/datasets/master/nlp/chinese_lexicon/chinese_lexicon_privative.txt"
-    data = pd.read_csv(io.StringIO(requests.get(url).content.decode('utf-8')), header=None)
-    data.to_csv(os.path.join(task_path, 'chinese_lexicon_privative.txt'), index=False, header=None)
+    rq.table(url, path_join(task_path, 'chinese_lexicon_privative.txt'))
     print('chinese_lexicon_privative dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -268,14 +230,9 @@ def idiom(root):
         Store the absolute path of the data directory, is `root/chinese_lexicon_idiom`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'chinese_lexicon_idiom')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
+    task_path = assert_dirs(root, 'chinese_lexicon_idiom')
     url = "https://raw.githubusercontent.com/Hourout/datasets/master/nlp/chinese_lexicon/chinese_lexicon_idiom.txt"
-    data = pd.read_csv(io.StringIO(requests.get(url).content.decode('utf-8')), header=None)
-    data.to_csv(os.path.join(task_path, 'chinese_lexicon_idiom.txt'), index=False, header=None)
+    rq.table(url, path_join(task_path, 'chinese_lexicon_idiom.txt'))
     print('chinese_lexicon_idiom dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -298,14 +255,9 @@ def pornography(root):
         Store the absolute path of the data directory, is `root/chinese_lexicon_pornography`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'chinese_lexicon_pornography')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
+    task_path = assert_dirs(root, 'chinese_lexicon_pornography')
     url = "https://raw.githubusercontent.com/Hourout/datasets/master/nlp/chinese_lexicon/chinese_lexicon_pornography.txt"
-    data = pd.read_csv(io.StringIO(requests.get(url).content.decode('utf-8')), header=None)
-    data.to_csv(os.path.join(task_path, 'chinese_lexicon_pornography.txt'), index=False, header=None)
+    rq.table(url, path_join(task_path, 'chinese_lexicon_pornography.txt'))
     print('chinese_lexicon_pornography dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -328,13 +280,8 @@ def car(root):
         Store the absolute path of the data directory, is `root/chinese_lexicon_car`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'chinese_lexicon_car')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
+    task_path = assert_dirs(root, 'chinese_lexicon_car')
     url = "https://raw.githubusercontent.com/Hourout/datasets/master/nlp/chinese_lexicon/chinese_lexicon_car.txt"
-    data = pd.read_csv(io.StringIO(requests.get(url).content.decode('utf-8')), header=None)
-    data.to_csv(os.path.join(task_path, 'chinese_lexicon_car.txt'), index=False, header=None)
+    rq.table(url, path_join(task_path, 'chinese_lexicon_car.txt'))
     print('chinese_lexicon_car dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
