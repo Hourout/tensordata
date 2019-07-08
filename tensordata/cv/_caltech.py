@@ -1,7 +1,8 @@
-import os
 import time
-import tensorflow as tf
+from tensorflow.io import gfile
 from tensordata.utils.compress import un_gz, un_tar
+from tensordata.utils._utils import assert_dirs, path_join
+import tensordata.utils.request as rq
 
 __all__  = ['caltech101', 'caltech256']
 
@@ -34,16 +35,13 @@ def caltech101(root):
         Store the absolute path of the data directory, is `root/caltech101.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'caltech101')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
+    task_path = assert_dirs(root, 'caltech101', make_root_dir=False)
     url = 'http://www.vision.caltech.edu/Image_Datasets/Caltech101/101_ObjectCategories.tar.gz'
-    tf.keras.utils.get_file(os.path.join(root, url.split('/')[-1]), url)
-    un_tar(un_gz(os.path.join(root, url.split('/')[-1])), task_path)
-    tf.gfile.Rename(os.path.join(task_path, '101_ObjectCategories'), os.path.join(task_path, 'train'))
+    rq.files(url, path_join(root, url.split('/')[-1]))
+    un_tar(un_gz(path_join(root, url.split('/')[-1])), task_path)
+    gfile.rename(path_join(task_path, '101_ObjectCategories'), path_join(task_path, 'train'))
     for i in ['101_ObjectCategories.tar.gz', '101_ObjectCategories.tar']:
-        tf.gfile.Remove(os.path.join(root, i))
+        gfile.remove(path_join(root, i))
     print('caltech101 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -75,14 +73,11 @@ def caltech256(root):
         Store the absolute path of the data directory, is `root/caltech256`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'caltech256')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
+    task_path = assert_dirs(root, 'caltech256', make_root_dir=False)
     url = "http://www.vision.caltech.edu/Image_Datasets/Caltech256/256_ObjectCategories.tar"
-    tf.keras.utils.get_file(os.path.join(root, url.split('/')[-1]), url)
-    un_tar(os.path.join(root, url.split('/')[-1]), task_path)
-    tf.gfile.Rename(os.path.join(task_path, '256_ObjectCategories'), os.path.join(task_path, 'train'))
-    tf.gfile.Remove(os.path.join(root, '256_ObjectCategories.tar'))
+    rq.files(url, path_join(root, url.split('/')[-1]))
+    un_tar(path_join(root, url.split('/')[-1]), task_path)
+    gfile.rename(path_join(task_path, '256_ObjectCategories'), path_join(task_path, 'train'))
+    gfile.remove(path_join(root, '256_ObjectCategories.tar'))
     print('caltech256 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
