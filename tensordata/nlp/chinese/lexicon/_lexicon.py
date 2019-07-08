@@ -1,9 +1,4 @@
-import io
-import os
 import time
-import requests
-import pandas as pd
-from tensorflow.io import gfile
 from tensordata.utils._utils import assert_dirs, path_join
 import tensordata.utils.request as rq
 
