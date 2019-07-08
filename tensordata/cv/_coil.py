@@ -1,8 +1,10 @@
 import os
 import time
 import pandas as pd
-import tensorflow as tf
 from tensordata.utils.compress import un_zip
+from tensorflow.io import gfile
+from tensordata.utils._utils import assert_dirs, path_join
+import tensordata.utils.request as rq
 
 __all__ = ['coil20', 'coil100']
 
@@ -29,25 +31,21 @@ def coil20(root):
         Store the absolute path of the data directory, is `root/coil20`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'coil20')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
+    task_path = assert_dirs(root, 'coil20')
     url = "http://www.cs.columbia.edu/CAVE/databases/SLAM_coil-20_coil-100/coil-20/coil-20-proc.zip"
-    tf.keras.utils.get_file(os.path.join(task_path, 'coil20.zip'), url)
-    un_zip(os.path.join(task_path, 'coil20.zip'))
-    image = tf.gfile.ListDirectory(os.path.join(task_path, 'coil20', 'coil-20-proc'))
+    rq.files(url, path_join(task_path, 'coil20.zip'))
+    un_zip(path_join(task_path, 'coil20.zip'))
+    image = gfile.listdir(path_join(task_path, 'coil20', 'coil-20-proc'))
     t = pd.DataFrame(image, columns=['image'])
     t['label'] = t.image.map(lambda x:x.split('__')[0][3:])
-    t['image_old_path'] = t.image.map(lambda x:os.path.join(task_path, 'coil20', 'coil-20-proc', x))
-    t['image_new_path'] = (t.label+'/'+t.image).map(lambda x:os.path.join(task_path, 'train', x))
+    t['image_old_path'] = t.image.map(lambda x:path_join(task_path, 'coil20', 'coil-20-proc', x))
+    t['image_new_path'] = (t.label+'/'+t.image).map(lambda x:path_join(task_path, 'train', x))
     for i in t.label.unique():
-        tf.gfile.MakeDirs(os.path.join(task_path, 'train', i))
+        gfile.makedirs(path_join(task_path, 'train', i))
     for i,j in zip(t.image_old_path, t.image_new_path):
-        tf.gfile.Copy(i, j)
-    tf.gfile.Remove(os.path.join(task_path, 'coil20.zip'))
-    tf.gfile.DeleteRecursively(os.path.join(task_path, 'coil20'))
+        gfile.copy(i, j)
+    gfile.remove(path_join(task_path, 'coil20.zip'))
+    gfile.rmtree(path_join(task_path, 'coil20'))
     print('coil20 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -74,26 +72,22 @@ def coil100(root):
         Store the absolute path of the data directory, is `root/coil100`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'coil100')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
+    task_path = assert_dirs(root, 'coil100')
     url = "http://www.cs.columbia.edu/CAVE/databases/SLAM_coil-20_coil-100/coil-100/coil-100.zip"
-    tf.keras.utils.get_file(os.path.join(task_path, 'coil100.zip'), url)
-    un_zip(os.path.join(task_path, 'coil100.zip'))
-    image = tf.gfile.ListDirectory(os.path.join(task_path, 'coil100', 'coil-100'))
+    rq.files(url, path_join(task_path, 'coil100.zip'))
+    un_zip(path_join(task_path, 'coil100.zip'))
+    image = gfile.listdir(path_join(task_path, 'coil100', 'coil-100'))
     t = pd.DataFrame(image, columns=['image'])
     t['label'] = t.image.map(lambda x:x.split('__')[0][3:])
-    t['image_old_path'] = t.image.map(lambda x:os.path.join(task_path, 'coil100', 'coil-100', x))
-    t['image_new_path'] = (t.label+'/'+t.image).map(lambda x:os.path.join(task_path, 'train', x))
+    t['image_old_path'] = t.image.map(lambda x:path_join(task_path, 'coil100', 'coil-100', x))
+    t['image_new_path'] = (t.label+'/'+t.image).map(lambda x:path_join(task_path, 'train', x))
     for i in t.label.unique():
-        tf.gfile.MakeDirs(os.path.join(task_path, 'train', i))
+        gfile.makedirs(path_join(task_path, 'train', i))
     for i,j in zip(t.image_old_path, t.image_new_path):
-        tf.gfile.Copy(i, j)
-    tf.gfile.Remove(os.path.join(task_path, 'coil100.zip'))
-    tf.gfile.DeleteRecursively(os.path.join(task_path, 'coil100'))
-    if tf.gfile.Exists(os.path.join(task_path, 'train', 'vertGroupppm2png.pl')):
-        tf.gfile.DeleteRecursively(os.path.join(task_path, 'train', 'vertGroupppm2png.pl'))
+        gfile.copy(i, j)
+    gfile.remove(path_join(task_path, 'coil100.zip'))
+    gfile.rmtree(path_join(task_path, 'coil100'))
+    if gfile.exists(path_join(task_path, 'train', 'vertGroupppm2png.pl')):
+        gfile.remove(path_join(task_path, 'train', 'vertGroupppm2png.pl'))
     print('coil100 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
