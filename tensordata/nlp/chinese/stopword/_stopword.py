@@ -2,7 +2,8 @@ import os
 import time
 import requests
 import pandas as pd
-import tensorflow as tf
+from tensordata.utils._utils import assert_dirs, path_join
+import tensordata.utils.request as rq
 
 __all__ = ['standard', 'baidu', 'SCU', 'HIT']
 
@@ -23,14 +24,9 @@ def standard(root):
         Store the absolute path of the data directory, is `root/chinese_stop_word`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'chinese_stop_word')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
+    task_path = assert_dirs(root, 'chinese_stop_word')
     url = 'https://raw.githubusercontent.com/Hourout/datasets/master/nlp/chinese_stop_word/chinese_stop_word.txt'
-    data = pd.read_csv(io.StringIO(requests.get(url).content.decode('utf-8')))
-    data.to_csv(os.path.join(task_path, 'chinese_stop_word.txt'), index=False)
+    rq.table(url, path_join(task_path, 'chinese_stop_word.txt'))
     print('chinese_stop_word dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -51,14 +47,9 @@ def baidu(root):
         Store the absolute path of the data directory, is `root/chinese_stop_word_baidu`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'chinese_stop_word_baidu')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
+    task_path = assert_dirs(root, 'chinese_stop_word_baidu')
     url = 'https://raw.githubusercontent.com/Hourout/datasets/master/nlp/chinese_stop_word/chinese_stop_word_baidu.txt'
-    data = pd.read_csv(io.StringIO(requests.get(url).content.decode('utf-8')))
-    data.to_csv(os.path.join(task_path, 'chinese_stop_word_baidu.txt'), index=False)
+    rq.table(url, path_join(task_path, 'chinese_stop_word_baidu.txt'))
     print('chinese_stop_word_baidu dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -79,14 +70,9 @@ def SCU(root):
         Store the absolute path of the data directory, is `root/chinese_stop_word_SCU`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'chinese_stop_word_SCU')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
+    task_path = assert_dirs(root, 'chinese_stop_word_SCU')
     url = 'https://raw.githubusercontent.com/Hourout/datasets/master/nlp/chinese_stop_word/chinese_stop_word_SCU.txt'
-    data = pd.read_csv(io.StringIO(requests.get(url).content.decode('utf-8')))
-    data.to_csv(os.path.join(task_path, 'chinese_stop_word_SCU.txt'), index=False)
+    rq.table(url, path_join(task_path, 'chinese_stop_word_SCU.txt'))
     print('chinese_stop_word_SCU dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -107,13 +93,9 @@ def HIT(root):
         Store the absolute path of the data directory, is `root/chinese_stop_word_HIT`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'chinese_stop_word_HIT')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
+    task_path = assert_dirs(root, 'chinese_stop_word_HIT')
     url = 'https://raw.githubusercontent.com/Hourout/datasets/master/nlp/chinese_stop_word/chinese_stop_word_HIT.txt'
     data = pd.DataFrame(list(map(lambda x:x.replace('\n', ''), io.StringIO(requests.get(url).content.decode('utf-8')))))
-    data.to_csv(os.path.join(task_path, 'chinese_stop_word_HIT.txt'), index=False, header=None)
+    data.to_csv(path_join(task_path, 'chinese_stop_word_HIT.txt'), index=False, header=None)
     print('chinese_stop_word_HIT dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
