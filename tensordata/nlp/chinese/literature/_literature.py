@@ -1,7 +1,8 @@
-import os
 import time
-import tensorflow as tf
+from tensorflow.io import gfile
 from tensordata.utils.compress import un_bz2
+from tensordata.utils._utils import assert_dirs, path_join
+import tensordata.utils.request as rq
 
 __all__ = ['shijing', 'youmengying', 'huajianji', 'poetry_SouthernTang', 'lunyu',
            'poet_tang', 'poet_song', 'ci_song'
@@ -33,13 +34,9 @@ def shijing(root):
         Store the absolute path of the data directory, is `root/shijing`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'shijing')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
+    task_path = assert_dirs(root, 'shijing')
     url = 'https://raw.githubusercontent.com/Hourout/datasets/master/nlp/wenxue/shijing.json'
-    tf.keras.utils.get_file(os.path.join(task_path, url.split('/')[-1]), url)
+    rq.files(url, path_join(task_path, url.split('/')[-1]))
     print('shijing dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -61,13 +58,9 @@ def youmengying(root):
         Store the absolute path of the data directory, is `root/youmengying`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
     task_path = os.path.join(root, 'youmengying')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
     url = "https://raw.githubusercontent.com/Hourout/datasets/master/nlp/wenxue/youmengying.json"
-    tf.keras.utils.get_file(os.path.join(task_path, url.split('/')[-1]), url)
+    rq.files(url, path_join(task_path, url.split('/')[-1]))
     print('youmengying dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -95,13 +88,9 @@ def huajianji(root):
         Store the absolute path of the data directory, is `root/huajianji`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'huajianji')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
+    task_path = assert_dirs(root, 'huajianji')
     url = "https://raw.githubusercontent.com/Hourout/datasets/master/nlp/wenxue/huajianji.json"
-    tf.keras.utils.get_file(os.path.join(task_path, url.split('/')[-1]), url)
+    rq.files(url, path_join(task_path, url.split('/')[-1]))
     print('huajianji dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -126,13 +115,9 @@ def poetry_SouthernTang(root):
         Store the absolute path of the data directory, is `root/poetry_SouthernTang`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'poetry_SouthernTang')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
+    task_path = assert_dirs(root, 'poetry_SouthernTang')
     url = "https://raw.githubusercontent.com/Hourout/datasets/master/nlp/wenxue/nantang_erzhu_poetry.json"
-    tf.keras.utils.get_file(os.path.join(task_path, 'poetry_SouthernTang.json'), url)
+    rq.files(url, path_join(task_path, 'poetry_SouthernTang.json'))
     print('poetry_SouthernTang dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -166,13 +151,9 @@ def lunyu(root):
         Store the absolute path of the data directory, is `root/lunyu`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'lunyu')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
+    task_path = assert_dirs(root, 'lunyu')
     url = 'https://raw.githubusercontent.com/Hourout/datasets/master/nlp/wenxue/lunyu.json'
-    tf.keras.utils.get_file(os.path.join(task_path, url.split('/')[-1]), url)
+    rq.files(url, path_join(task_path, url.split('/')[-1]))
     print('lunyu dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -197,15 +178,11 @@ def poet_tang(root):
         Store the absolute path of the data directory, is `root/poet_tang`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'poet_tang')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
+    task_path = assert_dirs(root, 'poet_tang')
     url = 'https://raw.githubusercontent.com/Hourout/datasets/master/nlp/wenxue/poetry_tang.json.bz2'
-    tf.keras.utils.get_file(os.path.join(task_path, 'poet_tang.json.bz2'), url)
-    un_bz2(os.path.join(task_path, 'poet_tang.json.bz2'))
-    tf.gfile.Remove(os.path.join(task_path, 'poet_tang.json.bz2'))
+    rq.files(url, path_join(task_path, 'poet_tang.json.bz2'))
+    un_bz2(path_join(task_path, 'poet_tang.json.bz2'))
+    gfile.remove(path_join(task_path, 'poet_tang.json.bz2'))
     print('poet_tang dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -232,15 +209,11 @@ def poet_song(root):
         Store the absolute path of the data directory, is `root/poet_song`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'poet_song')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
+    task_path = assert_dirs(root, 'poet_song')
     url = 'https://raw.githubusercontent.com/Hourout/datasets/master/nlp/wenxue/poetry_song.json.bz2'
-    tf.keras.utils.get_file(os.path.join(task_path, 'poet_song.json.bz2'), url)
-    un_bz2(os.path.join(task_path, 'poet_song.json.bz2'))
-    tf.gfile.Remove(os.path.join(task_path, 'poet_song.json.bz2'))
+    rq.files(url, path_join(task_path, 'poet_song.json.bz2'))
+    un_bz2(path_join(task_path, 'poet_song.json.bz2'))
+    gfile.remove(path_join(task_path, 'poet_song.json.bz2'))
     print('poet_song dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -268,12 +241,8 @@ def ci_song(root):
         Store the absolute path of the data directory, is `root/ci_song`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'ci_song')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
+    task_path = assert_dirs(root, 'ci_song')
     url = 'https://raw.githubusercontent.com/Hourout/datasets/master/nlp/wenxue/ci_song.json'
-    tf.keras.utils.get_file(os.path.join(task_path, url.split('/')[-1]), url)
+    rq.files(url, path_join(task_path, url.split('/')[-1]))
     print('ci_song dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
