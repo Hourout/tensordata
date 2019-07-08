@@ -1,15 +1,16 @@
-import os
 import io
 import time
-import json
 import requests
 import concurrent
 import pandas as pd
-import tensorflow as tf
+from tensordata.utils._utils import assert_dirs, path_join
+import tensordata.utils.request as rq
+
 
 __all__ = ['ctrip_hotel', 'douban_movies', 'online_shopping_10_cats', 'sina_weibo', 
            'sina_weibo_emotion4', 'takeaway',
           ]
+
 def ctrip_hotel(root):
     """Ctrip hotel reviews datasets.
     
@@ -33,20 +34,11 @@ def ctrip_hotel(root):
         Store the absolute path of the data directory, is `root/chinese_reviews_ctrip_hotel`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'chinese_reviews_ctrip_hotel')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
+    task_path = assert_dirs(root, 'chinese_reviews_ctrip_hotel')
     url_json = 'https://raw.githubusercontent.com/Hourout/datasets/master/nlp/chinese_reviews_ctrip_hotel/chinese_reviews_ctrip_hotel.json'
     url_txt = 'https://raw.githubusercontent.com/SophonPlus/ChineseNlpCorpus/master/datasets/ChnSentiCorp_htl_all/ChnSentiCorp_htl_all.csv'
-    s = requests.get(url_json)
-    with open(os.path.join(task_path, 'chinese_reviews_ctrip_hotel.json'), 'w') as outfile:
-        json.dump(s.json(), outfile, ensure_ascii=False)
-        outfile.write('\n')
-    s = requests.get(url_txt).content
-    data = pd.read_csv(io.StringIO(s.decode('utf-8')))
-    data.to_csv(os.path.join(task_path, 'chinese_reviews_ctrip_hotel.txt'), index=False)
+    rq.json(url_json, path_join(task_path, 'chinese_reviews_ctrip_hotel.json'))
+    rq.table(url_txt, path_join(task_path, 'chinese_reviews_ctrip_hotel.txt'))
     print('chinese_reviews_ctrip_hotel dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -74,23 +66,16 @@ def douban_movies(root):
         Store the absolute path of the data directory, is `root/chinese_reviews_douban_movies`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'chinese_reviews_douban_movies')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
+    task_path = assert_dirs(root, 'chinese_reviews_douban_movies')
     url_json = 'https://raw.githubusercontent.com/Hourout/datasets/master/nlp/chinese_reviews_douban_movies/chinese_reviews_douban_movies.json'
     url_movies = 'https://raw.githubusercontent.com/Hourout/datasets/master/nlp/chinese_reviews_douban_movies/movies.txt'
     url_ratings = 'https://raw.githubusercontent.com/Hourout/datasets/master/nlp/chinese_reviews_douban_movies/ratings.txt'
-    with open(os.path.join(task_path, 'chinese_reviews_douban_movies.json'), 'w') as outfile:
-        json.dump(requests.get(url_json).json(), outfile, ensure_ascii=False)
-        outfile.write('\n')
-    data = pd.read_csv(io.StringIO(requests.get(url_movies).content.decode('utf-8')))
-    data.to_csv(os.path.join(task_path, 'movies.txt'), index=False)
+    rq.json(url_json, path_join(task_path, 'chinese_reviews_douban_movies.json'))
+    rq.table(url_movies, path_join(task_path, 'movies.txt'))
     l = [url_ratings[:-4]+str(i)+url_ratings[-4:] for i in range(13)]
     with concurrent.futures.ProcessPoolExecutor() as excutor:
         data = pd.concat(excutor.map(_request_txt, l))
-    data.to_csv(os.path.join(task_path, 'ratings.txt'), index=False)
+    data.to_csv(path_join(task_path, 'ratings.txt'), index=False)
     print('chinese_reviews_douban_movies dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -116,20 +101,11 @@ def online_shopping_10_cats(root):
         Store the absolute path of the data directory, is `root/chinese_reviews_online_shopping_10_cats`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'chinese_reviews_online_shopping_10_cats')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
+    task_path = assert_dirs(root, 'chinese_reviews_online_shopping_10_cats')
     url_json = 'https://raw.githubusercontent.com/Hourout/datasets/master/nlp/chinese_reviews_online_shopping_10_cats/chinese_reviews_online_shopping_10_cats.json'
     url_txt = 'https://raw.githubusercontent.com/Hourout/datasets/master/nlp/chinese_reviews_online_shopping_10_cats/chinese_reviews_online_shopping_10_cats.csv'
-    s = requests.get(url_json)
-    with open(os.path.join(task_path, 'chinese_reviews_online_shopping_10_cats.json'), 'w') as outfile:
-        json.dump(s.json(), outfile, ensure_ascii=False)
-        outfile.write('\n')
-    s = requests.get(url_txt).content
-    data = pd.read_csv(io.StringIO(s.decode('utf-8')))
-    data.to_csv(os.path.join(task_path, 'chinese_reviews_online_shopping_10_cats.txt'), index=False)
+    rq.json(url_json, path_join(task_path, 'chinese_reviews_online_shopping_10_cats.json'))
+    rq.table(url_txt, path_join(task_path, 'chinese_reviews_online_shopping_10_cats.txt'))
     print('chinese_reviews_online_shopping_10_cats dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -153,20 +129,11 @@ def sina_weibo(root):
         Store the absolute path of the data directory, is `root/chinese_reviews_sina_weibo`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'chinese_reviews_sina_weibo')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
+    task_path = assert_dirs(root, 'chinese_reviews_sina_weibo')
     url_json = 'https://raw.githubusercontent.com/Hourout/datasets/master/nlp/chinese_reviews_sina_weibo/chinese_reviews_sina_weibo.json'
     url_txt = 'https://raw.githubusercontent.com/Hourout/datasets/master/nlp/chinese_reviews_sina_weibo/chinese_reviews_sina_weibo.csv'
-    s = requests.get(url_json)
-    with open(os.path.join(task_path, 'chinese_reviews_sina_weibo.json'), 'w') as outfile:
-        json.dump(s.json(), outfile, ensure_ascii=False)
-        outfile.write('\n')
-    s = requests.get(url_txt).content
-    data = pd.read_csv(io.StringIO(s.decode('utf-8')))
-    data.to_csv(os.path.join(task_path, 'chinese_reviews_sina_weibo.txt'), index=False)
+    rq.json(url_json, path_join(task_path, 'chinese_reviews_sina_weibo.json'))
+    rq.table(url_txt, path_join(task_path, 'chinese_reviews_sina_weibo.txt'))
     print('chinese_reviews_sina_weibo dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -190,24 +157,17 @@ def sina_weibo_emotion4(root):
         Store the absolute path of the data directory, is `root/chinese_reviews_sina_weibo_emotion4`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'chinese_reviews_sina_weibo_emotion4')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
+    task_path = assert_dirs(root, 'chinese_reviews_sina_weibo_emotion4')
     url_json = 'https://raw.githubusercontent.com/Hourout/datasets/master/nlp/chinese_reviews_sina_weibo_emotion4/chinese_reviews_sina_weibo_emotion4.json'
     url_txt = ['https://raw.githubusercontent.com/Hourout/datasets/master/nlp/chinese_reviews_sina_weibo_emotion4/chinese_reviews_sina_weibo_emotion4_01.txt',
                'https://raw.githubusercontent.com/Hourout/datasets/master/nlp/chinese_reviews_sina_weibo_emotion4/chinese_reviews_sina_weibo_emotion4_02.txt',
                'https://raw.githubusercontent.com/Hourout/datasets/master/nlp/chinese_reviews_sina_weibo_emotion4/chinese_reviews_sina_weibo_emotion4_03.txt',]
-    s = requests.get(url_json)
-    with open(os.path.join(task_path, 'chinese_reviews_sina_weibo_emotion4.json'), 'w') as outfile:
-        json.dump(s.json(), outfile, ensure_ascii=False)
-        outfile.write('\n')
+    rq.json(url_json, path_join(task_path, 'chinese_reviews_sina_weibo_emotion4.json'))
     data = pd.DataFrame()
     for url in url_txt:
         s = requests.get(url).content
         data = pd.concat([data, pd.read_csv(io.StringIO(s.decode('utf-8')))])
-    data.to_csv(os.path.join(task_path, 'chinese_reviews_sina_weibo_emotion4.txt'), index=False)
+    data.to_csv(path_join(task_path, 'chinese_reviews_sina_weibo_emotion4.txt'), index=False)
     print('chinese_reviews_sina_weibo_emotion4 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -233,19 +193,10 @@ def takeaway(root):
         Store the absolute path of the data directory, is `root/chinese_reviews_takeaway`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
-    task_path = os.path.join(root, 'chinese_reviews_takeaway')
-    if tf.gfile.Exists(task_path):
-        tf.gfile.DeleteRecursively(task_path)
-    tf.gfile.MakeDirs(task_path)
+    task_path = assert_dirs(root, 'chinese_reviews_takeaway')
     url_json = 'https://raw.githubusercontent.com/Hourout/datasets/master/nlp/chinese_reviews_takeaway/chinese_reviews_takeaway.json'
     url_txt = 'https://raw.githubusercontent.com/SophonPlus/ChineseNlpCorpus/master/datasets/waimai_10k/waimai_10k.csv'
-    s = requests.get(url_json)
-    with open(os.path.join(task_path, 'chinese_reviews_takeaway.json'), 'w') as outfile:
-        json.dump(s.json(), outfile, ensure_ascii=False)
-        outfile.write('\n')
-    s = requests.get(url_txt).content
-    data = pd.read_csv(io.StringIO(s.decode('utf-8')))
-    data.to_csv(os.path.join(task_path, 'chinese_reviews_takeaway.txt'), index=False)
+    rq.json(url_json, path_join(task_path, 'chinese_reviews_takeaway.json'))
+    rq.table(url_txt, path_join(task_path, 'chinese_reviews_takeaway.txt'))
     print('chinese_reviews_takeaway dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
