@@ -1,17 +1,9 @@
-import os
-import io
 import time
-import requests
-import concurrent
-import pandas as pd
-import tensorflow as tf
+from tensordata.utils._utils import get_paper
 
 
 __all__ = ['ICCV2013', 'ICCV2015', 'ICCV2017'
           ]
-
-def _download(path):
-    tf.keras.utils.get_file(os.path.join(path.split('|')[0], path.split('|')[1].split('/')[-1]), path.split('|')[1])
 
 def ICCV2017(root):
     """ICCV2017 datasets from http://openaccess.thecvf.com/ICCV2017.py.
@@ -30,8 +22,7 @@ def ICCV2017(root):
         Store the absolute path of the data directory, is `root/ICCV2017`.
     """
     start = time.time()
-    _get_paper('ICCV2017', root,
-               url='https://raw.githubusercontent.com/Hourout/datasets/master/paper/ICCV/iccv2017.txt')
+    get_paper('ICCV2017', root, 'https://raw.githubusercontent.com/Hourout/datasets/master/paper/ICCV/iccv2017.txt')
     print('ICCV2017 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -52,8 +43,7 @@ def ICCV2015(root):
         Store the absolute path of the data directory, is `root/ICCV2015`.
     """
     start = time.time()
-    _get_paper('ICCV2015', root,
-               url='https://raw.githubusercontent.com/Hourout/datasets/master/paper/ICCV/iccv2015.txt')
+    get_paper('ICCV2015', root, 'https://raw.githubusercontent.com/Hourout/datasets/master/paper/ICCV/iccv2015.txt')
     print('ICCV2015 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -74,7 +64,6 @@ def ICCV2013(root):
         Store the absolute path of the data directory, is `root/ICCV2013`.
     """
     start = time.time()
-    _get_paper('ICCV2013', root,
-               url='https://raw.githubusercontent.com/Hourout/datasets/master/paper/ICCV/iccv2013.txt')
+    get_paper('ICCV2013', root, 'https://raw.githubusercontent.com/Hourout/datasets/master/paper/ICCV/iccv2013.txt')
     print('ICCV2013 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
