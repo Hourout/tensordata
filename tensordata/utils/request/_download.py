@@ -1,5 +1,5 @@
 import io
-import json
+import json as jsons
 import requests
 import pandas as pd
 from tensorflow.io import gfile
@@ -19,7 +19,7 @@ def json(url, root_file):
     assert root_file[-5:]=='.json', '`root_file` should be `xxx.json`'
     s = requests.get(url)
     with gfile.GFile(root_file, 'w') as f:
-        json.dump(s.json(), f, ensure_ascii=False)
+        jsons.dump(s.json(), f, ensure_ascii=False)
     return root_file
 
 def table(url, root_file, sep=',', names=None):
