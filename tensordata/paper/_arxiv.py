@@ -1,6 +1,7 @@
-import os
 import time
-import tensorflow as tf
+from tensorflow.io import gfile
+from tensordata.utils._utils import path_join
+import tensordata.utils.request as rq
 
 __all__ = ['arxiv']
 
@@ -22,17 +23,17 @@ def arxiv(root, ids, new_name=None):
         Store the absolute path of the data directory, is `root/arxiv`.
     """
     start = time.time()
-    assert tf.gfile.IsDirectory(root), '`root` should be directory.'
+    assert gfile.isdir(root), '`root` should be directory.'
     assert isinstance(ids, str), '`ids` type should be str.'
     assert isinstance(new_name, str), '`new_name` type should be str.'
     if new_name is None:
-        task_path = os.path.join(root, 'arxiv', ids+'.pdf')
+        task_path = path_join(root, 'arxiv', ids+'.pdf')
     else:
-        task_path = os.path.join(root, 'arxiv', new_name+'.pdf')
-    if not tf.gfile.Exists(task_path):
-        tf.gfile.MakeDirs(task_path)
-    tf.gfile.DeleteRecursively(task_path)
+        task_path = path_join(root, 'arxiv', new_name+'.pdf')
+    if not gfile.exists(task_path):
+        gfile.makedirs(task_path)
+    gfile.remove(task_path)
     url = 'https://arxiv.org/pdf/'+str(ids)+'.pdf'
-    tf.keras.utils.get_file(task_path, url)
+    rq.files(url, task_path)
     print('arxiv paper download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
