@@ -3,7 +3,7 @@ import io
 import requests
 import pandas as pd
 from tensorflow.io import gfile
-import tensordata.utils.request as rq
+from tensordata.utils import request as rq
 
 def assert_dirs(root, root_dir=None, delete=True, make_root_dir=True):
     assert gfile.isdir(root), '{} should be directory.'.format(root)
