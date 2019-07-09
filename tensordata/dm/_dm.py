@@ -98,7 +98,7 @@ def wine(root):
     task_path = assert_dirs(root, 'wine')
     url_introduce = 'http://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.names'
     url_txt = 'http://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data'
-    rq.files(url_introduce, path_join(task_path, 'introduce.txt', verbose=0))
+    rq.files(url_introduce, path_join(task_path, 'introduce.txt'), verbose=0)
     rq.table(url_txt, path_join(task_path, 'wine.txt'),
              names=['label', 'Alcohol', 'Malic acid', 'Ash', 'Alcalinity of ash', 'Magnesium',
                     'Total phenols', 'Flavanoids', 'Nonflavanoid phenols', 'Proanthocyanins',
