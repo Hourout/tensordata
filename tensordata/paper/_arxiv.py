@@ -25,7 +25,6 @@ def arxiv(root, ids, new_name=None):
     start = time.time()
     assert gfile.isdir(root), '`root` should be directory.'
     assert isinstance(ids, str), '`ids` type should be str.'
-    assert isinstance(new_name, str), '`new_name` type should be str.'
     if new_name is None:
         task_path = path_join(root, 'arxiv', ids+'.pdf')
     else:
