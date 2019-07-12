@@ -31,7 +31,9 @@ def arxiv(root, ids, new_name=None):
         task_path = path_join(root, 'arxiv', new_name+'.pdf')
     if not gfile.exists(path_join(root, 'arxiv')):
         gfile.makedirs(path_join(root, 'arxiv'))
-    gfile.remove(task_path)
+    if gfile.exists(task_path):
+        if not gfile.isdir(task_path):
+            gfile.remove(task_path)
     url = 'https://arxiv.org/pdf/'+str(ids)+'.pdf'
     rq.files(url, task_path)
     print('arxiv paper download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
