@@ -58,7 +58,7 @@ def youmengying(root):
         Store the absolute path of the data directory, is `root/youmengying`.
     """
     start = time.time()
-    task_path = os.path.join(root, 'youmengying')
+    task_path = assert_dirs(root, 'youmengying')
     url = "https://raw.githubusercontent.com/Hourout/datasets/master/nlp/wenxue/youmengying.json"
     rq.files(url, path_join(task_path, url.split('/')[-1]))
     print('youmengying dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
