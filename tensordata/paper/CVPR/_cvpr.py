@@ -23,7 +23,7 @@ def CVPR2019(root):
         Store the absolute path of the data directory, is `root/CVPR2019`.
     """
     start = time.time()
-    get_paper('CVPR2019', root, 'https://raw.githubusercontent.com/Hourout/datasets/master/paper/cvpr/cvpr2019.txt')
+    task_path = get_paper('CVPR2019', root, 'https://raw.githubusercontent.com/Hourout/datasets/master/paper/cvpr/cvpr2019.txt')
     print('CVPR2019 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -44,7 +44,7 @@ def CVPR2018(root):
         Store the absolute path of the data directory, is `root/CVPR2018`.
     """
     start = time.time()
-    get_paper('CVPR2018', root, 'https://raw.githubusercontent.com/Hourout/datasets/master/paper/cvpr/cvpr2018.txt')
+    task_path = get_paper('CVPR2018', root, 'https://raw.githubusercontent.com/Hourout/datasets/master/paper/cvpr/cvpr2018.txt')
     print('CVPR2018 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -65,7 +65,7 @@ def CVPR2017(root):
         Store the absolute path of the data directory, is `root/CVPR2017`.
     """
     start = time.time()
-    get_paper('CVPR2017', root, 'https://raw.githubusercontent.com/Hourout/datasets/master/paper/cvpr/cvpr2017.txt')
+    task_path = get_paper('CVPR2017', root, 'https://raw.githubusercontent.com/Hourout/datasets/master/paper/cvpr/cvpr2017.txt')
     print('CVPR2017 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -86,7 +86,7 @@ def CVPR2016(root):
         Store the absolute path of the data directory, is `root/CVPR2016`.
     """
     start = time.time()
-    get_paper('CVPR2016', root, 'https://raw.githubusercontent.com/Hourout/datasets/master/paper/cvpr/cvpr2016.txt')
+    task_path = get_paper('CVPR2016', root, 'https://raw.githubusercontent.com/Hourout/datasets/master/paper/cvpr/cvpr2016.txt')
     print('CVPR2016 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -107,7 +107,7 @@ def CVPR2015(root):
         Store the absolute path of the data directory, is `root/CVPR2015`.
     """
     start = time.time()
-    get_paper('CVPR2015', root, 'https://raw.githubusercontent.com/Hourout/datasets/master/paper/cvpr/cvpr2015.txt')
+    task_path = get_paper('CVPR2015', root, 'https://raw.githubusercontent.com/Hourout/datasets/master/paper/cvpr/cvpr2015.txt')
     print('CVPR2015 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -128,7 +128,7 @@ def CVPR2014(root):
         Store the absolute path of the data directory, is `root/CVPR2014`.
     """
     start = time.time()
-    get_paper('CVPR2014', root, 'https://raw.githubusercontent.com/Hourout/datasets/master/paper/cvpr/cvpr2014.txt')
+    task_path = get_paper('CVPR2014', root, 'https://raw.githubusercontent.com/Hourout/datasets/master/paper/cvpr/cvpr2014.txt')
     print('CVPR2014 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -149,6 +149,6 @@ def CVPR2013(root):
         Store the absolute path of the data directory, is `root/CVPR2013`.
     """
     start = time.time()
-    get_paper('CVPR2013', root, 'https://raw.githubusercontent.com/Hourout/datasets/master/paper/cvpr/cvpr2013.txt')
+    task_path = get_paper('CVPR2013', root, 'https://raw.githubusercontent.com/Hourout/datasets/master/paper/cvpr/cvpr2013.txt')
     print('CVPR2013 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
