@@ -29,8 +29,8 @@ def arxiv(root, ids, new_name=None):
         task_path = path_join(root, 'arxiv', ids+'.pdf')
     else:
         task_path = path_join(root, 'arxiv', new_name+'.pdf')
-    if not gfile.exists(task_path):
-        gfile.makedirs(task_path)
+    if not gfile.exists(path_join(root, 'arxiv')):
+        gfile.makedirs(path_join(root, 'arxiv'))
     gfile.remove(task_path)
     url = 'https://arxiv.org/pdf/'+str(ids)+'.pdf'
     rq.files(url, task_path)
