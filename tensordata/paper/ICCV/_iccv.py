@@ -22,7 +22,7 @@ def ICCV2017(root):
         Store the absolute path of the data directory, is `root/ICCV2017`.
     """
     start = time.time()
-    get_paper('ICCV2017', root, 'https://raw.githubusercontent.com/Hourout/datasets/master/paper/ICCV/iccv2017.txt')
+    task_path = get_paper('ICCV2017', root, 'https://raw.githubusercontent.com/Hourout/datasets/master/paper/ICCV/iccv2017.txt')
     print('ICCV2017 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -43,7 +43,7 @@ def ICCV2015(root):
         Store the absolute path of the data directory, is `root/ICCV2015`.
     """
     start = time.time()
-    get_paper('ICCV2015', root, 'https://raw.githubusercontent.com/Hourout/datasets/master/paper/ICCV/iccv2015.txt')
+    task_path = get_paper('ICCV2015', root, 'https://raw.githubusercontent.com/Hourout/datasets/master/paper/ICCV/iccv2015.txt')
     print('ICCV2015 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -64,6 +64,6 @@ def ICCV2013(root):
         Store the absolute path of the data directory, is `root/ICCV2013`.
     """
     start = time.time()
-    get_paper('ICCV2013', root, 'https://raw.githubusercontent.com/Hourout/datasets/master/paper/ICCV/iccv2013.txt')
+    task_path = get_paper('ICCV2013', root, 'https://raw.githubusercontent.com/Hourout/datasets/master/paper/ICCV/iccv2013.txt')
     print('ICCV2013 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
