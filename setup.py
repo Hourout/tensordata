@@ -7,7 +7,7 @@ def readme():
 
 setup(name='tensordata',
       version='0.2.0',
-      install_requires=['pandas', 'numpy', 'imageio', 'rarfile', 'tensorflow>=2.0.0'],
+      install_requires=['pandas', 'numpy', 'imageio', 'rarfile', 'tensorflow>=2.0.0a0'],
       description='CV, NLP, DM datasets Toolkit for Machine Learning.',
       long_description=readme(),
       long_description_content_type='text/markdown',
