@@ -1,7 +1,7 @@
 import os
 import io
 import requests
-import concurrent
+import concurrent.futures
 import pandas as pd
 from tensorflow.io import gfile
 from tensordata.utils import request as rq
