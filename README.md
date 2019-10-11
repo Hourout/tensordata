@@ -22,3 +22,8 @@ To get the newest one from this repo (note that we are in the alpha stage, so th
 ```
 pip install git+git://github.com/Hourout/tensordata.git
 ```
+
+## Contact
+Please contact me if you have any related questions or improvements.
+
+[WeChat](https://github.com/Hourout/tensordata/blob/master/image/hourout_wechat.jpg)
