@@ -3,9 +3,10 @@ import gzip
 import time
 import imageio
 import numpy as np
-from tensorflow.io import gfile
 from tensordata.utils._utils import assert_dirs, path_join
 import tensordata.utils.request as rq
+import tensorflow as tf
+gfile = tf.io.gfile
 
 __all__ = ['mnist', 'mnist_fashion']
 
