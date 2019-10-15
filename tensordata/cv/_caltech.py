@@ -1,5 +1,5 @@
 import time
-from tensorflow.io import gfile
+import tensorflow as tf
 from tensordata.utils.compress import un_gz, un_tar
 from tensordata.utils._utils import assert_dirs, path_join
 import tensordata.utils.request as rq
@@ -39,9 +39,9 @@ def caltech101(root):
     url = 'http://www.vision.caltech.edu/Image_Datasets/Caltech101/101_ObjectCategories.tar.gz'
     rq.files(url, path_join(root, url.split('/')[-1]))
     un_tar(un_gz(path_join(root, url.split('/')[-1])), task_path)
-    gfile.rename(path_join(task_path, '101_ObjectCategories'), path_join(task_path, 'train'))
+    tf.io.gfile.rename(path_join(task_path, '101_ObjectCategories'), path_join(task_path, 'train'))
     for i in ['101_ObjectCategories.tar.gz', '101_ObjectCategories.tar']:
-        gfile.remove(path_join(root, i))
+        tf.io.gfile.remove(path_join(root, i))
     print('caltech101 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -77,7 +77,7 @@ def caltech256(root):
     url = "http://www.vision.caltech.edu/Image_Datasets/Caltech256/256_ObjectCategories.tar"
     rq.files(url, path_join(root, url.split('/')[-1]))
     un_tar(path_join(root, url.split('/')[-1]), task_path)
-    gfile.rename(path_join(task_path, '256_ObjectCategories'), path_join(task_path, 'train'))
-    gfile.remove(path_join(root, '256_ObjectCategories.tar'))
+    tf.io.gfile.rename(path_join(task_path, '256_ObjectCategories'), path_join(task_path, 'train'))
+    tf.io.gfile.remove(path_join(root, '256_ObjectCategories.tar'))
     print('caltech256 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
