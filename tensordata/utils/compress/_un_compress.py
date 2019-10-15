@@ -3,7 +3,7 @@ import gzip
 import zipfile
 import tarfile
 import rarfile
-from tensorflow.io import gfile
+import tensorflow as tf
 
 __all__ = ['un_gz', 'un_tar', 'un_zip', 'un_rar', 'un_bz2']
 
@@ -20,7 +20,7 @@ def un_gz(gz_file, ugz_name=None):
     if ugz_name is None:
         ugz_name = gz_file[:-3]
     with gzip.GzipFile(gz_file) as g_file:
-        with gfile.GFile(ugz_name, "w+") as f:
+        with tf.io.gfile.GFile(ugz_name, "w+") as f:
             f.write(g_file.read())
     return ugz_name
 
@@ -91,6 +91,6 @@ def un_bz2(bz2_file, ubz2_folder=None):
     if ubz2_folder is None:
         ubz2_folder = bz2_file[:-4]
     with bz2.BZ2File(bz2_file, 'r') as b:
-        with gfile.GFile(ubz2_folder, 'w') as f:
+        with tf.io.gfile.GFile(ubz2_folder, 'w') as f:
             f.write(b.readline())
     return ubz2_folder
