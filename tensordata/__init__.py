@@ -6,6 +6,6 @@ from tensordata import paper
 from tensordata import report
 from tensordata import book
 
-__version__ = '0.2.2'
+__version__ = '0.2.3'
 __author__ = 'JinQing Lee'
 __data_version__ = '0.1.0'
