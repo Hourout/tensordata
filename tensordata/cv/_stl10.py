@@ -1,10 +1,11 @@
 import time
 import imageio
 import numpy as np
-from tensorflow.io import gfile
 from tensordata.utils.compress import un_gz, un_tar
 from tensordata.utils._utils import assert_dirs, path_join
 import tensordata.utils.request as rq
+import tensorflow as tf
+gfile = tf.io.gfile
 
 __all__  = ['stl10']
 
