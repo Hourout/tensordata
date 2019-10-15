@@ -3,9 +3,9 @@ import time
 import requests
 import imageio
 import pandas as pd
-from tensorflow.io import gfile
 from tensordata.utils._utils import assert_dirs, path_join
-
+import tensorflow as tf
+gfile = tf.io.gfile
 
 __all__ = ['mnist_tibetan']
 
