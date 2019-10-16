@@ -92,5 +92,5 @@ def un_bz2(bz2_file, ubz2_folder=None):
         ubz2_folder = bz2_file[:-4]
     with bz2.BZ2File(bz2_file, 'r') as b:
         with tf.io.gfile.GFile(ubz2_folder, 'w') as f:
-            f.write(b.readline())
+            f.write(b.read())
     return ubz2_folder
