@@ -8,7 +8,7 @@ __all__ = ['real_time', 'real_time_share', 'real_time_index',
 
 def _get_tianqi_api(city):
     assert isinstance(city, str), "`city` should be str."
-    return requests.get('https://www.tianqiapi.com/api/?version=v1&city='+city).json()
+    return requests.get('https://www.tianqiapi.com/api/?appid=14641533&appsecret=WY75ItCZ&version=v1&city='+city).json()
 
 def real_time_share(city):
     a = _get_tianqi_api(city)
