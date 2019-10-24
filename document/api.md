@@ -84,6 +84,8 @@
 | td.paper.ICCV.ICCV2013 |   | ICCV2013 论文下载 |
 | td.paper.ICCV.ICCV2015 |   | ICCV2015 论文下载 |
 | td.paper.ICCV.ICCV2017 |   | ICCV2017 论文下载 |
+| td.paper.ICCV.ICCV2019 |   | ICCV2019 论文下载 |
+| td.paper.ECCV.ECCV2018 |   | ECCV2018 论文下载 |
 
 - ## td.report
 
