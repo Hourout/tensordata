@@ -49,7 +49,7 @@ def files(url, root_file, verbose=1, chunk_size=1024):
     """
     r = requests.get(url, stream=True)
     content_type = r.headers.get('Content-Length')
-    total_size = -1 if content_type is None else int(content_type.strip())
+    total_size = None if content_type is None else int(content_type.strip())
     p = tf.keras.utils.Progbar(total_size, verbose=verbose)
     with tf.io.gfile.GFile(root_file, 'wb') as f:
         for chunk in r.iter_content(chunk_size):
