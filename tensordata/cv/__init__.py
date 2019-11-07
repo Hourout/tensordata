@@ -5,3 +5,4 @@ from tensordata.cv._mnist_tibetan import *
 from tensordata.cv._coil import *
 from tensordata.cv._caltech import *
 from tensordata.cv._stl10 import *
+from tensordata.cv._mnist_kannada import *
