@@ -22,6 +22,7 @@
 | td.cv.mnist_kuzushiji49 |   | mnist_kuzushiji49 数据集 |
 | td.cv.mnist_kuzushiji_kanji |   | mnist_kuzushiji_kanji 数据集 |
 | td.cv.mnist_tibetan |   | mnist_tibetan 数据集 |
+| td.cv.mnist_kannada |   | mnist_kannada 数据集 |
 | td.cv.stl10 |   | stl10 数据集 |
 
 - ## td.dm
