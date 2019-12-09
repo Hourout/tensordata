@@ -3,7 +3,7 @@ from tensordata.utils._utils import assert_dirs, path_join
 import tensordata.utils.request as rq
 
 
-__all__ = ['boston_housing', 'adult', 'wine', 'abalone', 'arrhythmia']
+__all__ = ['boston_housing', 'adult', 'wine', 'abalone', 'arrhythmia', 'titanic']
 
 def boston_housing(root):
     """Housing Values in Suburbs of Boston
@@ -163,4 +163,37 @@ def arrhythmia(root):
     rq.files(url_introduce, path_join(task_path, 'introduce.txt'), verbose=0)
     rq.table(url_txt, path_join(task_path, 'arrhythmia.txt'))
     print('arrhythmia dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
+    return task_path
+
+
+def titanic(root):
+    """Titanic dataset
+    
+    'train.csv' will contain the details of a subset of the 
+    passengers on board (891 to be exact) and importantly, 
+    will reveal whether they survived or not, 
+    also known as the “ground truth”.
+    
+    The `test.csv` dataset contains similar information 
+    but does not disclose the “ground truth” for each passenger. 
+    
+    Data storage directory:
+    root = `/user/.../mydata`
+    titanic data: 
+    `root/titanic/train.csv`
+    `root/titanic/test.csv`
+    Args:
+        root: str, Store the absolute path of the data directory.
+              example:if you want data path is `/user/.../mydata/titanic`,
+              root should be `/user/.../mydata`.
+    Returns:
+        Store the absolute path of the data directory, is `root/titanic`.
+    """
+    start = time.time()
+    task_path = assert_dirs(root, 'titanic')
+    url_train = "https://storage.googleapis.com/tf-datasets/titanic/train.csv"
+    url_test = "https://storage.googleapis.com/tf-datasets/titanic/eval.csv"
+    rq.table(url_train, path_join(task_path, 'train.csv'))
+    rq.table(url_test, path_join(task_path, 'test.csv'))
+    print('titanic dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
