@@ -3,8 +3,8 @@ from tensordata.utils._utils import assert_dirs, path_join
 import tensordata.utils.request as rq
 
 __all__ = ['it', 'animal', 'medical', 'famous_person', 'placename', 'antonym', 
-           'synonym', 'privative', 'idiom', 'pornography', 'car',
-]
+           'synonym', 'privative', 'idiom', 'pornography', 'car', 'abbreviation'
+          ]
 
 def it(root):
     """Chinese lexicon IT datasets.
@@ -279,4 +279,37 @@ def car(root):
     url = "https://raw.githubusercontent.com/Hourout/datasets/master/nlp/chinese_lexicon/chinese_lexicon_car.txt"
     rq.table(url, path_join(task_path, 'chinese_lexicon_car.txt'))
     print('chinese_lexicon_car dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
+    return task_path
+
+def abbreviation(root):
+    """Chinese abbreviation datasets.
+    
+    datasets url:`https://github.com/zhangyics/Chinese-abbreviation-dataset`
+    
+    A corpus of Chinese abbreviation
+    This is the dataset released by the paper "A Chinese Dataset with Negative Full 
+    Forms for General Abbreviation Prediction".
+    
+    Data storage directory:
+    root = `/user/.../mydata`
+    Chinese abbreviation datasets data: 
+    `root/chinese_abbreviation/train_set.txt`
+    `root/chinese_abbreviation/test_set.txt`
+    `root/chinese_abbreviation/dev_set.txt`
+    Args:
+        root: str, Store the absolute path of the data directory.
+              example:if you want data path is `/user/.../mydata/chinese_abbreviation`,
+              root should be `/user/.../mydata`.
+    Returns:
+        Store the absolute path of the data directory, is `root/chinese_abbreviation`.
+    """
+    start = time.time()
+    task_path = assert_dirs(root, 'chinese_abbreviation')
+    url_train = "https://raw.githubusercontent.com/zhangyics/Chinese-abbreviation-dataset/master/train_set.txt"
+    url_test = "https://raw.githubusercontent.com/zhangyics/Chinese-abbreviation-dataset/master/test_set.txt"
+    url_dev = "https://raw.githubusercontent.com/zhangyics/Chinese-abbreviation-dataset/master/dev_set.txt"
+    rq.files(url_train, path_join(task_path, 'train_set.txt'))
+    rq.files(url_test, path_join(task_path, 'test_set.txt'))
+    rq.files(url_dev, path_join(task_path, 'dev_set.txt'))
+    print('chinese abbreviation dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
