@@ -6,8 +6,29 @@ __all__ = ['CVPR2018', 'CVPR2017', 'CVPR2016', 'CVPR2015', 'CVPR2014', 'CVPR2013
            'CVPR2019',
           ]
 
+def CVPR2020(root):
+    """CVPR2020 datasets from http://openaccess.thecvf.com/CVPR2020.py.
+        
+    CVPR2020 datasets includes 2201 papers.
+    
+    Data storage directory:
+    root = `/user/.../mydata`
+    CVPR2020 data: 
+    `root/CVPR2020/...`
+    Args:
+        root: str, Store the absolute path of the data directory.
+              example:if you want data path is `/user/.../mydata/CVPR2019`,
+              root should be `/user/.../mydata`.
+    Returns:
+        Store the absolute path of the data directory, is `root/CVPR2020`.
+    """
+    start = time.time()
+    task_path = get_paper('CVPR2020', root, 'https://raw.githubusercontent.com/Hourout/datasets/master/paper/cvpr/cvpr2020.txt')
+    print('CVPR2020 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
+    return task_path
+
 def CVPR2019(root):
-    """CVPR2018 datasets from http://openaccess.thecvf.com/CVPR2019.py.
+    """CVPR2019 datasets from http://openaccess.thecvf.com/CVPR2019.py.
         
     CVPR2019 datasets includes 1915 papers.
     
