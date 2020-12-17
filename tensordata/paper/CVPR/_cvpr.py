@@ -17,7 +17,7 @@ def CVPR2020(root):
     `root/CVPR2020/...`
     Args:
         root: str, Store the absolute path of the data directory.
-              example:if you want data path is `/user/.../mydata/CVPR2019`,
+              example:if you want data path is `/user/.../mydata/CVPR2020`,
               root should be `/user/.../mydata`.
     Returns:
         Store the absolute path of the data directory, is `root/CVPR2020`.
