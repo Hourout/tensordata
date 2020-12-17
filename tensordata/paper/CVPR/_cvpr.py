@@ -3,7 +3,7 @@ from tensordata.utils._utils import get_paper
 
 
 __all__ = ['CVPR2018', 'CVPR2017', 'CVPR2016', 'CVPR2015', 'CVPR2014', 'CVPR2013',
-           'CVPR2019',
+           'CVPR2019', 'CVPR2020',
           ]
 
 def CVPR2020(root):
