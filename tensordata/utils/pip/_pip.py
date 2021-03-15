@@ -4,10 +4,13 @@ import subprocess
 __all__ = ['freeze', 'upgrade', 'upgradeable', 'install', 'uninstall', 
            'mirror', 'file', 'show', 'search']
 
-pypi = {'pip':"https://pypi.org/simple",
+pypi = {'pip': "https://pypi.org/simple",
         'tsinghua': "https://pypi.tuna.tsinghua.edu.cn/simple",
         'aliyun': "https://mirrors.aliyun.com/pypi/simple",
-        'ustc':"https://mirrors.ustc.edu.cn/pypi/web/simple"}
+        'ustc': "https://mirrors.ustc.edu.cn/pypi/web/simple",
+        'tencent': 'https://mirrors.cloud.tencent.com/pypi/simple',
+        'douban': 'https://pypi.doubanio.com/simple/'
+       }
 
 def freeze(name=None, py=3):
     """List all python libraries.
