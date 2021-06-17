@@ -1,10 +1,11 @@
 import io
 import time
-import requests
 import concurrent
+
+import requests
 import pandas as pd
-from tensordata.utils._utils import assert_dirs, path_join
 import tensordata.utils.request as rq
+from tensordata.utils._utils import assert_dirs, path_join
 
 
 __all__ = ['ctrip_hotel', 'douban_movies', 'online_shopping_10_cats', 'sina_weibo', 

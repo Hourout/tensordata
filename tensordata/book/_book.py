@@ -1,8 +1,9 @@
 import time
+
 import requests
 import pandas as pd
-from tensordata.utils._utils import assert_dirs, path_join
 import tensordata.utils.request as rq
+from tensordata.utils._utils import assert_dirs, path_join
 
 __all__ = ['economist']
 

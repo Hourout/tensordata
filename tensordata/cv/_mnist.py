@@ -1,12 +1,12 @@
 import os
 import gzip
 import time
+
 import imageio
 import numpy as np
-from tensordata.utils._utils import assert_dirs, path_join
 import tensordata.utils.request as rq
-import tensorflow as tf
-gfile = tf.io.gfile
+from tensordata.utils._utils import assert_dirs, path_join
+
 
 __all__ = ['mnist', 'mnist_fashion']
 
@@ -53,15 +53,15 @@ def mnist(root):
         test = np.frombuffer(imgpath.read(), np.uint8, offset=16).reshape(len(test_label), 28, 28)
     
     for i in set(train_label):
-        gfile.makedirs(path_join(task_path, 'train', str(i)))
+        os.makedirs(path_join(task_path, 'train', str(i)))
     for i in set(test_label):
-        gfile.makedirs(path_join(task_path, 'test', str(i)))
+        os.makedirs(path_join(task_path, 'test', str(i)))
     for idx in range(train.shape[0]):
         imageio.imsave(path_join(task_path, 'train', str(train_label[idx]), str(idx)+'.png'), train[idx])
     for idx in range(test.shape[0]):
         imageio.imsave(path_join(task_path, 'test', str(test_label[idx]), str(idx)+'.png'), test[idx])
     for url in url_list:
-        gfile.remove(path_join(task_path, url.split('/')[-1]))
+        os.remove(path_join(task_path, url.split('/')[-1]))
     print('mnist dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -110,14 +110,14 @@ def mnist_fashion(root):
         test = np.frombuffer(imgpath.read(), np.uint8, offset=16).reshape(len(test_label), 28, 28)
     
     for i in set(train_label):
-        gfile.makedirs(path_join(task_path, 'train', str(i)))
+        os.makedirs(path_join(task_path, 'train', str(i)))
     for i in set(test_label):
-        gfile.makedirs(path_join(task_path, 'test', str(i)))
+        os.makedirs(path_join(task_path, 'test', str(i)))
     for idx in range(train.shape[0]):
         imageio.imsave(path_join(task_path, 'train', str(train_label[idx]), str(idx)+'.png'), train[idx])
     for idx in range(test.shape[0]):
         imageio.imsave(path_join(task_path, 'test', str(test_label[idx]), str(idx)+'.png'), test[idx])
     for url in url_list:
-        gfile.remove(path_join(task_path, url.split('/')[-1]))
+        os.remove(path_join(task_path, url.split('/')[-1]))
     print('mnist_fashion dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path

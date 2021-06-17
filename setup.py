@@ -6,8 +6,8 @@ def readme():
         return f.read()
 
 setup(name='tensordata',
-      version='0.3.0',
-      install_requires=['pandas', 'numpy', 'imageio', 'rarfile', 'tensorflow>=2.0.0'],
+      version='0.4.0',
+      install_requires=['pandas', 'numpy', 'imageio', 'rarfile'],
       description='CV, NLP, DM datasets Toolkit for Machine Learning.',
       long_description=readme(),
       long_description_content_type='text/markdown',
@@ -27,6 +27,8 @@ setup(name='tensordata',
           'Programming Language :: Python :: 3.5',
           'Programming Language :: Python :: 3.6',
           'Programming Language :: Python :: 3.7',
+          'Programming Language :: Python :: 3.8',
+          'Programming Language :: Python :: 3.9',
       ],
       packages=find_packages(),
       zip_safe=False)

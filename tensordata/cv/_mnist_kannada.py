@@ -1,9 +1,12 @@
+import os
 import time
+
+import imageio
 import pandas as pd
 import tensordata.utils.request as rq
 from tensordata.utils._utils import assert_dirs, path_join
-import tensorflow as tf
-gfile = tf.io.gfile
+from tensordata.utils.compress._un_compress import un_zip
+
 
 __all__ = ['mnist_kannada']
 
@@ -35,19 +38,19 @@ def mnist_kannada(root):
     print('Downloading data from https://github.com/Hourout/datasets/releases/download/0.0.1/kannada_MNIST.zip')
     task_path = assert_dirs(root, 'mnist_kannada')
     zip_path = rq.files('https://github.com/Hourout/datasets/releases/download/0.0.1/kannada_MNIST.zip', task_path+'/kannada_MNIST.zip')
-    unzip_path = td.utils.compress.un_zip(task_path+'/kannada_MNIST.zip')
+    unzip_path = un_zip(task_path+'/kannada_MNIST.zip')
     test = pd.read_csv('./data/kannada_MNIST/kannada_MNIST_train.csv', header=None, dtype='uint8')
     train = pd.read_csv('./data/kannada_MNIST/kannada_MNIST_test.csv', header=None, dtype='uint8')
     for i in set(train[0]):
-        gfile.makedirs(path_join(task_path, 'train', str(i)))
-        gfile.makedirs(path_join(task_path, 'test', str(i)))
+        os.makedirs(path_join(task_path, 'train', str(i)))
+        os.makedirs(path_join(task_path, 'test', str(i)))
     for i in range(len(train)):
-        tf.io.write_file(path_join(task_path, 'train', str(train.iat[i, 0]), str(i)+'.png'),
-                         tf.image.encode_png(train.iloc[i, 1:].values.reshape(28, 28, 1)))
+        imageio.imsave(path_join(task_path, 'train', str(train.iat[i, 0]), str(i)+'.png'),
+                       train.iloc[i, 1:].values.reshape(28, 28, 1))
     for i in range(len(test)):
-        tf.io.write_file(path_join(task_path, 'test', str(test.iat[i, 0]), str(i)+'.png'),
-                         tf.image.encode_png(test.iloc[i, 1:].values.reshape(28, 28, 1)))
-    gfile.remove(zip_path)
-    gfile.rmtree(unzip_path)
+        imageio.imsave(path_join(task_path, 'test', str(test.iat[i, 0]), str(i)+'.png'),
+                       test.iloc[i, 1:].values.reshape(28, 28, 1))
+    os.remove(zip_path)
+    os.rmdir(unzip_path)
     print('mnist_kannada dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path

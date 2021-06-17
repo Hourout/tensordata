@@ -1,11 +1,12 @@
 import os
 import time
+import shutil
+
 import pandas as pd
+import tensordata.utils.request as rq
 from tensordata.utils.compress import un_zip
 from tensordata.utils._utils import assert_dirs, path_join
-import tensordata.utils.request as rq
-import tensorflow as tf
-gfile = tf.io.gfile
+
 
 __all__ = ['coil20', 'coil100']
 
@@ -36,17 +37,17 @@ def coil20(root):
     url = "http://www.cs.columbia.edu/CAVE/databases/SLAM_coil-20_coil-100/coil-20/coil-20-proc.zip"
     rq.files(url, path_join(task_path, 'coil20.zip'))
     un_zip(path_join(task_path, 'coil20.zip'))
-    image = gfile.listdir(path_join(task_path, 'coil20', 'coil-20-proc'))
+    image = os.listdir(path_join(task_path, 'coil20', 'coil-20-proc'))
     t = pd.DataFrame(image, columns=['image'])
     t['label'] = t.image.map(lambda x:x.split('__')[0][3:])
     t['image_old_path'] = t.image.map(lambda x:path_join(task_path, 'coil20', 'coil-20-proc', x))
     t['image_new_path'] = (t.label+'/'+t.image).map(lambda x:path_join(task_path, 'train', x))
     for i in t.label.unique():
-        gfile.makedirs(path_join(task_path, 'train', i))
+        os.makedirs(path_join(task_path, 'train', i))
     for i,j in zip(t.image_old_path, t.image_new_path):
-        gfile.copy(i, j)
-    gfile.remove(path_join(task_path, 'coil20.zip'))
-    gfile.rmtree(path_join(task_path, 'coil20'))
+        shutil.copy(i, j)
+    os.remove(path_join(task_path, 'coil20.zip'))
+    os.rmdir(path_join(task_path, 'coil20'))
     print('coil20 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -77,18 +78,18 @@ def coil100(root):
     url = "http://www.cs.columbia.edu/CAVE/databases/SLAM_coil-20_coil-100/coil-100/coil-100.zip"
     rq.files(url, path_join(task_path, 'coil100.zip'))
     un_zip(path_join(task_path, 'coil100.zip'))
-    image = gfile.listdir(path_join(task_path, 'coil100', 'coil-100'))
+    image = os.listdir(path_join(task_path, 'coil100', 'coil-100'))
     t = pd.DataFrame(image, columns=['image'])
     t['label'] = t.image.map(lambda x:x.split('__')[0][3:])
     t['image_old_path'] = t.image.map(lambda x:path_join(task_path, 'coil100', 'coil-100', x))
     t['image_new_path'] = (t.label+'/'+t.image).map(lambda x:path_join(task_path, 'train', x))
     for i in t.label.unique():
-        gfile.makedirs(path_join(task_path, 'train', i))
+        os.makedirs(path_join(task_path, 'train', i))
     for i,j in zip(t.image_old_path, t.image_new_path):
-        gfile.copy(i, j)
-    gfile.remove(path_join(task_path, 'coil100.zip'))
-    gfile.rmtree(path_join(task_path, 'coil100'))
-    if gfile.exists(path_join(task_path, 'train', 'vertGroupppm2png.pl')):
-        gfile.remove(path_join(task_path, 'train', 'vertGroupppm2png.pl'))
+        shutil.copy(i, j)
+    os.remove(path_join(task_path, 'coil100.zip'))
+    os.rmdir(path_join(task_path, 'coil100'))
+    if os.path.exists(path_join(task_path, 'train', 'vertGroupppm2png.pl')):
+        os.remove(path_join(task_path, 'train', 'vertGroupppm2png.pl'))
     print('coil100 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
