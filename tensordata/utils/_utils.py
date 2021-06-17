@@ -1,27 +1,27 @@
 import os
 import io
-import requests
 import concurrent.futures
+
+import requests
 import pandas as pd
-import tensorflow as tf
 from tensordata.utils import request as rq
 
 def assert_dirs(root, root_dir=None, delete=True, make_root_dir=True):
-    assert tf.io.gfile.isdir(root), '{} should be directory.'.format(root)
+    assert os.path.isdir(root), '{} should be directory.'.format(root)
     if root_dir is not None:
         assert isinstance(root_dir, str), '{} should be str.'.format(root_dir)
         task_path = path_join(root, root_dir)
-        if tf.io.gfile.exists(task_path):
+        if os.path.exists(task_path):
             if delete:
-                tf.io.gfile.rmtree(task_path)
-                tf.io.gfile.makedirs(task_path)
+                os.rmdir(task_path)
+                os.makedirs(task_path)
         else:
             if make_root_dir:
-                tf.io.gfile.makedirs(task_path)
+                os.makedirs(task_path)
         return task_path
     else:
-        if not tf.io.gfile.exists(root):
-            tf.io.gfile.makedirs(root)
+        if not os.path.exists(root):
+            os.makedirs(root)
         return root
 
 def path_join(path, *paths):

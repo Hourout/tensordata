@@ -1,8 +1,8 @@
 import io
 import json as jsons
+
 import requests
 import pandas as pd
-import tensorflow as tf
 
 __all__ = ['json', 'table', 'files']
 
@@ -17,7 +17,7 @@ def json(url, root_file):
     """
     assert root_file[-5:]=='.json', '`root_file` should be `xxx.json`'
     s = requests.get(url)
-    with tf.io.gfile.GFile(root_file, 'w') as f:
+    with open(root_file, 'w') as f:
         jsons.dump(s.json(), f, ensure_ascii=False)
     return root_file
 
@@ -51,7 +51,7 @@ def files(url, root_file, verbose=1, chunk_size=1024):
     content_type = r.headers.get('Content-Length')
     total_size = None if content_type is None else int(content_type.strip())
     p = tf.keras.utils.Progbar(total_size, verbose=verbose)
-    with tf.io.gfile.GFile(root_file, 'wb') as f:
+    with open(root_file, 'wb') as f:
         for chunk in r.iter_content(chunk_size):
             p.add(chunk_size)
             f.write(chunk)
