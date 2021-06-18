@@ -1,7 +1,8 @@
 import os
 import shutil
 
-__all__ = ['copy', 'exists', 'isdir', 'isfile', 'listdir', 'makedirs', 'remove', 'stat', 'walk']
+__all__ = ['copy', 'exists', 'isdir', 'isfile', 'listdir', 'makedirs', 'remove', 'stat', 'walk',
+           'path_join']
 
 def copy(src, dst, overwrite=False):
     """Copies data from src to dst.
@@ -131,3 +132,6 @@ def walk(top, topdown=True, onerror=None):
         Each item is a string.
     """
     return os.walk(top, topdown, onerror)
+
+def path_join(path, *paths):
+    return eval(repr(os.path.join(path, *paths)).replace("\\", '/').replace("//", '/'))
