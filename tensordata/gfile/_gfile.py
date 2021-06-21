@@ -88,7 +88,7 @@ def remove(path):
     """
     if isfile(path):
         return os.remove(path)
-    return os.removedirs(path)
+    return shutil.rmtree(path)
 
 def rename(src, dst, overwrite=False):
     """Rename or move a file / directory.
