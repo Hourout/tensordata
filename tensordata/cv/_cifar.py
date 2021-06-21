@@ -46,7 +46,8 @@ def cifar10(root):
         for i in set(train_label):
             os.makedirs(path_join(task_path, 'train', str(i)))
         for idx in range(train.shape[0]):
-            imageio.imsave(path_join(task_path, 'train', str(train_label[idx]), str(idx)+'.png'), train[idx])
+            save_image(path_join(task_path, 'train', str(train_label[idx]), str(idx)+'.png'), array_to_imag(train[idx]))
+#             imageio.imsave(path_join(task_path, 'train', str(train_label[idx]), str(idx)+'.png'), train[idx])
     for file in ['test_batch.bin']:
         with open(path_join(task_path, file), 'rb') as fin:
             data = np.frombuffer(fin.read(), dtype=np.uint8).reshape(-1, 3072+1)
@@ -55,7 +56,8 @@ def cifar10(root):
         for i in set(test_label):
             os.makedirs(path_join(task_path, 'test', str(i)))
         for idx in range(test.shape[0]):
-            imageio.imsave(path_join(task_path, 'test', str(test_label[idx]), str(idx)+'.png'), test[idx])
+            save_image(path_join(task_path, 'test', str(test_label[idx]), str(idx)+'.png'), array_to_imag(test[idx]))
+#             imageio.imsave(path_join(task_path, 'test', str(test_label[idx]), str(idx)+'.png'), test[idx])
     for file in noise_flie:
         os.remove(path_join(task_path, file))
     print('cifar10 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
@@ -100,7 +102,8 @@ def cifar100(root, fine_label=True):
     for i in set(train_label):
         os.makedirs(path_join(task_path, 'train', str(i)))
     for idx in range(train.shape[0]):
-        imageio.imsave(path_join(task_path, 'train', str(train_label[idx]), str(idx)+'.png'), train[idx])
+        save_image(path_join(task_path, 'train', str(train_label[idx]), str(idx)+'.png'), array_to_imag(train[idx]))
+#         imageio.imsave(path_join(task_path, 'train', str(train_label[idx]), str(idx)+'.png'), train[idx])
     with open(path_join(task_path, 'test.bin'), 'rb') as fin:
         data = np.frombuffer(fin.read(), dtype=np.uint8).reshape(-1, 3072+2)
         test = data[:, 2:].reshape(-1, 3, 32, 32).transpose(0, 2, 3, 1)
@@ -108,7 +111,8 @@ def cifar100(root, fine_label=True):
     for i in set(test_label):
         os.makedirs(path_join(task_path, 'test', str(i)))
     for idx in range(test.shape[0]):
-        imageio.imsave(path_join(task_path, 'test', str(test_label[idx]), str(idx)+'.png'), test[idx])
+        save_image(path_join(task_path, 'test', str(test_label[idx]), str(idx)+'.png'), array_to_imag(test[idx]))
+#         imageio.imsave(path_join(task_path, 'test', str(test_label[idx]), str(idx)+'.png'), test[idx])
     for file in noise_flie:
         os.remove(path_join(task_path, file))
     print('cifar100 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))

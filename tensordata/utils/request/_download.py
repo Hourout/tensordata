@@ -3,6 +3,7 @@ import json as jsons
 
 import requests
 import pandas as pd
+from linora.utils import Progbar
 
 __all__ = ['json', 'table', 'files']
 
@@ -42,7 +43,7 @@ def files(url, root_file, verbose=1, chunk_size=1024):
     Args:
         url: str, request url.
         root_file: str, downloaded and saved file name.
-        verbose: Verbosity mode, 0 (silent), 1 (verbose), 2 (semi-verbose)
+        verbose: Verbosity mode, 0 (silent), 1 (verbose)
         chunk_size: the number of bytes it should read into memory.
     Return:
         root_file: str, downloaded and saved file name.
@@ -50,9 +51,9 @@ def files(url, root_file, verbose=1, chunk_size=1024):
     r = requests.get(url, stream=True)
     content_type = r.headers.get('Content-Length')
     total_size = None if content_type is None else int(content_type.strip())
-#     p = tf.keras.utils.Progbar(total_size, verbose=verbose)
+    p = Progbar(total_size, verbose=verbose)
     with open(root_file, 'wb') as f:
         for chunk in r.iter_content(chunk_size):
-#             p.add(chunk_size)
+            p.add(chunk_size)
             f.write(chunk)
     return root_file

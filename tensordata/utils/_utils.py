@@ -13,7 +13,7 @@ def assert_dirs(root, root_dir=None, delete=True, make_root_dir=True):
         task_path = path_join(root, root_dir)
         if os.path.exists(task_path):
             if delete:
-                os.rmdir(task_path)
+                os.removedirs(task_path)
                 os.makedirs(task_path)
         else:
             if make_root_dir:
