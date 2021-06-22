@@ -3,7 +3,7 @@ import time
 import tensordata.gfile as gfile
 import tensordata.utils.request as rq
 from tensordata.utils.compress import un_gz, un_tar
-from tensordata.utils._utils import assert_dirs, 
+from tensordata.utils._utils import assert_dirs
 
 
 __all__ = ['caltech101', 'caltech256']
