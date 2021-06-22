@@ -56,9 +56,11 @@ def mnist(root):
     for i in set(test_label):
         gfile.makedirs(gfile.path_join(task_path, 'test', str(i)))
     for idx in range(train.shape[0]):
-        save_image(gfile.path_join(task_path, 'train', str(train_label[idx]), str(idx)+'.png'), array_to_image(train[idx]))
+        save_image(gfile.path_join(task_path, 'train', str(train_label[idx]), str(idx)+'.png'), 
+                   array_to_image(train[idx].reshape(28, 28, 1)))
     for idx in range(test.shape[0]):
-        save_image(gfile.path_join(task_path, 'test', str(test_label[idx]), str(idx)+'.png'), array_to_image(test[idx]))
+        save_image(gfile.path_join(task_path, 'test', str(test_label[idx]), str(idx)+'.png'), 
+                   array_to_image(test[idx].reshape(28, 28, 1)))
     for url in url_list:
         gfile.remove(gfile.path_join(task_path, url.split('/')[-1]))
     print('mnist dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
@@ -113,9 +115,11 @@ def mnist_fashion(root):
     for i in set(test_label):
         gfile.makedirs(gfile.path_join(task_path, 'test', str(i)))
     for idx in range(train.shape[0]):
-        save_image(gfile.path_join(task_path, 'train', str(train_label[idx]), str(idx)+'.png'), array_to_image(train[idx]))
+        save_image(gfile.path_join(task_path, 'train', str(train_label[idx]), str(idx)+'.png'), 
+                   array_to_image(train[idx].reshape(28, 28, 1)))
     for idx in range(test.shape[0]):
-        save_image(gfile.path_join(task_path, 'test', str(test_label[idx]), str(idx)+'.png'), array_to_image(test[idx]))
+        save_image(gfile.path_join(task_path, 'test', str(test_label[idx]), str(idx)+'.png'), 
+                   array_to_image(test[idx].reshape(28, 28, 1)))
     for url in url_list:
         gfile.remove(gfile.path_join(task_path, url.split('/')[-1]))
     print('mnist_fashion dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))

@@ -51,6 +51,7 @@ def mnist_tibetan(root):
     for i in set(train_label):
         gfile.makedirs(gfile.path_join(task_path, 'train', str(i)))
     for idx in range(train.shape[0]):
-        save_image(gfile.path_join(task_path, 'train', str(train_label[idx]), str(idx)+'.png'), array_to_image(train[idx]))
+        save_image(gfile.path_join(task_path, 'train', str(train_label[idx]), str(idx)+'.png'),
+                   array_to_image(train[idx].reshape(28, 28, 1)))
     print('mnist_tibetan dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
