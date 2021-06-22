@@ -38,8 +38,8 @@ def mnist_kannada(root):
     task_path = assert_dirs(root, 'mnist_kannada')
     zip_path = rq.files('https://github.com/Hourout/datasets/releases/download/0.0.1/kannada_MNIST.zip', task_path+'/kannada_MNIST.zip')
     unzip_path = un_zip(task_path+'/kannada_MNIST.zip')
-    test = pd.read_csv('./data/kannada_MNIST/kannada_MNIST_train.csv', header=None, dtype='uint8')
-    train = pd.read_csv('./data/kannada_MNIST/kannada_MNIST_test.csv', header=None, dtype='uint8')
+    train = pd.read_csv(gfile.path_join(task_path, 'kannada_MNIST/kannada_MNIST_train.csv'), header=None, dtype='uint8')
+    test = pd.read_csv(gfile.path_join(task_path, 'kannada_MNIST/kannada_MNIST_test.csv'), header=None, dtype='uint8')
     for i in set(train[0]):
         gfile.makedirs(gfile.path_join(task_path, 'train', str(i)))
         gfile.makedirs(gfile.path_join(task_path, 'test', str(i)))
