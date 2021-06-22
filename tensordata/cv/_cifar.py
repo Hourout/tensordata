@@ -1,11 +1,11 @@
-import os
 import time
 import tarfile
 
-import imageio
 import numpy as np
+import tensordata.gfile as gfile
 import tensordata.utils.request as rq
-from tensordata.utils._utils import assert_dirs, path_join
+from tensordata.utils._utils import assert_dirs
+from linora.image import save_image, array_to_image
 
 __all__ = ['cifar10', 'cifar100']
 
@@ -34,32 +34,30 @@ def cifar10(root):
     start = time.time()
     task_path = assert_dirs(root, 'cifar10')
     url = 'https://apache-mxnet.s3-accelerate.dualstack.amazonaws.com/gluon/dataset/cifar10/cifar-10-binary.tar.gz'
-    rq.files(url, path_join(task_path, url.split('/')[-1]))
-    with tarfile.open(path_join(task_path, url.split('/')[-1])) as t:
+    rq.files(url, gfile.path_join(task_path, url.split('/')[-1]))
+    with tarfile.open(gfile.path_join(task_path, url.split('/')[-1])) as t:
         t.extractall(task_path)
-    noise_flie = os.listdir(task_path)
+    noise_flie = gfile.listdir(task_path)
     for file in ['data_batch_1.bin', 'data_batch_2.bin', 'data_batch_3.bin', 'data_batch_4.bin', 'data_batch_5.bin']:
-        with open(path_join(task_path, file), 'rb') as fin:
+        with open(gfile.path_join(task_path, file), 'rb') as fin:
             data = np.frombuffer(fin.read(), dtype=np.uint8).reshape(-1, 3072+1)
             train = data[:, 1:].reshape(-1, 3, 32, 32).transpose(0, 2, 3, 1)
             train_label = data[:, 0].astype(np.int32)
         for i in set(train_label):
-            os.makedirs(path_join(task_path, 'train', str(i)))
+            gfile.makedirs(gfile.path_join(task_path, 'train', str(i)))
         for idx in range(train.shape[0]):
-            save_image(path_join(task_path, 'train', str(train_label[idx]), str(idx)+'.png'), array_to_imag(train[idx]))
-#             imageio.imsave(path_join(task_path, 'train', str(train_label[idx]), str(idx)+'.png'), train[idx])
+            save_image(gfile.path_join(task_path, 'train', str(train_label[idx]), str(idx)+'.png'), array_to_image(train[idx]))
     for file in ['test_batch.bin']:
-        with open(path_join(task_path, file), 'rb') as fin:
+        with open(gfile.path_join(task_path, file), 'rb') as fin:
             data = np.frombuffer(fin.read(), dtype=np.uint8).reshape(-1, 3072+1)
             test = data[:, 1:].reshape(-1, 3, 32, 32).transpose(0, 2, 3, 1)
             test_label = data[:, 0].astype(np.int32)
         for i in set(test_label):
-            os.makedirs(path_join(task_path, 'test', str(i)))
+            gfile.makedirs(gfile.path_join(task_path, 'test', str(i)))
         for idx in range(test.shape[0]):
-            save_image(path_join(task_path, 'test', str(test_label[idx]), str(idx)+'.png'), array_to_imag(test[idx]))
-#             imageio.imsave(path_join(task_path, 'test', str(test_label[idx]), str(idx)+'.png'), test[idx])
+            save_image(gfile.path_join(task_path, 'test', str(test_label[idx]), str(idx)+'.png'), array_to_image(test[idx]))
     for file in noise_flie:
-        os.remove(path_join(task_path, file))
+        gfile.remove(gfile.path_join(task_path, file))
     print('cifar10 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -91,29 +89,27 @@ def cifar100(root, fine_label=True):
     start = time.time()
     task_path = assert_dirs(root, 'cifar100')
     url = 'https://apache-mxnet.s3-accelerate.dualstack.amazonaws.com/gluon/dataset/cifar100/cifar-100-binary.tar.gz'
-    rq.files(url, path_join(task_path, url.split('/')[-1]))
-    with tarfile.open(path_join(task_path, url.split('/')[-1])) as t:
+    rq.files(url, gfile.path_join(task_path, url.split('/')[-1]))
+    with tarfile.open(gfile.path_join(task_path, url.split('/')[-1])) as t:
         t.extractall(task_path)
-    noise_flie = os.listdir(task_path)
-    with open(path_join(task_path, 'train.bin'), 'rb') as fin:
+    noise_flie = gfile.listdir(task_path)
+    with open(gfile.path_join(task_path, 'train.bin'), 'rb') as fin:
         data = np.frombuffer(fin.read(), dtype=np.uint8).reshape(-1, 3072+2)
         train = data[:, 2:].reshape(-1, 3, 32, 32).transpose(0, 2, 3, 1)
         train_label = data[:, 0+fine_label].astype(np.int32)
     for i in set(train_label):
-        os.makedirs(path_join(task_path, 'train', str(i)))
+        gfile.makedirs(gfile.path_join(task_path, 'train', str(i)))
     for idx in range(train.shape[0]):
-        save_image(path_join(task_path, 'train', str(train_label[idx]), str(idx)+'.png'), array_to_imag(train[idx]))
-#         imageio.imsave(path_join(task_path, 'train', str(train_label[idx]), str(idx)+'.png'), train[idx])
-    with open(path_join(task_path, 'test.bin'), 'rb') as fin:
+        save_image(gfile.path_join(task_path, 'train', str(train_label[idx]), str(idx)+'.png'), array_to_image(train[idx]))
+    with open(gfile.path_join(task_path, 'test.bin'), 'rb') as fin:
         data = np.frombuffer(fin.read(), dtype=np.uint8).reshape(-1, 3072+2)
         test = data[:, 2:].reshape(-1, 3, 32, 32).transpose(0, 2, 3, 1)
         test_label = data[:, 0+fine_label].astype(np.int32)
     for i in set(test_label):
-        os.makedirs(path_join(task_path, 'test', str(i)))
+        gfile.makedirs(gfile.path_join(task_path, 'test', str(i)))
     for idx in range(test.shape[0]):
-        save_image(path_join(task_path, 'test', str(test_label[idx]), str(idx)+'.png'), array_to_imag(test[idx]))
-#         imageio.imsave(path_join(task_path, 'test', str(test_label[idx]), str(idx)+'.png'), test[idx])
+        save_image(gfile.path_join(task_path, 'test', str(test_label[idx]), str(idx)+'.png'), array_to_image(test[idx]))
     for file in noise_flie:
-        os.remove(path_join(task_path, file))
+        gfile.remove(gfile.path_join(task_path, file))
     print('cifar100 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path

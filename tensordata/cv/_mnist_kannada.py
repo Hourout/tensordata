@@ -1,12 +1,11 @@
-import os
 import time
 
-import imageio
 import pandas as pd
+import tensordata.gfile as gfile
 import tensordata.utils.request as rq
-from tensordata.utils._utils import assert_dirs, path_join
+from tensordata.utils._utils import assert_dirs
 from tensordata.utils.compress._un_compress import un_zip
-
+from linora.image import save_image, array_to_image
 
 __all__ = ['mnist_kannada']
 
@@ -42,15 +41,15 @@ def mnist_kannada(root):
     test = pd.read_csv('./data/kannada_MNIST/kannada_MNIST_train.csv', header=None, dtype='uint8')
     train = pd.read_csv('./data/kannada_MNIST/kannada_MNIST_test.csv', header=None, dtype='uint8')
     for i in set(train[0]):
-        os.makedirs(path_join(task_path, 'train', str(i)))
-        os.makedirs(path_join(task_path, 'test', str(i)))
+        gfile.makedirs(gfile.path_join(task_path, 'train', str(i)))
+        gfile.makedirs(gfile.path_join(task_path, 'test', str(i)))
     for i in range(len(train)):
-        imageio.imsave(path_join(task_path, 'train', str(train.iat[i, 0]), str(i)+'.png'),
-                       train.iloc[i, 1:].values.reshape(28, 28, 1))
+        save_image(gfile.path_join(task_path, 'train', str(train.iat[i, 0]), str(i)+'.png'),
+                       array_to_image(train.iloc[i, 1:].values.reshape(28, 28, 1)))
     for i in range(len(test)):
-        imageio.imsave(path_join(task_path, 'test', str(test.iat[i, 0]), str(i)+'.png'),
-                       test.iloc[i, 1:].values.reshape(28, 28, 1))
-    os.remove(zip_path)
-    os.rmdir(unzip_path)
+        save_image(gfile.path_join(task_path, 'test', str(test.iat[i, 0]), str(i)+'.png'),
+                       array_to_image(test.iloc[i, 1:].values.reshape(28, 28, 1)))
+    gfile.remove(zip_path)
+    gfile.remove(unzip_path)
     print('mnist_kannada dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path

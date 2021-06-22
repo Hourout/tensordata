@@ -2,31 +2,7 @@ import os
 import shutil
 
 __all__ = ['copy', 'exists', 'isdir', 'isfile', 'listdir', 'makedirs', 'remove', 'stat', 'walk',
-           'path_join']
-
-def copy(src, dst, overwrite=False):
-    """Copies data from src to dst.
-    
-    Note that the above will still result in an error if you try to overwrite a directory with a file.
-
-    Note that you cannot copy a directory, only file arguments are supported.
-
-    Args:
-        src: string, name of the file whose contents need to be copied
-        dst: string, name of the file to which to copy to
-        overwrite: boolean, Whether to overwrite the file if existing file.
-    """
-    if exists(dst):
-        if overwrite:
-            if isdir(src):
-                shutil.copytree(src, dst)
-            else:
-                shutil.copy(src, dst)
-    else:
-        if isdir(src):
-            shutil.copytree(src, dst)
-        else:
-            shutil.copy(src, dst)
+           'path_join', 'rename']
 
 def exists(path):
     """Determines whether a path exists or not.
@@ -70,13 +46,48 @@ def listdir(path):
     """
     return os.listdir(path)
 
+def copy(src, dst, overwrite=False):
+    """Copies data from src to dst.
+    
+    when dst exist: 
+        1.copy file to file.
+        2.copy file to directory.
+        
+    when dst not exist: 
+        1.copy file to file.
+        2.copy file to directory.
+        3.copy directory to directory.
+
+    Args:
+        src: string, name of the file whose contents need to be copied
+        dst: string, name of the file to which to copy to
+        overwrite: boolean, Whether to overwrite the file if existing file.
+    """
+    assert exists(src), "src not exists."
+    if exists(dst):
+        if isdir(src) and isfile(dst):
+            raise ValueError("src is dir and dst is file.")
+        if isdir(src) and isdir(dst):
+            raise ValueError("src is dir and dst is dir.")
+        if overwrite:
+            if isdir(src):
+                shutil.copytree(src, dst)
+            else:
+                shutil.copy(src, dst)
+    else:
+        if isdir(src):
+            shutil.copytree(src, dst)
+        else:
+            shutil.copy(src, dst)
+
 def makedirs(path):
     """Creates a directory and all parent/intermediate directories.
     
     Args:
         path: string, name of the directory to be created.
     """
-    return os.makedirs(path)
+    if not exists(path):
+        os.makedirs(path)
 
 def remove(path):
     """Deletes a directory or file.
@@ -86,9 +97,11 @@ def remove(path):
     Raises:
         errors. NotFoundError if directory or file doesn't exist.
     """
-    if isfile(path):
-        return os.remove(path)
-    return shutil.rmtree(path)
+    if exists(path):
+        if isfile(path):
+            os.remove(path)
+        else:
+            shutil.rmtree(path)
 
 def rename(src, dst, overwrite=False):
     """Rename or move a file / directory.
@@ -98,11 +111,15 @@ def rename(src, dst, overwrite=False):
         dst: string, pathname to which the file needs to be moved.
         overwrite: boolean, Whether to overwrite the file if existing file.
     """
+    assert exists(src), "src not exists."
     if exists(dst):
+        assert isdir(src)==isdir(dst), "src and dst should same type."
+        assert isfile(src)==isfile(dst), "src and dst should same type."
         if overwrite:
-            return os.rename(src, dst)
+            shutil.rmtree(dst)
+            os.rename(src, dst)
     else:
-        return os.rename(src, dst)
+        os.rename(src, dst)
     
 def stat(path):
     """Returns file or directory statistics for a given path.

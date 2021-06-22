@@ -1,14 +1,13 @@
-import os
 import time
 
-import imageio
 import numpy as np
+import tensordata.gfile as gfile
 import tensordata.utils.request as rq
 from tensordata.utils.compress import un_gz, un_tar
-from tensordata.utils._utils import assert_dirs, path_join
+from tensordata.utils._utils import assert_dirs
+from linora.image import save_image, array_to_image
 
-
-__all__  = ['stl10']
+__all__ = ['stl10']
 
 def stl10(root):
     """Stl10 dataset from http://ai.stanford.edu/~acoates/stl10
@@ -45,35 +44,35 @@ def stl10(root):
     start = time.time()
     task_path = assert_dirs(root, 'stl10')
     url = "http://ai.stanford.edu/~acoates/stl10/stl10_binary.tar.gz"
-    rq.files(url, path_join(task_path, url.split('/')[-1]))
-    un_tar(un_gz(path_join(task_path, url.split('/')[-1])))
+    rq.files(url, gfile.path_join(task_path, url.split('/')[-1]))
+    un_tar(un_gz(gfile.path_join(task_path, url.split('/')[-1])))
     
-    with open(path_join(task_path, 'stl10_binary/stl10_binary/test_X.bin'), 'rb') as fin:
+    with open(gfile.path_join(task_path, 'stl10_binary/stl10_binary/test_X.bin'), 'rb') as fin:
         data = np.frombuffer(fin.read(), dtype=np.uint8).reshape(-1, 3,96,96).transpose((0, 3, 2, 1))
-    with open(path_join(task_path, 'stl10_binary/stl10_binary/test_y.bin'), 'rb') as fin:
+    with open(gfile.path_join(task_path, 'stl10_binary/stl10_binary/test_y.bin'), 'rb') as fin:
         data_label = np.frombuffer(fin.read(), dtype=np.uint8)
     for i in set(data_label):
-        os.makedirs(path_join(task_path, 'test', str(i)))
+        gfile.makedirs(gfile.path_join(task_path, 'test', str(i)))
     for idx in range(data.shape[0]):
-        imageio.imsave(path_join(task_path, 'test', str(data_label[idx]), str(idx)+'.png'), data[idx])
+        save_image(gfile.path_join(task_path, 'test', str(data_label[idx]), str(idx)+'.png'), array_to_image(data[idx]))
     
-    with open(path_join(task_path, 'stl10_binary/stl10_binary/train_X.bin'), 'rb') as fin:
+    with open(gfile.path_join(task_path, 'stl10_binary/stl10_binary/train_X.bin'), 'rb') as fin:
         data = np.frombuffer(fin.read(), dtype=np.uint8).reshape(-1, 3,96,96).transpose((0, 3, 2, 1))
-    with open(path_join(task_path, 'stl10_binary/stl10_binary/train_y.bin'), 'rb') as fin:
+    with open(gfile.path_join(task_path, 'stl10_binary/stl10_binary/train_y.bin'), 'rb') as fin:
         data_label = np.frombuffer(fin.read(), dtype=np.uint8)
     for i in set(data_label):
-        os.makedirs(path_join(task_path, 'train', str(i)))
+        gfile.makedirs(gfile.path_join(task_path, 'train', str(i)))
     for idx in range(data.shape[0]):
-        imageio.imsave(path_join(task_path, 'train', str(data_label[idx]), str(idx)+'.png'), data[idx])
+        save_image(gfile.path_join(task_path, 'train', str(data_label[idx]), str(idx)+'.png'), array_to_image(data[idx]))
 
-    with open(path_join(task_path, 'stl10_binary/stl10_binary/unlabeled_X.bin'), 'rb') as fin:
+    with open(gfile.path_join(task_path, 'stl10_binary/stl10_binary/unlabeled_X.bin'), 'rb') as fin:
         data = np.frombuffer(fin.read(), dtype=np.uint8).reshape(-1, 3,96,96).transpose((0, 3, 2, 1))
-    os.makedirs(path_join(task_path, 'unlabeled'))
+    gfile.makedirs(gfile.path_join(task_path, 'unlabeled'))
     for idx in range(data.shape[0]):
-        imageio.imsave(path_join(task_path, 'unlabeled', str(idx)+'.png'), data[idx])
+        save_image(gfile.path_join(task_path, 'unlabeled', str(idx)+'.png'), array_to_image(data[idx]))
     
-    os.remove(path_join(task_path, 'stl10_binary.tar.gz'))
-    os.remove(path_join(task_path, 'stl10_binary.tar'))
-    os.rmdir(path_join(task_path, 'stl10_binary'))
+    gfile.remove(gfile.path_join(task_path, 'stl10_binary.tar.gz'))
+    gfile.remove(gfile.path_join(task_path, 'stl10_binary.tar'))
+    gfile.remove(path_join(task_path, 'stl10_binary'))
     print('stl10 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path

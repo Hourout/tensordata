@@ -1,35 +1,31 @@
-import os
 import io
-import shutil
 import concurrent.futures
 
 import requests
 import pandas as pd
+import tensordata.gfile as gfile
 from tensordata.utils import request as rq
 
 def assert_dirs(root, root_dir=None, delete=True, make_root_dir=True):
-    assert os.path.isdir(root), '{} should be directory.'.format(root)
+    assert gfile.isdir(root), '{} should be directory.'.format(root)
     if root_dir is not None:
         assert isinstance(root_dir, str), '{} should be str.'.format(root_dir)
-        task_path = path_join(root, root_dir)
-        if os.path.exists(task_path):
+        task_path = gfile.path_join(root, root_dir)
+        if gfile.exists(task_path):
             if delete:
-                shutil.rmtree(task_path)
-                os.makedirs(task_path)
+                gfile.remove(task_path)
+                gfile.makedirs(task_path)
         else:
             if make_root_dir:
-                os.makedirs(task_path)
+                gfile.makedirs(task_path)
         return task_path
     else:
-        if not os.path.exists(root):
-            os.makedirs(root)
+        if not gfile.exists(root):
+            gfile.makedirs(root)
         return root
 
-def path_join(path, *paths):
-    return eval(repr(os.path.join(path, *paths)).replace("\\", '/').replace("//", '/'))
-
 def _download(path):
-    rq.files(path.split('|')[1], path_join(path.split('|')[0], path.split('|')[1].split('/')[-1]))
+    rq.files(path.split('|')[1], gfile.path_join(path.split('|')[0], path.split('|')[1].split('/')[-1]))
     
 def get_paper(name, root, url):
     task_path = assert_dirs(root, name)

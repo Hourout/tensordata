@@ -1,9 +1,10 @@
-import os
 import time
 
+import tensordata.gfile as gfile
 import tensordata.utils.request as rq
 from tensordata.utils.compress import un_gz, un_tar
-from tensordata.utils._utils import assert_dirs, path_join
+from tensordata.utils._utils import assert_dirs, 
+
 
 __all__ = ['caltech101', 'caltech256']
 
@@ -38,11 +39,11 @@ def caltech101(root):
     start = time.time()
     task_path = assert_dirs(root, 'caltech101', make_root_dir=False)
     url = 'http://www.vision.caltech.edu/Image_Datasets/Caltech101/101_ObjectCategories.tar.gz'
-    rq.files(url, path_join(root, url.split('/')[-1]))
-    un_tar(un_gz(path_join(root, url.split('/')[-1])), task_path)
-    os.rename(path_join(task_path, '101_ObjectCategories'), path_join(task_path, 'train'))
+    rq.files(url, gfile.path_join(root, url.split('/')[-1]))
+    un_tar(un_gz(gfile.path_join(root, url.split('/')[-1])), task_path)
+    gfile.rename(gfile.path_join(task_path, '101_ObjectCategories'), gfile.path_join(task_path, 'train'))
     for i in ['101_ObjectCategories.tar.gz', '101_ObjectCategories.tar']:
-        os.remove(path_join(root, i))
+        gfile.remove(gfile.path_join(root, i))
     print('caltech101 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -76,9 +77,9 @@ def caltech256(root):
     start = time.time()
     task_path = assert_dirs(root, 'caltech256', make_root_dir=False)
     url = "http://www.vision.caltech.edu/Image_Datasets/Caltech256/256_ObjectCategories.tar"
-    rq.files(url, path_join(root, url.split('/')[-1]))
-    un_tar(path_join(root, url.split('/')[-1]), task_path)
-    os.rename(path_join(task_path, '256_ObjectCategories'), path_join(task_path, 'train'))
-    os.remove(path_join(root, '256_ObjectCategories.tar'))
+    rq.files(url, gfile.path_join(root, url.split('/')[-1]))
+    un_tar(gfile.path_join(root, url.split('/')[-1]), task_path)
+    gfile.rename(gfile.path_join(task_path, '256_ObjectCategories'), gfile.path_join(task_path, 'train'))
+    gfile.remove(gfile.path_join(root, '256_ObjectCategories.tar'))
     print('caltech256 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path

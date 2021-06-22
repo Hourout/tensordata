@@ -1,12 +1,11 @@
-import os
 import io
 import time
 
 import requests
-import imageio
 import pandas as pd
-from tensordata.utils._utils import assert_dirs, path_join
-
+import tensordata.gfile as gfile
+from tensordata.utils._utils import assert_dirs
+from linora.image import save_image, array_to_image
 
 __all__ = ['mnist_tibetan']
 
@@ -50,8 +49,8 @@ def mnist_tibetan(root):
     train = data.loc[:, 1:].values.reshape(-1, 28, 28)
     train_label = data.loc[:, 0].values
     for i in set(train_label):
-        os.makedirs(path_join(task_path, 'train', str(i)))
+        gfile.makedirs(gfile.path_join(task_path, 'train', str(i)))
     for idx in range(train.shape[0]):
-        imageio.imsave(path_join(task_path, 'train', str(train_label[idx]), str(idx)+'.png'), train[idx])
+        save_image(gfile.path_join(task_path, 'train', str(train_label[idx]), str(idx)+'.png'), array_to_image(train[idx]))
     print('mnist_tibetan dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path

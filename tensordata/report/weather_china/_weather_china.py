@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*- 
+import datetime
+
 import requests
 import pandas as pd
 
@@ -13,7 +14,7 @@ def _get_tianqi_api(city):
 def real_time_share(city):
     a = _get_tianqi_api(city)
     for i in a['data']:
-        if i['date']==str(pd.to_datetime(pd.datetime.now()))[:10]:
+        if i['date']==str(pd.to_datetime(datetime.datetime.now()))[:10]:
             break    
     s = pd.DataFrame(i['hours']).rename(columns={'day':'分时', 'tem':'温度', 'wea':'天气', 'win':'风向', 'win_speed':'风力'})
     s['更新时间'] = a['update_time']
@@ -22,7 +23,7 @@ def real_time_share(city):
 def real_time(city):
     a = _get_tianqi_api(city)
     for i in a['data']:
-        if i['date']==str(pd.to_datetime(pd.datetime.now()))[:10]:
+        if i['date']==str(pd.to_datetime(datetime.datetime.now()))[:10]:
             break
     s = {j:[i[j]] for j in ['date', 'tem', 'tem1', 'tem2', 'wea', 'week', 'win', 'win_speed', 'air', 'air_level']}
     s['city'] = [city]
@@ -37,7 +38,7 @@ def real_time(city):
 def real_time_index(city):
     a = _get_tianqi_api(city)
     for i in a['data']:
-        if i['date']==str(pd.to_datetime(pd.datetime.now()))[:10]:
+        if i['date']==str(pd.to_datetime(datetime.datetime.now()))[:10]:
             break
     s = {'指数':['空气质量指数', '紫外线指数', '运动指数', '血糖指数', '穿衣指数', '洗车指数', '空气污染扩散指数']}
     s['等级'] = [i['air_level']]+[j['level'] for j in i['index']]

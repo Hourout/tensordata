@@ -1,6 +1,7 @@
-# -*- coding: utf-8 -*-
 import io
 import time
+import datetime
+
 import requests
 import pandas as pd
 
@@ -18,7 +19,7 @@ def rating(date=None):
     """
     start = time.time()
     if date is None:
-        date = str(pd.to_datetime(pd.datetime.now())-pd.DateOffset(months=1))[:7].replace('-', '')
+        date = str(pd.to_datetime(datetime.datetime.now())-pd.DateOffset(months=1))[:7].replace('-', '')
     assert (isinstance(date, str) and len(date)==6), "`date` shoule format '201812' or None"
     url_txt = 'https://raw.githubusercontent.com/Hourout/datasets/master/report/p2peye/rating/p2peye_rating'+date+'.txt'
     s = requests.get(url_txt).content
@@ -39,7 +40,7 @@ def problem_platform(date=None, days=7):
     """
     start = time.time()
     if date is None:
-        date = str(pd.to_datetime(pd.datetime.now()).floor('d'))[:10]
+        date = str(pd.to_datetime(datetime.datetime.now()).floor('d'))[:10]
     assert (isinstance(date, str) and len(date)==10), "`date` shoule format '2018-12-01' or None"
     date = pd.to_datetime(date)
     update = date-pd.DateOffset(days=days)

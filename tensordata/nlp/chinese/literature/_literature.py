@@ -1,9 +1,10 @@
-import os
 import time
 
-from tensordata.utils.compress import un_bz2
-from tensordata.utils._utils import assert_dirs, path_join
 import tensordata.utils.request as rq
+import tensordata.gfile._gfile import path_join, remove
+from tensordata.utils.compress import un_bz2
+from tensordata.utils._utils import assert_dirs
+
 
 __all__ = ['shijing', 'youmengying', 'huajianji', 'poetry_SouthernTang', 'lunyu',
            'poet_tang', 'poet_song', 'ci_song'
@@ -183,7 +184,7 @@ def poet_tang(root):
     url = 'https://raw.githubusercontent.com/Hourout/datasets/master/nlp/wenxue/poetry_tang.json.bz2'
     rq.files(url, path_join(task_path, 'poet_tang.json.bz2'))
     un_bz2(path_join(task_path, 'poet_tang.json.bz2'))
-    os.remove(path_join(task_path, 'poet_tang.json.bz2'))
+    remove(path_join(task_path, 'poet_tang.json.bz2'))
     print('poet_tang dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 
@@ -214,7 +215,7 @@ def poet_song(root):
     url = 'https://raw.githubusercontent.com/Hourout/datasets/master/nlp/wenxue/poetry_song.json.bz2'
     rq.files(url, path_join(task_path, 'poet_song.json.bz2'))
     un_bz2(path_join(task_path, 'poet_song.json.bz2'))
-    os.remove(path_join(task_path, 'poet_song.json.bz2'))
+    remove(path_join(task_path, 'poet_song.json.bz2'))
     print('poet_song dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
     return task_path
 

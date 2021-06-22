@@ -3,7 +3,8 @@ import time
 import requests
 import pandas as pd
 import tensordata.utils.request as rq
-from tensordata.utils._utils import assert_dirs, path_join
+from tensordata.utils._utils import assert_dirs
+from tensordata.gfile._gfile import path_join
 
 __all__ = ['economist']
 

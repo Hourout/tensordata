@@ -5,7 +5,8 @@ import concurrent
 import requests
 import pandas as pd
 import tensordata.utils.request as rq
-from tensordata.utils._utils import assert_dirs, path_join
+import tensordata.gfile._gfile import path_join
+from tensordata.utils._utils import assert_dirs
 
 
 __all__ = ['ctrip_hotel', 'douban_movies', 'online_shopping_10_cats', 'sina_weibo', 

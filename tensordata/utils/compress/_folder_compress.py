@@ -5,7 +5,7 @@ import zipfile
 import tarfile
 import rarfile
 
-from tensordata.utils._utils import path_join
+import tensordata.gfile as gfile
 
 __all__ = ['folder_zip', 'folder_tar']
 
@@ -18,13 +18,13 @@ def folder_zip(folder, zip_name):
     Return:
         zip_name: str, compression files name.
     """
-    assert os.path.isdir(folder), '`folder` should be folder path.'
+    assert gfile.isdir(folder), '`folder` should be folder path.'
     with zipfile.ZipFile(zip_name, 'w', zipfile.ZIP_DEFLATED) as z:
-        for dirpath, dirnames, filenames in os.walk(folder):
+        for dirpath, dirnames, filenames in gfile.walk(folder):
             fpath = dirpath.replace(startdir, '')
             fpath = fpath and fpath + os.sep or ''
             for filename in filenames:
-                z.write(path_join(dirpath, filename), path_join(fpath, filename))
+                z.write(gfile.path_join(dirpath, filename), gfile.path_join(fpath, filename))
     return zip_name
 
 def folder_tar(folder, tar_name):
@@ -36,11 +36,11 @@ def folder_tar(folder, tar_name):
     Return:
         zip_name: str, compression files name.
     """
-    assert os.path.isdir(folder), '`folder` should be folder path.'
+    assert gfile.isdir(folder), '`folder` should be folder path.'
     with tarfile.open(tar_name, 'w') as tar:
-        for dirpath, dirnames, filenames in os.walk(tar_name):
+        for dirpath, dirnames, filenames in gfile.walk(tar_name):
             fpath = dirpath.replace(startdir, '')
             fpath = fpath and fpath + os.sep or ''
             for filename in filenames:
-                tar.add(path_join(dirpath, filename), path_join(fpath, filename))
+                tar.add(gfile.path_join(dirpath, filename), gfile.path_join(fpath, filename))
     return tar_name

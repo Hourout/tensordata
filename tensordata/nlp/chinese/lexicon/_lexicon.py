@@ -1,6 +1,9 @@
 import time
-from tensordata.utils._utils import assert_dirs, path_join
+
 import tensordata.utils.request as rq
+import tensordata.gfile._gfile import path_join
+from tensordata.utils._utils import assert_dirs
+
 
 __all__ = ['it', 'animal', 'medical', 'famous_person', 'placename', 'antonym', 
            'synonym', 'privative', 'idiom', 'pornography', 'car', 'abbreviation'
