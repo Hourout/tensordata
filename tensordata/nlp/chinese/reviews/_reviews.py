@@ -5,7 +5,7 @@ import concurrent
 import requests
 import pandas as pd
 import tensordata.utils.request as rq
-import tensordata.gfile._gfile import path_join
+from tensordata.gfile._gfile import path_join
 from tensordata.utils._utils import assert_dirs
 
 

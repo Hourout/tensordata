@@ -1,7 +1,7 @@
 import time
 
 import tensordata.utils.request as rq
-import tensordata.gfile._gfile import path_join, remove
+from tensordata.gfile._gfile import path_join, remove
 from tensordata.utils.compress import un_bz2
 from tensordata.utils._utils import assert_dirs
 
