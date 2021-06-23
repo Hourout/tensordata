@@ -7,7 +7,7 @@ def readme():
 
 setup(name='tensordata',
       version='0.5.0',
-      install_requires=['pandas', 'numpy', 'linora', 'rarfile'],
+      install_requires=['linora', 'rarfile'],
       description='CV, NLP, DM datasets Toolkit for Machine Learning.',
       long_description=readme(),
       long_description_content_type='text/markdown',
