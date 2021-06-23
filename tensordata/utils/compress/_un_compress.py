@@ -32,10 +32,10 @@ def un_tar(tar_file, utar_folder=None):
     Return:
         utar_folder: str, uncompression files name.
     """
-    assert tar_file[-4:]==".tar", '`tar_file` should be `xxx.tar`'
+    assert tar_file[-4:] in [".tar", '.tgz'], '`tar_file` should be `xxx.tar`'
     if utar_folder is None:
         utar_folder = tar_file[:-4]
-    with tarfile.TarFile(tar_file, 'r') as tar:
+    with tarfile.open(tar_file, 'r') as tar:
         names = tar.getnames()
         for name in names:
             tar.extract(name, utar_folder)
