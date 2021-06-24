@@ -3,8 +3,29 @@ from tensordata.utils._utils import get_paper
 
 
 __all__ = ['CVPR2018', 'CVPR2017', 'CVPR2016', 'CVPR2015', 'CVPR2014', 'CVPR2013',
-           'CVPR2019', 'CVPR2020',
+           'CVPR2019', 'CVPR2020', 'CVPR2021'
           ]
+
+def CVPR2021(root):
+    """CVPR2021 datasets from https://openaccess.thecvf.com/CVPR2021.
+        
+    CVPR2021 datasets includes 2690 papers.
+    
+    Data storage directory:
+    root = `/user/.../mydata`
+    CVPR2021 data: 
+    `root/CVPR2021/...`
+    Args:
+        root: str, Store the absolute path of the data directory.
+              example:if you want data path is `/user/.../mydata/CVPR2021`,
+              root should be `/user/.../mydata`.
+    Returns:
+        Store the absolute path of the data directory, is `root/CVPR2021`.
+    """
+    start = time.time()
+    task_path = get_paper('CVPR2021', root, 'https://raw.githubusercontent.com/Hourout/datasets/master/paper/cvpr/cvpr2021.txt')
+    print('CVPR2021 dataset download completed, run time %d min %.2f sec' %divmod((time.time()-start), 60))
+    return task_path
 
 def CVPR2020(root):
     """CVPR2020 datasets from http://openaccess.thecvf.com/CVPR2020.py.
