@@ -1,13 +1,13 @@
-from io import open
+import io
 from setuptools import setup, find_packages
 
 def readme():
-    with open('README.md', encoding='utf-8') as f:
+    with io.open('README.md', encoding='utf-8') as f:
         return f.read()
 
 setup(name='tensordata',
-      version='0.5.0',
-      install_requires=['linora', 'rarfile', 'requests'],
+      version='0.4.1',
+      install_requires=['linora>=1.0.0', 'rarfile', 'requests'],
       description='CV, NLP, DM datasets Toolkit for Machine Learning.',
       long_description=readme(),
       long_description_content_type='text/markdown',
