@@ -7,6 +7,6 @@ from tensordata import report
 from tensordata import book
 from tensordata import gfile
 
-__version__ = '0.4.1'
+__version__ = '0.4.2'
 __author__ = 'JinQing Lee'
 __data_version__ = '0.1.0'

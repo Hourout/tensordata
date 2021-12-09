@@ -14,7 +14,7 @@ class pypi_mirror:
     
 mirror = pypi_mirror()
 
-def freeze(name=None, py=''):
+def freeze(name, py=''):
     """List all python libraries.
     
     Args:
@@ -23,50 +23,56 @@ def freeze(name=None, py=''):
     Return:
         a dict of python libraries version.
     """
-    assert name is None or isinstance(name, (str, list)), "`name` should be None or str or list."
+    assert isinstance(name, (str, list)), "`name` should be None or str or list."
     cmd = f"pip{py} list"
     s = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True).communicate()[0]
     s = [i.split(' ') for i in s.decode('utf-8').split('\n')[2:-1]]
     s = {i[0]: i[-1] for i in s}
-    if name is not None:
-        try:
-            if isinstance(name, str):
-                name = [name]
-            s = {i:s[i] for i in name}
-        except:
-            raise ValueError("{} is not in local libraries".format(name))
+    if isinstance(name, str):
+        name = [name]
+    s = {i:s.get(i, None) for i in name}
     return s
 
-def upgrade(name=None, version=None, py='', mirror=mirror.pip):
+def upgrade(name, version=None, py='', mirror=mirror.pip, logger=True):
     """Upgrade python libraries.
     
     Args:
         name: str or list. libraries name.
-        version: str or list. libraries version name.
+        version: str or list. libraries version.
         py: python environment.one of ['', 2, 3].
         mirror: pip install libraries mirror,
                 default official https://pypi.org/simple.
-                options one of ['pip', 'tsinghua', 'aliyun', 'ustc'],
-                or you can set mirror='https://pypi.tuna.tsinghua.edu.cn/simple'.
-                or mirror=td.utils.pip.mirror.pip
+                or you can set eg. mirror='https://pypi.tuna.tsinghua.edu.cn/simple'.
+                or eg. mirror=td.utils.pip.mirror.tsinghua
     Return:
         a dict of python libraries version.
     """
     assert version is None or isinstance(version, (str, list)), "`version` should be None or str or list."
+    if isinstance(name, str):
+        name = [name]
     old_lib = freeze(name=name, py=py)
     if version is not None:
         if isinstance(version, str):
             version = [version]
-        assert len(old_lib)==len(version), "`name` and `version` should be same number."
+        assert len(name)==len(version), "`name` and `version` should be same number."
         for (dist, ver) in zip(name, version):
-            cmd = f"pip{py} install --upgrade {dist}=={ver} -i {mirror}"
-            subprocess.call(cmd, shell=True)
+            if ver=='':
+                cmd = f"pip{py} install --upgrade {dist} -i {mirror}"
+            else:
+                cmd = f"pip{py} install --upgrade {dist}=={ver} -i {mirror}"
+            if logger:
+                subprocess.call(cmd, shell=True)
+            else:
+                subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True).communicate()[0]
     else:
         for dist in old_lib:
             cmd = f"pip{py} install --upgrade {dist} -i {mirror}"
-            subprocess.call(cmd, shell=True)
+            if logger:
+                subprocess.call(cmd, shell=True)
+            else:
+                subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True).communicate()[0]
     new_lib = freeze(name=name, py=py)
-    lib = {i:{'old_version': old_lib[i], "new_version":new_lib[i]} for i in old_lib}
+    lib = {i:{'old_version': old_lib[i], "new_version":new_lib[i]} for i in new_lib}
     return lib
 
 def upgradeable(py=''):
@@ -93,7 +99,6 @@ def install(name, version=None, py='', mirror=mirror.pip):
         py: python environment.one of ['', 2, 3].
         mirror: pip install libraries mirror,
                 default official https://pypi.org/simple.
-                options one of ['pip', 'tsinghua', 'aliyun', 'ustc'],
                 or you can set mirror='https://pypi.tuna.tsinghua.edu.cn/simple'.
                 or mirror=td.utils.pip.mirror.pip
     Return:
@@ -103,7 +108,7 @@ def install(name, version=None, py='', mirror=mirror.pip):
     assert version is None or isinstance(version, str), "`version` should be None or str."
     cmd = f"pip{py} install {name if version is None else name + '==' + version} -i {mirror}"
     t = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True).communicate()[0]
-    name = t.decode('utf-8').split('\n')[-3].split(' ')[-1]
+#     name = t.decode('utf-8').split('\n')[-3].split(' ')[-1]
     return freeze(name=name, py=py)
 
 def uninstall(name, py=''):
@@ -127,7 +132,6 @@ def set_mirror(mirror=mirror.pip, py=''):
         py: python environment.one of [2, 3].
         mirror: pip install libraries mirror,
                 default official https://pypi.org/simple.
-                options one of ['pip', 'tsinghua', 'aliyun', 'ustc'],
                 or you can set mirror='https://pypi.tuna.tsinghua.edu.cn/simple'.
                 or mirror=td.utils.pip.mirror.pip
     Return:
@@ -146,7 +150,6 @@ def file(root, name, py='', mirror=mirror.pip):
         py: python environment.one of ['', 2, 3].
         mirror: pip install libraries mirror,
                 default official https://pypi.org/simple.
-                options one of ['pip', 'tsinghua', 'aliyun', 'ustc'],
                 or you can set mirror='https://pypi.tuna.tsinghua.edu.cn/simple'.
                 mirror=td.utils.pip.mirror.pip
     Return:
