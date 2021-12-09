@@ -14,12 +14,22 @@ class pypi_mirror:
     
 mirror = pypi_mirror()
 
+def libraries_name(name):
+    name1 = []
+    for i in name:
+        for j in ['==', '>', '<', '>=', '<=']:
+            if j in i:
+                i = i.split(j)[0]
+                break
+        name1.append(i)
+    return name1
+
 def freeze(name, py=''):
     """List all python libraries.
     
     Args:
         name: str or list. libraries name.
-        py: python environment.one of ['', 2, 3].
+        py: python environment.one of ['', 3].
     Return:
         a dict of python libraries version.
     """
@@ -30,6 +40,7 @@ def freeze(name, py=''):
     s = {i[0]: i[-1] for i in s}
     if isinstance(name, str):
         name = [name]
+    name = libraries_name(name)
     s = {i:s.get(i, None) for i in name}
     return s
 
@@ -39,7 +50,7 @@ def upgrade(name, version=None, py='', mirror=mirror.pip, logger=True):
     Args:
         name: str or list. libraries name.
         version: str or list. libraries version.
-        py: python environment.one of ['', 2, 3].
+        py: python environment.one of ['', 3].
         mirror: pip install libraries mirror,
                 default official https://pypi.org/simple.
                 or you can set eg. mirror='https://pypi.tuna.tsinghua.edu.cn/simple'.
@@ -59,7 +70,9 @@ def upgrade(name, version=None, py='', mirror=mirror.pip, logger=True):
             if ver=='':
                 cmd = f"pip{py} install --upgrade {dist} -i {mirror}"
             else:
-                cmd = f"pip{py} install --upgrade {dist}=={ver} -i {mirror}"
+                if len([i for i in ['==', '>', '<', '>=', '<='] if i in ver])==0:
+                    ver = '=='+ver
+                cmd = f"pip{py} install --upgrade {dist}{ver} -i {mirror}"
             if logger:
                 subprocess.call(cmd, shell=True)
             else:
@@ -79,7 +92,7 @@ def upgradeable(py=''):
     """Veiw upgradeable python libraries.
     
     Args:
-        py: python environment.one of ['', 2, 3].
+        py: python environment.one of ['', 3].
     Return:
         a dict of python libraries version.
     """
@@ -90,13 +103,13 @@ def upgradeable(py=''):
     s = {i[0]:{'version':i[1], 'latest':i[2], 'type':i[-1]} for i in s}
     return s
 
-def install(name, version=None, py='', mirror=mirror.pip):
+def install(name, py='', mirror=mirror.pip):
     """Install python libraries.
     
     Args:
-        name: str or list. libraries name.
-        version: str or list. libraries version name.
-        py: python environment.one of ['', 2, 3].
+        name: str or list. libraries name. 
+              eg. name = 'numpy' or 'numpy==1.0.0' or ['numpy', 'pandas>1.0.0']
+        py: python environment.one of ['', 3].
         mirror: pip install libraries mirror,
                 default official https://pypi.org/simple.
                 or you can set mirror='https://pypi.tuna.tsinghua.edu.cn/simple'.
@@ -104,32 +117,32 @@ def install(name, version=None, py='', mirror=mirror.pip):
     Return:
         a dict of python libraries version.
     """
-    assert isinstance(name, str), "`name` should be str."
-    assert version is None or isinstance(version, str), "`version` should be None or str."
-    cmd = f"pip{py} install {name if version is None else name + '==' + version} -i {mirror}"
-    t = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True).communicate()[0]
-#     name = t.decode('utf-8').split('\n')[-3].split(' ')[-1]
-    return freeze(name=name, py=py)
+    if isinstance(name, str):
+         name = [name]
+    name1 = libraries_name(name)
+    cmd = f"pip{py} install {' '.join(name)} -i {mirror}"
+    subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True).communicate()[0]
+    return freeze(name=name1, py=py)
 
 def uninstall(name, py=''):
     """Uinstall python libraries.
     
     Args:
         name: str. libraries name.
-        py: python environment.one of [2, 3].
+        py: python environment.one of ['', 3].
     Return:
         uninstall log.
     """
     assert isinstance(name, str), "`name` should be str."
     cmd = f"pip{py} uninstall {name} -y"
     s = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True).communicate()[0]
-    return s
+    return s.decode('utf-8').strip().split('\n')[-1].strip()
 
 def set_mirror(mirror=mirror.pip, py=''):
     """Set up pip mirrors on your machine.
     
     Args:
-        py: python environment.one of [2, 3].
+        py: python environment.one of ['', 3].
         mirror: pip install libraries mirror,
                 default official https://pypi.org/simple.
                 or you can set mirror='https://pypi.tuna.tsinghua.edu.cn/simple'.
@@ -147,7 +160,7 @@ def file(root, name, py='', mirror=mirror.pip):
     Args:
         root: str, dirs.
         name: str or list. libraries name.
-        py: python environment.one of ['', 2, 3].
+        py: python environment.one of ['', 3].
         mirror: pip install libraries mirror,
                 default official https://pypi.org/simple.
                 or you can set mirror='https://pypi.tuna.tsinghua.edu.cn/simple'.
@@ -165,7 +178,7 @@ def show(name, py=''):
     
     Args:
         name: str or list. libraries name.
-        py: python environment.one of ['', 2, 3].
+        py: python environment.one of ['', 3].
     Return:
         a dict of python libraries version information.
     """
@@ -186,7 +199,7 @@ def search(name, py=''):
     
     Args:
         name: str. libraries name.
-        py: python environment.one of ['', 2, 3].
+        py: python environment.one of ['', 3].
     Return:
         a dict of python libraries version information.
     """
