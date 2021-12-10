@@ -17,11 +17,11 @@ mirror = pypi_mirror()
 def libraries_name(name):
     for i in ['==', '>=', '<=', '>', '<']:
         if i in name:
-            return name.split(i)
+            return name.split(i)+[i]
     for i,j in enumerate(name):
         if j=='-' and name[i+1] in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']:
-            return [name[:i], name[i+1:]]
-    return [name, '']
+            return [name[:i], name[i+1:], '-']
+    return [name, '', '']
 
 def freeze(name, py=''):
     """List all python libraries.
@@ -117,10 +117,28 @@ def install(name, py='', mirror=mirror.pip):
         a dict of python libraries version.
     """
     if isinstance(name, str):
-         name = [name]
+        if name.startswith('https://github.com/'):
+            cmd = f"pip{py} install git+git://github.com/{name.split('github.com/')[1]}.git"
+            s = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True).communicate()[0]
+            name = s.decode('utf-8').strip().split('\n')[-1].split(' ')[2:]
+            return freeze(name=name, py=py)
+        elif name.endswith('.whl'):
+            cmd = f"pip{py} install {name}"
+            s = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True).communicate()[0]
+            name = s.decode('utf-8').strip().split('\n')[-1].split(' ')[2:]
+            return freeze(name=name, py=py)
+        elif name.endswith('.txt'):
+            cmd = f"pip{py} install -r {name}"
+            s = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True).communicate()[0]
+            name = s.decode('utf-8').strip().split('\n')[-1].split(' ')[2:]
+            return freeze(name=name, py=py)
+        name = [name]
     name = [libraries_name(i) for i in name]
     name1 = [i[0] for i in name]
-    name = [i[0] if i[1] in ['', '<' else '=='.join(i) for i in name]]
+    name = [i[0] for i in name if i[2]=='']
+    name = name + [i[0]+'=='+i[1] for i in name if i[2]=='-']
+    name = name + [i[0]+i[2]+i[1] for i in name if i[2] not in ['', '-']]
+    name = ['"'+i+'"' for i in name]
     cmd = f"pip{py} install {' '.join(name)} -i {mirror}"
     subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True).communicate()[0]
     return freeze(name=name1, py=py)
