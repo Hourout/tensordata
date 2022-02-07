@@ -55,11 +55,16 @@ def files(url, root_file, retries=3, verbose=1, chunk_size=1024):
             content_type = r.headers.get('Content-Length')
             total_size = None if content_type is None else int(content_type.strip())
             p = Progbar(total_size, verbose=verbose)
+            down_size = 0
             with open(root_file, 'wb') as f:
                 for chunk in r.iter_content(chunk_size):
                     p.add(chunk_size)
                     f.write(chunk)
-            break
+                    down_size += len(chunk)
+            if down_size==total_size:
+                break
+            else:
+                raise 'download failed'
         except:
             if i==retries-1:
                 raise f'{url} download failed'
