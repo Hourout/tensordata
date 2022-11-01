@@ -36,7 +36,29 @@ def cifar10(root):
     url = 'https://apache-mxnet.s3-accelerate.dualstack.amazonaws.com/gluon/dataset/cifar10/cifar-10-binary.tar.gz'
     rq.files(url, gfile.path_join(task_path, url.split('/')[-1]))
     with tarfile.open(gfile.path_join(task_path, url.split('/')[-1])) as t:
-        t.extractall(task_path)
+        
+        import os
+        
+        def is_within_directory(directory, target):
+            
+            abs_directory = os.path.abspath(directory)
+            abs_target = os.path.abspath(target)
+        
+            prefix = os.path.commonprefix([abs_directory, abs_target])
+            
+            return prefix == abs_directory
+        
+        def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
+        
+            for member in tar.getmembers():
+                member_path = os.path.join(path, member.name)
+                if not is_within_directory(path, member_path):
+                    raise Exception("Attempted Path Traversal in Tar File")
+        
+            tar.extractall(path, members, numeric_owner=numeric_owner) 
+            
+        
+        safe_extract(t, task_path)
     noise_flie = gfile.listdir(task_path)
     for file in ['data_batch_1.bin', 'data_batch_2.bin', 'data_batch_3.bin', 'data_batch_4.bin', 'data_batch_5.bin']:
         with open(gfile.path_join(task_path, file), 'rb') as fin:
@@ -91,7 +113,26 @@ def cifar100(root, fine_label=True):
     url = 'https://apache-mxnet.s3-accelerate.dualstack.amazonaws.com/gluon/dataset/cifar100/cifar-100-binary.tar.gz'
     rq.files(url, gfile.path_join(task_path, url.split('/')[-1]))
     with tarfile.open(gfile.path_join(task_path, url.split('/')[-1])) as t:
-        t.extractall(task_path)
+        def is_within_directory(directory, target):
+            
+            abs_directory = os.path.abspath(directory)
+            abs_target = os.path.abspath(target)
+        
+            prefix = os.path.commonprefix([abs_directory, abs_target])
+            
+            return prefix == abs_directory
+        
+        def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
+        
+            for member in tar.getmembers():
+                member_path = os.path.join(path, member.name)
+                if not is_within_directory(path, member_path):
+                    raise Exception("Attempted Path Traversal in Tar File")
+        
+            tar.extractall(path, members, numeric_owner=numeric_owner) 
+            
+        
+        safe_extract(t, task_path)
     noise_flie = gfile.listdir(task_path)
     with open(gfile.path_join(task_path, 'train.bin'), 'rb') as fin:
         data = np.frombuffer(fin.read(), dtype=np.uint8).reshape(-1, 3072+2)
